@@ -26,6 +26,21 @@ if (OPENSSL_CRYPTO_LIBRARIES)
     ${LIBSSH_LINK_LIBRARIES}
     ${OPENSSL_CRYPTO_LIBRARIES}
   )
+
+  if(WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+    set(OQS_LIB_DIR ${OQS_ROOT_DIR}/lib)
+    set(OQS_INCLUDE_DIR ${OQS_ROOT_DIR}/include)
+    set(libssh_oqs_SRCS
+        oqs-utils.c)
+    set(LIBSSH_PRIVATE_INCLUDE_DIRS
+      ${LIBSSH_PRIVATE_INCLUDE_DIRS}
+      ${OQS_INCLUDE_DIR}
+    )
+    set(LIBSSH_LINK_LIBRARIES
+      ${LIBSSH_LINK_LIBRARIES}
+      ${OQS_LIB_DIR}/liboqs.a
+    )
+  endif(WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
 endif (OPENSSL_CRYPTO_LIBRARIES)
 
 if (MBEDTLS_CRYPTO_LIBRARY)
@@ -118,6 +133,7 @@ set(libssh_SRCS
   ecdh.c
   error.c
   getpass.c
+  hykex.c
   init.c
   kdf.c
   kex.c
@@ -136,6 +152,7 @@ set(libssh_SRCS
   pki.c
   pki_container_openssh.c
   poll.c
+  pqkex.c
   session.c
   scp.c
   socket.c
@@ -147,6 +164,7 @@ set(libssh_SRCS
   config_parser.c
   token.c
   pki_ed25519_common.c
+  ${libssh_oqs_SRCS}
 )
 
 if (DEFAULT_C_NO_DEPRECATION_FLAGS)

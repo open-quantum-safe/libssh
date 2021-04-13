@@ -377,7 +377,11 @@ ssh_key pki_key_dup(const ssh_key key, int demote)
         break;
     }
     case SSH_KEYTYPE_RSA:
-    case SSH_KEYTYPE_RSA1: {
+    case SSH_KEYTYPE_RSA1:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    CASE_KEY_RSA_HYBRID: /* Duplicating classical part of key is handled here. PQ part is below. */
+#endif
+        {
         const BIGNUM *n = NULL, *e = NULL, *d = NULL;
         BIGNUM *nn, *ne, *nd;
         new->rsa = RSA_new();
@@ -479,6 +483,9 @@ ssh_key pki_key_dup(const ssh_key key, int demote)
     case SSH_KEYTYPE_ECDSA_P256:
     case SSH_KEYTYPE_ECDSA_P384:
     case SSH_KEYTYPE_ECDSA_P521:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    CASE_KEY_ECDSA_HYBRID: /* Duplicating classical part of key is handled here. PQ part is below. */
+#endif
 #ifdef HAVE_OPENSSL_ECC
         new->ecdsa_nid = key->ecdsa_nid;
 
@@ -512,11 +519,44 @@ ssh_key pki_key_dup(const ssh_key key, int demote)
             goto fail;
         }
         break;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    CASE_KEY_OQS:
+        /* Processing is handled below. Don't fail. */
+        break;
+#endif
     case SSH_KEYTYPE_UNKNOWN:
     default:
         ssh_key_free(new);
         return NULL;
     }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    switch (key->type) {
+    CASE_KEY_OQS:
+    CASE_KEY_HYBRID:
+        new->oqs_sig = OQS_SIG_new(key->oqs_sig->method_name);
+        if (new->oqs_sig == NULL) {
+            goto fail;
+        }
+        if (key->oqs_pk != NULL) {
+            new->oqs_pk = malloc(new->oqs_sig->length_public_key);
+            if (new->oqs_pk == NULL) {
+                goto fail;
+            }
+            memcpy(new->oqs_pk, key->oqs_pk, new->oqs_sig->length_public_key);
+        }
+        if (!demote && key->oqs_sk != NULL) {
+            new->oqs_sk = malloc(new->oqs_sig->length_secret_key);
+            if (new->oqs_sk == NULL) {
+                goto fail;
+            }
+            memcpy(new->oqs_sk, key->oqs_sk, new->oqs_sig->length_secret_key);
+        }
+        break;
+    default:
+        break;
+    }
+#endif
 
     return new;
 fail:
@@ -644,7 +684,11 @@ int pki_key_compare(const ssh_key k1,
             break;
         }
         case SSH_KEYTYPE_RSA:
-        case SSH_KEYTYPE_RSA1: {
+        case SSH_KEYTYPE_RSA1:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_RSA_HYBRID:
+#endif
+        {
             const BIGNUM *e1, *e2, *n1, *n2, *p1, *p2, *q1, *q2;
             if (RSA_size(k1->rsa) != RSA_size(k2->rsa)) {
                 return 1;
@@ -675,6 +719,9 @@ int pki_key_compare(const ssh_key k1,
         case SSH_KEYTYPE_ECDSA_P384:
         case SSH_KEYTYPE_ECDSA_P521:
         case SSH_KEYTYPE_SK_ECDSA:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_ECDSA_HYBRID:
+#endif
 #ifdef HAVE_OPENSSL_ECC
             {
                 const EC_POINT *p1 = EC_KEY_get0_public_key(k1->ecdsa);
@@ -711,6 +758,20 @@ int pki_key_compare(const ssh_key k1,
         default:
             return 1;
     }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (IS_OQS_KEY_TYPE(k1->type)) {
+        if (k1->oqs_sig->length_public_key != k2->oqs_sig->length_public_key) {
+            return 1;
+        }
+        if (k1->oqs_pk == NULL || k2->oqs_pk == NULL) {
+            return 1;
+        }
+        if (memcmp(k1->oqs_pk, k2->oqs_pk, k1->oqs_sig->length_public_key) != 0) {
+            return 1;
+        }
+    }
+#endif
 
     return 0;
 }
@@ -1186,6 +1247,9 @@ ssh_string pki_publickey_to_blob(const ssh_key key)
     ssh_string p = NULL;
     ssh_string g = NULL;
     ssh_string q = NULL;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    ssh_string pqpublic = NULL;
+#endif
     int rc;
 
     buffer = ssh_buffer_new();
@@ -1269,7 +1333,11 @@ ssh_string pki_publickey_to_blob(const ssh_key key)
             break;
         }
         case SSH_KEYTYPE_RSA:
-        case SSH_KEYTYPE_RSA1: {
+        case SSH_KEYTYPE_RSA1:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_RSA_HYBRID:
+#endif
+        {
             const BIGNUM *be, *bn;
             RSA_get0_key(key->rsa, &bn, &be, NULL);
             e = ssh_make_bignum_string((BIGNUM *)be);
@@ -1313,6 +1381,9 @@ ssh_string pki_publickey_to_blob(const ssh_key key)
         case SSH_KEYTYPE_ECDSA_P384:
         case SSH_KEYTYPE_ECDSA_P521:
         case SSH_KEYTYPE_SK_ECDSA:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_ECDSA_HYBRID: /* Do classical part of hybrid key here */
+#endif
 #ifdef HAVE_OPENSSL_ECC
             type_s = ssh_string_from_char(pki_key_ecdsa_nid_to_char(key->ecdsa_nid));
             if (type_s == NULL) {
@@ -1358,10 +1429,33 @@ ssh_string pki_publickey_to_blob(const ssh_key key)
 
             break;
 #endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_OQS:
+            /* Do nothing at this point, but don't fail. Processing happens later. */
+        break;
+#endif
         case SSH_KEYTYPE_UNKNOWN:
         default:
             goto fail;
     }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    /* Handle PQ part of key */
+    if (IS_OQS_KEY_TYPE(key->type)) {
+        pqpublic = ssh_string_new(key->oqs_sig->length_public_key);
+        if (pqpublic == NULL) {
+            goto fail;
+        }
+        memcpy(ssh_string_data(pqpublic), key->oqs_pk, key->oqs_sig->length_public_key);
+        if (ssh_buffer_add_ssh_string(buffer, pqpublic) < 0) {
+            goto fail;
+        }
+
+        ssh_string_burn(pqpublic);
+        SSH_STRING_FREE(pqpublic);
+        pqpublic = NULL;
+    }
+#endif
 
 makestring:
     str = ssh_string_new(ssh_buffer_get_len(buffer));
@@ -1390,7 +1484,10 @@ fail:
     SSH_STRING_FREE(q);
     ssh_string_burn(n);
     SSH_STRING_FREE(n);
-
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    ssh_string_burn(pqpublic);
+    SSH_STRING_FREE(pqpublic);
+#endif
     return NULL;
 }
 
@@ -1577,6 +1674,9 @@ ssh_string pki_signature_to_blob(const ssh_signature sig)
             break;
         case SSH_KEYTYPE_RSA:
         case SSH_KEYTYPE_RSA1:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_RSA_HYBRID: /* Handle the classical part of the signature here */
+#endif
             sig_blob = ssh_string_copy(sig->raw_sig);
             break;
         case SSH_KEYTYPE_ED25519:
@@ -1585,9 +1685,18 @@ ssh_string pki_signature_to_blob(const ssh_signature sig)
         case SSH_KEYTYPE_ECDSA_P256:
         case SSH_KEYTYPE_ECDSA_P384:
         case SSH_KEYTYPE_ECDSA_P521:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_ECDSA_HYBRID: /* Handle the classical part of the signature here */
+#endif
 #ifdef HAVE_OPENSSL_ECC
             sig_blob = pki_ecdsa_signature_to_blob(sig);
             break;
+#endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_OQS:
+            /* Pure PQ signature types should never end up in this function, as this only does the classical signature. Bug. */
+            SSH_LOG(SSH_LOG_WARN, "Pure PQ key type in pki_signature_to_blob - this should not happen"); 
+            return NULL;
 #endif
         default:
         case SSH_KEYTYPE_UNKNOWN:
@@ -1940,7 +2049,12 @@ ssh_signature pki_signature_from_blob(const ssh_key pubkey,
     ssh_signature sig;
     int rc;
 
-    if (ssh_key_type_plain(pubkey->type) != type) {
+    if ((ssh_key_type_plain(pubkey->type) != type)
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        /* RSA hybrids maintain the original classical algorithm string identifier. Allow them to proceed. */
+        && !(type == SSH_KEYTYPE_RSA && IS_RSA_HYBRID(pubkey->type))
+#endif
+        ) {
         SSH_LOG(SSH_LOG_WARN,
                 "Incompatible public key provided (%d) expecting (%d)",
                 type,
@@ -1966,6 +2080,9 @@ ssh_signature pki_signature_from_blob(const ssh_key pubkey,
             break;
         case SSH_KEYTYPE_RSA:
         case SSH_KEYTYPE_RSA1:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_RSA_HYBRID:
+#endif
             rc = pki_signature_from_rsa_blob(pubkey, sig_blob, sig);
             if (rc != SSH_OK) {
                 goto error;
@@ -1986,6 +2103,9 @@ ssh_signature pki_signature_from_blob(const ssh_key pubkey,
         case SSH_KEYTYPE_ECDSA_P521_CERT01:
         case SSH_KEYTYPE_SK_ECDSA:
         case SSH_KEYTYPE_SK_ECDSA_CERT01:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_KEY_ECDSA_HYBRID:
+#endif
 #ifdef HAVE_OPENSSL_ECC
             rc = pki_signature_from_ecdsa_blob(pubkey, sig_blob, sig);
             if (rc != SSH_OK) {
@@ -2064,6 +2184,9 @@ static EVP_PKEY *pki_key_to_pkey(ssh_key key)
     case SSH_KEYTYPE_RSA:
     case SSH_KEYTYPE_RSA1:
     case SSH_KEYTYPE_RSA_CERT01:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    CASE_KEY_RSA_HYBRID:
+#endif
         if (key->rsa == NULL) {
             SSH_LOG(SSH_LOG_TRACE, "NULL key->rsa");
             goto error;
@@ -2084,6 +2207,9 @@ static EVP_PKEY *pki_key_to_pkey(ssh_key key)
     case SSH_KEYTYPE_ECDSA_P521_CERT01:
     case SSH_KEYTYPE_SK_ECDSA:
     case SSH_KEYTYPE_SK_ECDSA_CERT01:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    CASE_KEY_ECDSA_HYBRID:
+#endif
 # if defined(HAVE_OPENSSL_ECC)
         if (key->ecdsa == NULL) {
             SSH_LOG(SSH_LOG_TRACE, "NULL key->ecdsa");
@@ -2159,9 +2285,9 @@ error:
  * @return  a newly allocated ssh_signature or NULL on error.
  */
 ssh_signature pki_sign_data(const ssh_key privkey,
-                            enum ssh_digest_e hash_type,
-                            const unsigned char *input,
-                            size_t input_len)
+    enum ssh_digest_e hash_type,
+    const unsigned char* input,
+    size_t input_len)
 {
     const EVP_MD *md = NULL;
     EVP_MD_CTX *ctx = NULL;
@@ -2169,6 +2295,9 @@ ssh_signature pki_sign_data(const ssh_key privkey,
 
     unsigned char *raw_sig_data = NULL;
     size_t raw_sig_len;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    ssh_string pq_sig = NULL;
+#endif
 
     ssh_signature sig = NULL;
 
@@ -2176,7 +2305,7 @@ ssh_signature pki_sign_data(const ssh_key privkey,
 
     if (privkey == NULL || !ssh_key_is_private(privkey) || input == NULL) {
         SSH_LOG(SSH_LOG_TRACE, "Bad parameter provided to "
-                               "pki_sign_data()");
+            "pki_sign_data()");
         return NULL;
     }
 
@@ -2194,72 +2323,91 @@ ssh_signature pki_sign_data(const ssh_key privkey,
     }
 #endif
 
-    /* Set hash algorithm to be used */
-    md = pki_digest_to_md(hash_type);
-    if (md == NULL) {
-        if (hash_type != SSH_DIGEST_AUTO) {
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (!IS_OQS_KEY_TYPE(privkey->type) || IS_HYBRID(privkey->type)) {
+        /* Perform the classical signature, if applicable. */
+#endif
+        /* Set hash algorithm to be used */
+        md = pki_digest_to_md(hash_type);
+        if (md == NULL) {
+            if (hash_type != SSH_DIGEST_AUTO) {
+                return NULL;
+            }
+        }
+
+        /* Setup private key EVP_PKEY */
+        pkey = pki_key_to_pkey(privkey);
+        if (pkey == NULL) {
             return NULL;
         }
-    }
 
-    /* Setup private key EVP_PKEY */
-    pkey = pki_key_to_pkey(privkey);
-    if (pkey == NULL) {
-        return NULL;
-    }
+        /* Allocate buffer for signature */
+        raw_sig_len = (size_t)EVP_PKEY_size(pkey);
+        raw_sig_data = (unsigned char *)malloc(raw_sig_len);
+        if (raw_sig_data == NULL) {
+            SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+            goto out;
+        }
 
-    /* Allocate buffer for signature */
-    raw_sig_len = (size_t)EVP_PKEY_size(pkey);
-    raw_sig_data = (unsigned char *)malloc(raw_sig_len);
-    if (raw_sig_data == NULL) {
-        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
-        goto out;
-    }
+        /* Create the context */
+        ctx = EVP_MD_CTX_create();
+        if (ctx == NULL) {
+            SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+            goto out;
+        }
 
-    /* Create the context */
-    ctx = EVP_MD_CTX_create();
-    if (ctx == NULL) {
-        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
-        goto out;
-    }
-
-    /* Sign the data */
-    rc = EVP_DigestSignInit(ctx, NULL, md, NULL, pkey);
-    if (rc != 1){
-        SSH_LOG(SSH_LOG_TRACE,
+        /* Sign the data */
+        rc = EVP_DigestSignInit(ctx, NULL, md, NULL, pkey);
+        if (rc != 1){
+            SSH_LOG(SSH_LOG_TRACE,
                 "EVP_DigestSignInit() failed: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+            goto out;
+        }
 
 #ifdef HAVE_OPENSSL_EVP_DIGESTSIGN
-    rc = EVP_DigestSign(ctx, raw_sig_data, &raw_sig_len, input, input_len);
-    if (rc != 1) {
-        SSH_LOG(SSH_LOG_TRACE,
+        rc = EVP_DigestSign(ctx, raw_sig_data, &raw_sig_len, input, input_len);
+        if (rc != 1) {
+            SSH_LOG(SSH_LOG_TRACE,
                 "EVP_DigestSign() failed: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+            goto out;
+        }
 #else
-    rc = EVP_DigestSignUpdate(ctx, input, input_len);
-    if (rc != 1) {
-        SSH_LOG(SSH_LOG_TRACE,
+        rc = EVP_DigestSignUpdate(ctx, input, input_len);
+        if (rc != 1) {
+            SSH_LOG(SSH_LOG_TRACE,
                 "EVP_DigestSignUpdate() failed: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+            goto out;
+        }
 
-    rc = EVP_DigestSignFinal(ctx, raw_sig_data, &raw_sig_len);
-    if (rc != 1) {
-        SSH_LOG(SSH_LOG_TRACE,
+        rc = EVP_DigestSignFinal(ctx, raw_sig_data, &raw_sig_len);
+        if (rc != 1) {
+            SSH_LOG(SSH_LOG_TRACE,
                 "EVP_DigestSignFinal() failed: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+            goto out;
+        }
 #endif
 
 #ifdef DEBUG_CRYPTO
         ssh_log_hexdump("Generated signature", raw_sig_data, raw_sig_len);
+#endif
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    }
+
+    /* Perform the PQ signature, if applicable. */
+    if (IS_OQS_KEY_TYPE(privkey->type)) {
+        rc = pki_oqs_sign_data(privkey, input, input_len, &pq_sig);
+        if (rc < 0) {
+            SSH_LOG(SSH_LOG_TRACE,
+                    "pki_oqs_sign_data failed: %d",
+                    rc);
+            goto out;
+        }
+    }
 #endif
 
     /* Allocate and fill output signature */
@@ -2268,19 +2416,29 @@ ssh_signature pki_sign_data(const ssh_key privkey,
         goto out;
     }
 
-    sig->raw_sig = ssh_string_new(raw_sig_len);
-    if (sig->raw_sig == NULL) {
-        ssh_signature_free(sig);
-        sig = NULL;
-        goto out;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    /* This should only possibly be true if PQC is enabled. */
+    if (raw_sig_data != NULL) {
+#endif
+        sig->raw_sig = ssh_string_new(raw_sig_len);
+        if (sig->raw_sig == NULL) {
+            ssh_signature_free(sig);
+            sig = NULL;
+            goto out;
+        }
+
+        rc = ssh_string_fill(sig->raw_sig, raw_sig_data, raw_sig_len);
+        if (rc < 0) {
+            ssh_signature_free(sig);
+            sig = NULL;
+            goto out;
+        }
+#ifdef WITH_POST_QUANTUM_CRYPTO
     }
 
-    rc = ssh_string_fill(sig->raw_sig, raw_sig_data, raw_sig_len);
-    if (rc < 0) {
-        ssh_signature_free(sig);
-        sig = NULL;
-        goto out;
-    }
+    sig->pq_sig = pq_sig;
+    pq_sig = NULL;
+#endif
 
     sig->type = privkey->type;
     sig->hash_type = hash_type;
@@ -2297,8 +2455,312 @@ out:
     if (pkey != NULL) {
         EVP_PKEY_free(pkey);
     }
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    ssh_string_burn(pq_sig);
+    SSH_STRING_FREE(pq_sig);
+#endif
     return sig;
 }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
+{
+    switch (keytype)
+    {
+    case SSH_KEYTYPE_OQSDEFAULT:
+    case SSH_KEYTYPE_RSA3072_OQSDEFAULT:
+    case SSH_KEYTYPE_P256_OQSDEFAULT:
+        return OQS_SIG_alg_default;
+    case SSH_KEYTYPE_DILITHIUM_2:
+    case SSH_KEYTYPE_RSA3072_DILITHIUM_2:
+    case SSH_KEYTYPE_P256_DILITHIUM_2:
+        return OQS_SIG_alg_dilithium_2;
+    case SSH_KEYTYPE_FALCON_512:
+    case SSH_KEYTYPE_RSA3072_FALCON_512:
+    case SSH_KEYTYPE_P256_FALCON_512:
+        return OQS_SIG_alg_falcon_512;
+    case SSH_KEYTYPE_PICNIC_L1FULL:
+    case SSH_KEYTYPE_RSA3072_PICNIC_L1FULL:
+    case SSH_KEYTYPE_P256_PICNIC_L1FULL:
+        return OQS_SIG_alg_picnic_L1_full;
+    case SSH_KEYTYPE_PICNIC3_L1:
+    case SSH_KEYTYPE_RSA3072_PICNIC3_L1:
+    case SSH_KEYTYPE_P256_PICNIC3_L1:
+        return OQS_SIG_alg_picnic3_L1;
+#ifdef WITH_PQ_RAINBOW_ALGS
+    case SSH_KEYTYPE_RAINBOW_I_CLASSIC:
+    case SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC:
+    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
+        return OQS_SIG_alg_rainbow_I_classic;
+    case SSH_KEYTYPE_RAINBOW_III_CLASSIC:
+    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
+        return OQS_SIG_alg_rainbow_III_classic;
+    case SSH_KEYTYPE_RAINBOW_V_CLASSIC:
+    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
+        return OQS_SIG_alg_rainbow_V_classic;
+#endif
+    case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST:
+    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST:
+    case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
+        return OQS_SIG_alg_sphincs_haraka_128f_robust;
+    case SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST:
+    case SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_ROBUST:
+    case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST:
+        return OQS_SIG_alg_sphincs_sha256_128f_robust;
+    case SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST:
+    case SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST:
+    case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
+        return OQS_SIG_alg_sphincs_shake256_128f_robust;
+    default:
+        return NULL;
+    }
+}
+
+int pki_parse_oqs_signature_from_blob(ssh_signature sig,
+                                      const ssh_key pubkey,
+                                      const ssh_string pq_sig_blob,
+                                      enum ssh_keytypes_e type,
+                                      enum ssh_digest_e hash_type)
+{
+    int rc = SSH_ERROR;
+    ssh_buffer buf;
+    ssh_string ktypestr = NULL, sigblob = NULL;
+    const char *ktype = NULL;
+
+    if (pubkey->oqs_sig == NULL ||
+        pubkey->oqs_pk == NULL) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "No OQS signature key present");
+        return SSH_ERROR;
+    }
+
+    buf = ssh_buffer_new();
+    if (buf == NULL) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Could not allocate buf");
+        return SSH_ERROR;
+    }
+
+    rc = ssh_buffer_add_data(buf,
+                             ssh_string_data(pq_sig_blob),
+                             ssh_string_len(pq_sig_blob));
+
+    if (rc < 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Could not add sig_blob to buffer");
+        goto out;
+    }
+
+    ktypestr = ssh_buffer_get_ssh_string(buf);
+    if (ktypestr == NULL) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Could not get ktypestr");
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    sigblob = ssh_buffer_get_ssh_string(buf);
+    if (sigblob == NULL) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Could not get sigblob");
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    ktype = ssh_string_get_char(ktypestr);
+    if (strcmp("ssh-oqs", ktype) != 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "ktype was not ssh-oqs");
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    if (ssh_string_len(sigblob) > pubkey->oqs_sig->length_signature) {
+        SSH_LOG(SSH_LOG_TRACE,
+            "string length was %zu, length_signature was %zu",
+            ssh_string_len(sigblob), pubkey->oqs_sig->length_signature);
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    sig->pq_sig = sigblob;
+    /* Since we're successful, don't free this memory on the way out, as it now belongs to sig. */
+    sigblob = NULL;
+
+    rc = SSH_OK;
+
+out:
+
+    SSH_BUFFER_FREE(buf);
+    SSH_STRING_FREE(ktypestr);
+    SSH_STRING_FREE(sigblob);
+
+    return rc;
+
+}
+
+int pki_oqs_sign_data(const ssh_key privkey,
+                      const unsigned char *input,
+                      size_t input_len,
+                      ssh_string *pq_sig)
+{
+    int rc = SSH_ERROR, oqs_rc;
+    unsigned char *sig = NULL;
+    size_t siglen = 0;
+    ssh_buffer b = NULL;
+    ssh_string sig_str = NULL;
+
+    if (pq_sig == NULL) {
+        SSH_LOG(SSH_LOG_TRACE, "pq_sig invalid");
+        return SSH_ERROR;
+    }
+
+    *pq_sig = NULL;
+
+    if (privkey->oqs_sig == NULL) {
+        SSH_LOG(SSH_LOG_WARN,
+            "Signing with OQS key type with no oqs_sig set");
+        return SSH_ERROR;
+    }
+    if (privkey->oqs_sk == NULL) {
+        SSH_LOG(SSH_LOG_WARN,
+            "Signing with OQS key type with no oqs_sk set");
+        return SSH_ERROR;
+    }
+
+    siglen = privkey->oqs_sig->length_signature;
+    sig = malloc(siglen);
+    if (sig == NULL) {
+        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+        return SSH_ERROR;
+    }
+
+    oqs_rc = OQS_SIG_sign(privkey->oqs_sig, sig, &siglen, input, input_len, privkey->oqs_sk);
+    if (oqs_rc != OQS_SUCCESS) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "OQS_SIG_sign failed: %d",
+                oqs_rc);
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    sig_str = ssh_string_new(siglen);
+    if (sig_str == NULL) {
+        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+        rc = SSH_ERROR;
+        goto out;
+    }
+    rc = ssh_string_fill(sig_str, sig, siglen);
+    if (rc < 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Failed to ssh_string_fill sig_str: %d",
+                rc);
+        goto out;
+    }
+
+    b = ssh_buffer_new();
+    if (b == NULL) {
+        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    ssh_buffer_set_secure(b);
+
+    rc = ssh_buffer_pack(b, "sS", "ssh-oqs", sig_str);
+    if (rc < 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Failed to ssh_buffer_pack: %d",
+                rc);
+        goto out;
+    }
+
+    *pq_sig = ssh_string_new(ssh_buffer_get_len(b));
+    if (*pq_sig == NULL) {
+        SSH_LOG(SSH_LOG_TRACE, "Out of memory");
+        rc = SSH_ERROR;
+        goto out;
+    }
+
+    rc = ssh_string_fill(*pq_sig, ssh_buffer_get(b), ssh_buffer_get_len(b));
+    if (rc < 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "Failed to ssh_string_fill sig->pq_sig: %d",
+                rc);
+        ssh_string_burn(*pq_sig);
+        SSH_STRING_FREE(*pq_sig);
+        *pq_sig = NULL;
+        goto out;
+    }
+
+    rc = SSH_OK;
+    
+out:
+    if (sig != NULL) {
+        explicit_bzero(sig, siglen);
+        SAFE_FREE(sig);
+    }
+    ssh_string_burn(sig_str);
+    SSH_STRING_FREE(sig_str);
+    SSH_BUFFER_FREE(b);
+
+    return rc;
+}
+
+int pki_verify_oqs_data_signature(const ssh_signature sig,
+                                  const ssh_key pubkey,
+                                  const unsigned char *input,
+                                  size_t input_len)
+{
+    int oqs_rc;
+
+    if (input == NULL ||
+        input_len == 0) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "input or input_len invalid");
+        return SSH_ERROR;
+    }
+
+    if (!IS_OQS_KEY_TYPE(pubkey->type)) {
+        /* Not a hybrid or PQ key type? Nothing to do. Warn, but pass. */
+        SSH_LOG(SSH_LOG_WARN,
+                "Not a PQ or hybrid key type");
+        return SSH_OK;
+    }
+
+    if (sig->pq_sig == NULL) {
+        /* Hybrid or PQ key type but no signature? Fail. */
+        SSH_LOG(SSH_LOG_TRACE,
+                "No PQ signature present");
+        return SSH_ERROR;
+    }
+
+    if (pubkey->oqs_sig == NULL ||
+        pubkey->oqs_pk == NULL) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "No OQS signature key present");
+        return SSH_ERROR;
+    }
+
+    oqs_rc = OQS_SIG_verify(pubkey->oqs_sig,
+                            input,
+                            input_len,
+                            ssh_string_data(sig->pq_sig),
+                            ssh_string_len(sig->pq_sig),
+                            pubkey->oqs_pk);
+
+    if (oqs_rc != OQS_SUCCESS) {
+        SSH_LOG(SSH_LOG_TRACE,
+                "OQS_SIG_verify failed; oqs_rc = %d", oqs_rc);
+        return SSH_ERROR;
+    } else {
+        SSH_LOG(SSH_LOG_TRACE,
+                "OQS_SIG_verify succeeded");
+    }
+
+    return SSH_OK;
+}
+#endif
 
 /**
  * @internal
@@ -2333,6 +2795,9 @@ int pki_verify_data_signature(ssh_signature signature,
 #ifndef HAVE_OPENSSL_ED25519
         && signature->ed25519_sig == NULL
 #endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        && signature->pq_sig == NULL
+#endif
         ))
     {
         SSH_LOG(SSH_LOG_TRACE, "Bad parameter provided to "
@@ -2356,67 +2821,80 @@ int pki_verify_data_signature(ssh_signature signature,
     }
 #endif
 
-    /* Get the signature to be verified */
-    raw_sig_data = ssh_string_data(signature->raw_sig);
-    raw_sig_len = ssh_string_len(signature->raw_sig);
-    if (raw_sig_data == NULL) {
-        return SSH_ERROR;
-    }
-
-    /* Set hash algorithm to be used */
-    md = pki_digest_to_md(signature->hash_type);
-    if (md == NULL) {
-        if (signature->hash_type != SSH_DIGEST_AUTO) {
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    /* Only do classical verification if the key is pure classical or hybrid. Skip for pure PQ. */
+    if (!IS_OQS_KEY_TYPE(pubkey->type) || IS_HYBRID(pubkey->type)) {
+#endif
+        /* Get the signature to be verified */
+        raw_sig_data = ssh_string_data(signature->raw_sig);
+        raw_sig_len = ssh_string_len(signature->raw_sig);
+        if (raw_sig_data == NULL) {
             return SSH_ERROR;
         }
-    }
 
-    /* Setup public key EVP_PKEY */
-    pkey = pki_key_to_pkey(pubkey);
-    if (pkey == NULL) {
-        return SSH_ERROR;
-    }
+        /* Set hash algorithm to be used */
+        md = pki_digest_to_md(signature->hash_type);
+        if (md == NULL) {
+            if (signature->hash_type != SSH_DIGEST_AUTO) {
+                return SSH_ERROR;
+            }
+        }
 
-    /* Create the context */
-    ctx = EVP_MD_CTX_create();
-    if (ctx == NULL) {
-        SSH_LOG(SSH_LOG_TRACE,
-                "Failed to create EVP_MD_CTX: %s",
-                ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+        /* Setup public key EVP_PKEY */
+        /* If this is a hybrid signature, this will set the classical algorithm key. */
+        pkey = pki_key_to_pkey(pubkey);
+        if (pkey == NULL) {
+            return SSH_ERROR;
+        }
 
-    /* Verify the signature */
-    evp_rc = EVP_DigestVerifyInit(ctx, NULL, md, NULL, pkey);
-    if (evp_rc != 1){
-        SSH_LOG(SSH_LOG_TRACE,
-                "EVP_DigestVerifyInit() failed: %s",
-                ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
+        /* Create the context */
+        ctx = EVP_MD_CTX_create();
+        if (ctx == NULL) {
+            SSH_LOG(SSH_LOG_TRACE,
+                    "Failed to create EVP_MD_CTX: %s",
+                    ERR_error_string(ERR_get_error(), NULL));
+            goto out;
+        }
+
+        /* Verify the clasical signature */
+        evp_rc = EVP_DigestVerifyInit(ctx, NULL, md, NULL, pkey);
+        if (evp_rc != 1){
+            SSH_LOG(SSH_LOG_TRACE,
+                    "EVP_DigestVerifyInit() failed: %s",
+                    ERR_error_string(ERR_get_error(), NULL));
+            goto out;
+        }
 
 #ifdef HAVE_OPENSSL_EVP_DIGESTVERIFY
-    evp_rc = EVP_DigestVerify(ctx, raw_sig_data, raw_sig_len, input, input_len);
+        evp_rc = EVP_DigestVerify(ctx, raw_sig_data, raw_sig_len, input, input_len);
 #else
-    evp_rc = EVP_DigestVerifyUpdate(ctx, input, input_len);
-    if (evp_rc != 1) {
-        SSH_LOG(SSH_LOG_TRACE,
-                "EVP_DigestVerifyUpdate() failed: %s",
-                ERR_error_string(ERR_get_error(), NULL));
-        goto out;
-    }
-
-    evp_rc = EVP_DigestVerifyFinal(ctx, raw_sig_data, raw_sig_len);
+        evp_rc = EVP_DigestVerifyUpdate(ctx, input, input_len);
+        if (evp_rc != 1) {
+            SSH_LOG(SSH_LOG_TRACE,
+                    "EVP_DigestVerifyUpdate() failed: %s",
+                    ERR_error_string(ERR_get_error(), NULL));
+            goto out;
+        }
+        evp_rc = EVP_DigestVerifyFinal(ctx, raw_sig_data, raw_sig_len);
 #endif
-    if (evp_rc == 1) {
-        SSH_LOG(SSH_LOG_TRACE, "Signature valid");
-        rc = SSH_OK;
-    } else {
-        SSH_LOG(SSH_LOG_TRACE,
-                "Signature invalid: %s",
-                ERR_error_string(ERR_get_error(), NULL));
-        rc = SSH_ERROR;
+        if (evp_rc == 1) {
+            SSH_LOG(SSH_LOG_TRACE, "Signature valid");
+            rc = SSH_OK;
+        } else {
+            SSH_LOG(SSH_LOG_TRACE,
+                    "Signature invalid: %s",
+                    ERR_error_string(ERR_get_error(), NULL));
+            rc = SSH_ERROR;
+        }
+#ifdef WITH_POST_QUANTUM_CRYPTO
     }
+#endif
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (IS_OQS_KEY_TYPE(pubkey->type)) {
+        rc = pki_verify_oqs_data_signature(signature, pubkey, input, input_len);
+    }
+#endif
 
 out:
     if (ctx != NULL) {

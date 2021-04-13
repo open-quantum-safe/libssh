@@ -186,6 +186,12 @@ struct ssh_session_struct {
         ssh_key dsa_key;
         ssh_key ecdsa_key;
         ssh_key ed25519_key;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        /* This currently supports only a single host key of a PQ or hybrid key type being used, in addition to the above classical types. 
+         * Multiple hybrid/pure PQ host keys being offered simultaneously is not currently supported.
+         */
+        ssh_key oqs_key;
+#endif
         /* The type of host key wanted by client */
         enum ssh_keytypes_e hostkey;
         enum ssh_digest_e hostkey_digest;

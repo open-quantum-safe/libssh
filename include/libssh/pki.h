@@ -42,9 +42,16 @@
 #endif
 /* This definition is used for both OpenSSL and internal implementations */
 #define ED25519_KEY_LEN 32
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#include <oqs/oqs.h>
+#endif
 
 #define MAX_PUBKEY_SIZE 0x100000 /* 1M */
+#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PQ_RAINBOW_ALGS)
+#define MAX_PRIVKEY_SIZE 0x800000 /* 8M */
+#else
 #define MAX_PRIVKEY_SIZE 0x400000 /* 4M */
+#endif
 
 #define SSH_KEY_FLAG_EMPTY   0x0
 #define SSH_KEY_FLAG_PUBLIC  0x0001
@@ -84,6 +91,12 @@ struct ssh_key_struct {
     ssh_string sk_application;
     void *cert;
     enum ssh_keytypes_e cert_type;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    /* OQS */
+    OQS_SIG* oqs_sig;
+    uint8_t* oqs_sk;
+    uint8_t* oqs_pk;
+#endif
 };
 
 struct ssh_signature_struct {
@@ -102,6 +115,9 @@ struct ssh_signature_struct {
     ed25519_signature *ed25519_sig;
 #endif
     ssh_string raw_sig;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    ssh_string pq_sig;
+#endif
 
     /* Security Key specific additions */
     uint8_t sk_flags;

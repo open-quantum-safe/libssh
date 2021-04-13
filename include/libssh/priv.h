@@ -168,7 +168,11 @@ int gettimeofday(struct timeval *__p, void *__t);
 
 /* some constants */
 #ifndef MAX_PACKET_LEN
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#define MAX_PACKET_LEN 2097152
+#else
 #define MAX_PACKET_LEN 262144
+#endif
 #endif
 #ifndef ERROR_BUFFERLEN
 #define ERROR_BUFFERLEN 1024

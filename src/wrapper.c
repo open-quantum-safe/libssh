@@ -54,6 +54,12 @@
 #endif /* WITH_GEX */
 #include "libssh/ecdh.h"
 #include "libssh/curve25519.h"
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#ifdef WITH_PURE_PQ_KEX
+#include "libssh/pqkex.h"
+#endif
+#include "libssh/hykex.h"
+#endif
 
 static struct ssh_hmac_struct ssh_hmac_tab[] = {
   { "hmac-sha1",                     SSH_HMAC_SHA1,          false },
@@ -186,6 +192,31 @@ void crypto_free(struct ssh_crypto_struct *crypto)
     }
 #endif
     SAFE_FREE(crypto->dh_server_signature);
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (crypto->oqs_kem != NULL) {
+        if (crypto->oqs_sk != NULL) {
+            explicit_bzero(crypto->oqs_sk, crypto->oqs_kem->length_secret_key);
+        }
+        OQS_KEM_free(crypto->oqs_kem);
+        crypto->oqs_kem = NULL;
+    }
+    if (crypto->oqs_sk != NULL) {
+        SAFE_FREE(crypto->oqs_sk);
+        crypto->oqs_sk = NULL;
+    }
+    if (crypto->oqs_pk != NULL) {
+        SAFE_FREE(crypto->oqs_pk);
+        crypto->oqs_pk = NULL;
+    }
+    if (crypto->oqs_local_msg != NULL) {
+        ssh_string_burn(crypto->oqs_local_msg);
+        SSH_STRING_FREE(crypto->oqs_local_msg);
+    }
+    if (crypto->oqs_remote_msg != NULL) {
+        ssh_string_burn(crypto->oqs_remote_msg);
+        SSH_STRING_FREE(crypto->oqs_remote_msg);
+    }
+#endif
     if (crypto->session_id != NULL) {
         explicit_bzero(crypto->session_id, crypto->digest_len);
         SAFE_FREE(crypto->session_id);
@@ -571,6 +602,16 @@ int crypt_set_algorithms_server(ssh_session session){
     case SSH_KEX_CURVE25519_SHA256:
     case SSH_KEX_CURVE25519_SHA256_LIBSSH_ORG:
         ssh_server_curve25519_init(session);
+        break;
+#endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#ifdef WITH_PURE_PQ_KEX
+    CASE_SSH_KEX_PURE_PQ:
+        ssh_server_pqkex_init(session);
+        break;
+#endif
+    CASE_SSH_KEX_HYBRID:
+        ssh_server_hykex_init(session);
         break;
 #endif
     default:

@@ -40,6 +40,9 @@
 #include "libssh/server.h"
 #include "libssh/bind.h"
 #include "libssh/bind_config.h"
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#include "libssh/pki_priv.h"
+#endif
 #endif
 
 /**
@@ -1722,6 +1725,13 @@ int ssh_bind_options_set(ssh_bind sshbind, enum ssh_bind_options_e type,
 		  bind_key_loc = &sshbind->ed25519;
 		  bind_key_path_loc = &sshbind->ed25519key;
 		  break;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+          CASE_KEY_OQS:
+          CASE_KEY_HYBRID:
+              bind_key_loc = &sshbind->oqs;
+              bind_key_path_loc = &sshbind->oqskey;
+              break;
+#endif
           default:
               ssh_set_error(sshbind,
                             SSH_FATAL,
@@ -1783,6 +1793,12 @@ int ssh_bind_options_set(ssh_bind sshbind, enum ssh_bind_options_e type,
                 case SSH_KEYTYPE_ED25519:
                     bind_key_loc = &sshbind->ed25519;
                     break;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+                CASE_KEY_OQS:
+                CASE_KEY_HYBRID:
+                    bind_key_loc = &sshbind->oqs;
+                    break;
+#endif
                 default:
                     ssh_set_error(sshbind,
                                   SSH_FATAL,

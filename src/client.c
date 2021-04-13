@@ -42,6 +42,8 @@
 #include "libssh/dh-gex.h"
 #endif /* WITH_GEX */
 #include "libssh/ecdh.h"
+#include "libssh/pqkex.h"
+#include "libssh/hykex.h"
 #include "libssh/threads.h"
 #include "libssh/misc.h"
 #include "libssh/pki.h"
@@ -275,6 +277,16 @@ static int dh_handshake(ssh_session session) {
         case SSH_KEX_CURVE25519_SHA256_LIBSSH_ORG:
           rc = ssh_client_curve25519_init(session);
           break;
+#endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        CASE_SSH_KEX_HYBRID:
+          rc = ssh_client_hykex_init(session);
+          break;
+#ifdef WITH_PURE_PQ_KEX
+        CASE_SSH_KEX_PURE_PQ:
+          rc = ssh_client_pqkex_init(session);
+          break;
+#endif
 #endif
         default:
           rc = SSH_ERROR;
@@ -605,7 +617,7 @@ pending:
             timeout = 10 * 1000;
         }
         SSH_LOG(SSH_LOG_PACKET, "Actual timeout : %d", timeout);
-        ret = ssh_handle_packets_termination(session, timeout,
+        ret = ssh_handle_packets_termination(session, -1,
                                              ssh_connect_termination, session);
         if (session->session_state != SSH_SESSION_STATE_ERROR &&
             (ret == SSH_ERROR || !ssh_connect_termination(session)))
@@ -725,6 +737,7 @@ error:
     session->opts.fd = SSH_INVALID_SOCKET;
     session->session_state = SSH_SESSION_STATE_DISCONNECTED;
     session->pending_call_state = SSH_PENDING_CALL_NONE;
+    session->packet_state = PACKET_STATE_INIT;
 
     while ((it = ssh_list_get_iterator(session->channels)) != NULL) {
         ssh_channel_do_free(ssh_iterator_value(ssh_channel, it));

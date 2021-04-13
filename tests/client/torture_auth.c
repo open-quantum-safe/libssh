@@ -984,6 +984,147 @@ static void torture_auth_pubkey_types_ed25519_nonblocking(void **state)
 
 }
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+static void torture_auth_pubkey_types_oqs_wrapper(void **state, const char *algname)
+{
+    struct torture_state *s = *state;
+    ssh_session session = s->ssh.session;
+    char bob_ssh_key[1024];
+    char ssh_algname[128];
+    ssh_key privkey = NULL;
+    struct passwd *pwd;
+    int rc;
+    int out_len;
+
+    if (ssh_fips_mode()) {
+        skip();
+    }
+
+    pwd = getpwnam("bob");
+    assert_non_null(pwd);
+
+    out_len = snprintf(bob_ssh_key,
+                       sizeof(bob_ssh_key),
+                       "%s/.ssh/id_%s",
+                       pwd->pw_dir,
+                       algname);
+    assert_in_range(out_len, 0, sizeof(bob_ssh_key) - 1);
+
+    rc = ssh_options_set(session, SSH_OPTIONS_USER, TORTURE_SSH_USER_ALICE);
+    assert_ssh_return_code(session, rc);
+
+    rc = ssh_connect(session);
+    assert_ssh_return_code(session, rc);
+
+    rc = ssh_userauth_none(session, NULL);
+    /* This request should return a SSH_REQUEST_DENIED error */
+    if (rc == SSH_ERROR) {
+        assert_int_equal(ssh_get_error_code(session), SSH_REQUEST_DENIED);
+    }
+    rc = ssh_userauth_list(session, NULL);
+    assert_true(rc & SSH_AUTH_METHOD_PUBLICKEY);
+
+    /* Import the OQS private key */
+    rc = ssh_pki_import_privkey_file(bob_ssh_key, NULL, NULL, NULL, &privkey);
+    assert_int_equal(rc, SSH_OK);
+
+    /* Enable only RSA keys -- authentication should fail */
+    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
+                         "ssh-rsa");
+    assert_ssh_return_code(session, rc);
+
+    rc = ssh_userauth_publickey(session, NULL, privkey);
+    assert_int_equal(rc, SSH_AUTH_DENIED);
+
+    /* Verify we can use also oqs keys */
+    out_len = snprintf(ssh_algname, sizeof(ssh_algname), "ssh-%s", algname);
+    assert_in_range(out_len, 0, sizeof(ssh_algname) - 1);
+    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
+                         ssh_algname);
+    assert_ssh_return_code(session, rc);
+
+    rc = ssh_userauth_publickey(session, NULL, privkey);
+    assert_int_equal(rc, SSH_AUTH_SUCCESS);
+
+    SSH_KEY_FREE(privkey);
+}
+
+static void torture_auth_pubkey_types_oqs_nonblocking_wrapper(void **state, const char *algname)
+{
+    struct torture_state *s = *state;
+    ssh_session session = s->ssh.session;
+    char bob_ssh_key[1024];
+    char ssh_algname[128];
+    ssh_key privkey = NULL;
+    struct passwd *pwd;
+    int rc;
+    int out_len;
+
+    if (ssh_fips_mode()) {
+        skip();
+    }
+
+    pwd = getpwnam("bob");
+    assert_non_null(pwd);
+
+    out_len = snprintf(bob_ssh_key,
+                       sizeof(bob_ssh_key),
+                       "%s/.ssh/id_%s",
+                       pwd->pw_dir,
+                       algname);
+    assert_in_range(out_len, 0, sizeof(bob_ssh_key) - 1);
+
+    rc = ssh_options_set(session, SSH_OPTIONS_USER, TORTURE_SSH_USER_ALICE);
+    assert_ssh_return_code(session, rc);
+
+    rc = ssh_connect(session);
+    assert_ssh_return_code(session, rc);
+
+    ssh_set_blocking(session, 0);
+    do {
+      rc = ssh_userauth_none(session, NULL);
+    } while (rc == SSH_AUTH_AGAIN);
+
+    /* This request should return a SSH_REQUEST_DENIED error */
+    if (rc == SSH_ERROR) {
+        assert_int_equal(ssh_get_error_code(session), SSH_REQUEST_DENIED);
+    }
+
+    rc = ssh_userauth_list(session, NULL);
+    assert_true(rc & SSH_AUTH_METHOD_PUBLICKEY);
+
+    /* Import the OQS private key */
+    rc = ssh_pki_import_privkey_file(bob_ssh_key, NULL, NULL, NULL, &privkey);
+    assert_int_equal(rc, SSH_OK);
+
+    /* Enable only RSA keys -- authentication should fail */
+    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
+                         "ssh-rsa");
+    assert_ssh_return_code(session, rc);
+
+    do {
+        rc = ssh_userauth_publickey(session, NULL, privkey);
+    } while (rc == SSH_AUTH_AGAIN);
+    assert_int_equal(rc, SSH_AUTH_DENIED);
+
+    /* Verify we can use also OQS key to authenticate */
+    out_len = snprintf(ssh_algname, sizeof(ssh_algname), "ssh-%s", algname);
+    assert_in_range(out_len, 0, sizeof(ssh_algname) - 1);
+    
+    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
+                         ssh_algname);
+    assert_ssh_return_code(session, rc);
+
+    do {
+        rc = ssh_userauth_publickey(session, NULL, privkey);
+    } while (rc == SSH_AUTH_AGAIN);
+    assert_int_equal(rc, SSH_AUTH_SUCCESS);
+}
+#endif /* WITH_POST_QUANTUM_CRYPTO */
+
+#include "torture_auth_oqs_funcs.c"
+
+
 int torture_run_tests(void) {
     int rc;
     struct CMUnitTest tests[] = {
@@ -1047,6 +1188,7 @@ int torture_run_tests(void) {
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ed25519_nonblocking,
                                         pubkey_setup,
                                         session_teardown),
+#include "torture_auth_oqs_cases.c"
     };
 
     ssh_init();

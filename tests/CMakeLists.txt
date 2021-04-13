@@ -16,6 +16,10 @@ include_directories(${OPENSSL_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}/tests)
 
+if (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+    include_directories(${OQS_ROOT_DIR}/include)
+endif (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+
 set(TORTURE_LINK_LIBRARIES
     ${CMOCKA_LIBRARY}
     ssh::static)
@@ -136,6 +140,20 @@ if (SSH_EXECUTABLE)
         ecdsa-sha2-nistp256-cert-v01@openssh.com ecdsa-sha2-nistp384-cert-v01@openssh.com
         ecdsa-sha2-nistp521-cert-v01@openssh.com
         )
+    if (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+        set(SSH_ALGORITHMS
+            ${SSH_ALGORITHMS}
+            ssh-rsa3072-oqsdefault ssh-p256-oqsdefault ssh-rsa3072-dilithium2 ssh-p256-dilithium2 ssh-rsa3072-falcon512
+            ssh-p256-falcon512 ssh-rsa3072-picnicl1full ssh-p256-picnicl1full ssh-rsa3072-picnic3l1 ssh-p256-picnic3l1
+            ssh-rsa3072-rainbowiaclassic ssh-p256-rainbowiaclassic ssh-p384-rainbowiiicclassic ssh-p521-rainbowvcclassic
+            ssh-rsa3072-sphincsharaka128frobust ssh-p256-sphincsharaka128frobust ssh-rsa3072-sphincssha256128frobust
+            ssh-p256-sphincssha256128frobust ssh-rsa3072-sphincsshake256128frobust ssh-p256-sphincsshake256128frobust
+            ssh-oqsdefault ssh-dilithium2 ssh-falcon512 ssh-picnicl1full ssh-picnic3l1 ssh-rainbowiaclassic
+            ssh-rainbowiiicclassic ssh-rainbowvcclassic ssh-sphincsharaka128frobustssh-sphincssha256128frobust
+            ssh-sphincsshake256128frobust
+            )
+    endif(WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+
     foreach(ALGORITHM ${SSH_ALGORITHMS})
         string(TOUPPER ${ALGORITHM} VARNAME)
         string(REGEX REPLACE "[-@.]" "_" VARNAME "OPENSSH_${VARNAME}")
@@ -271,6 +289,11 @@ if (CLIENT_TESTING OR SERVER_TESTING)
     # append ed25519 public key
     file(READ keys/id_ed25519.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+
+    # Copy and authorize OQS keys if PQ crypto is enabled
+    if (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+        include(GenerateAndAuthorizePQKeys.cmake)
+    endif (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
 
     # Allow to auth with bob his public keys on charlie account
     configure_file(keys/pkcs11/id_pkcs11_rsa_openssh.pub ${CMAKE_CURRENT_BINARY_DIR}/home/charlie/.ssh/authorized_keys @ONLY)

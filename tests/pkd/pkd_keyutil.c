@@ -71,6 +71,171 @@ void setup_ecdsa_keys() {
     }
 }
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+void setup_post_quantum_keys() {
+    int rc = 0;
+    if (access(LIBSSH_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t OQSDEFAULT -q -N \"\" -f "
+                            LIBSSH_OQSDEFAULT_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_FALCON_512_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t FALCON512 -q -N \"\" -f "
+                            LIBSSH_FALCON_512_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t PICNICL1FULL -q -N \"\" -f "
+                            LIBSSH_PICNIC_L1FULL_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t PICNIC3L1 -q -N \"\" -f "
+                            LIBSSH_PICNIC3_L1_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+#ifdef WITH_PQ_RAINBOW_ALGS
+    if (access(LIBSSH_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWICLASSIC -q -N \"\" -f "
+                            LIBSSH_RAINBOW_I_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RAINBOW_III_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWIIICLASSIC -q -N \"\" -f "
+                            LIBSSH_RAINBOW_III_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RAINBOW_V_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWVCLASSIC -q -N \"\" -f "
+                            LIBSSH_RAINBOW_V_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+#endif
+    if (access(LIBSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                            LIBSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                            LIBSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                            LIBSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_OQSDEFAULT -q -N \"\" -f "
+                            LIBSSH_RSA3072_OQSDEFAULT_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_OQSDEFAULT -q -N \"\" -f "
+                            LIBSSH_P256_OQSDEFAULT_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_P256_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_FALCON_512_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_FALCON512 -q -N \"\" -f "
+                            LIBSSH_RSA3072_FALCON_512_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_FALCON_512_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_FALCON512 -q -N \"\" -f "
+                            LIBSSH_P256_FALCON_512_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNICL1FULL -q -N \"\" -f "
+                            LIBSSH_RSA3072_PICNIC_L1FULL_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_PICNICL1FULL -q -N \"\" -f "
+                            LIBSSH_P256_PICNIC_L1FULL_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNIC3L1 -q -N \"\" -f "
+                            LIBSSH_RSA3072_PICNIC3_L1_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_PICNIC3L1 -q -N \"\" -f "
+                            LIBSSH_P256_PICNIC3_L1_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+#ifdef WITH_PQ_RAINBOW_ALGS
+    if (access(LIBSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_RAINBOWICLASSIC -q -N \"\" -f "
+                            LIBSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_RAINBOWICLASSIC -q -N \"\" -f "
+                            LIBSSH_P256_RAINBOW_I_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P384_RAINBOW_III_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P384_RAINBOWIIICLASSIC -q -N \"\" -f "
+                            LIBSSH_P384_RAINBOW_III_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P521_RAINBOW_V_CLASSIC_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P521_RAINBOWVCLASSIC -q -N \"\" -f "
+                            LIBSSH_P521_RAINBOW_V_CLASSIC_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+#endif
+    if (access(LIBSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                            LIBSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                            LIBSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                            LIBSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                            LIBSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                            LIBSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                            LIBSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+}
+#endif
+
 void cleanup_rsa_key() {
     cleanup_key(LIBSSH_RSA_TESTKEY);
 }
@@ -90,6 +255,46 @@ void cleanup_ecdsa_keys() {
     cleanup_key(LIBSSH_ECDSA_384_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_521_TESTKEY);
 }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+void cleanup_post_quantum_keys() {
+    cleanup_key(LIBSSH_OQSDEFAULT_TESTKEY);
+    cleanup_key(LIBSSH_DILITHIUM_2_TESTKEY);
+    cleanup_key(LIBSSH_FALCON_512_TESTKEY);
+    cleanup_key(LIBSSH_PICNIC_L1FULL_TESTKEY);
+    cleanup_key(LIBSSH_PICNIC3_L1_TESTKEY);
+#ifdef WITH_PQ_RAINBOW_ALGS
+    cleanup_key(LIBSSH_RAINBOW_I_CLASSIC_TESTKEY);
+    cleanup_key(LIBSSH_RAINBOW_III_CLASSIC_TESTKEY);
+    cleanup_key(LIBSSH_RAINBOW_V_CLASSIC_TESTKEY);
+#endif
+    cleanup_key(LIBSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_OQSDEFAULT_TESTKEY);
+    cleanup_key(LIBSSH_P256_OQSDEFAULT_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+    cleanup_key(LIBSSH_P256_DILITHIUM_2_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_FALCON_512_TESTKEY);
+    cleanup_key(LIBSSH_P256_FALCON_512_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_PICNIC_L1FULL_TESTKEY);
+    cleanup_key(LIBSSH_P256_PICNIC_L1FULL_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_PICNIC3_L1_TESTKEY);
+    cleanup_key(LIBSSH_P256_PICNIC3_L1_TESTKEY);
+#ifdef WITH_PQ_RAINBOW_ALGS
+    cleanup_key(LIBSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY);
+    cleanup_key(LIBSSH_P256_RAINBOW_I_CLASSIC_TESTKEY);
+    cleanup_key(LIBSSH_P384_RAINBOW_III_CLASSIC_TESTKEY);
+    cleanup_key(LIBSSH_P521_RAINBOW_V_CLASSIC_TESTKEY);
+#endif
+    cleanup_key(LIBSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+}
+#endif
 
 void setup_openssh_client_keys() {
     int rc = 0;
@@ -182,6 +387,176 @@ void setup_openssh_client_keys() {
         }
         assert_int_equal(rc, 0);
     }
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (!ssh_fips_mode()) {
+        /*
+         * As of this time, ssh-keygen's usage text hasn't been updated with the correct list of key types. Newer key types have not been
+         * added, and removed types are still listed. For the authoritative list of options, see the second field
+         * in the keytypes struct as sshkey.c:119 in OpenSSH for the correct string to pass to ssh-keygen's -t parameter.
+         */
+        if (access(OPENSSH_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t OQSDEFAULT -q -N \"\" -f "
+                                OPENSSH_OQSDEFAULT_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_FALCON_512_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t FALCON512 -q -N \"\" -f "
+                                OPENSSH_FALCON_512_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t PICNICL1FULL -q -N \"\" -f "
+                                OPENSSH_PICNIC_L1FULL_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t PICNIC3L1 -q -N \"\" -f "
+                                OPENSSH_PICNIC3_L1_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+#ifdef WITH_PQ_RAINBOW_ALGS
+        if (access(OPENSSH_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWICLASSIC -q -N \"\" -f "
+                                OPENSSH_RAINBOW_I_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RAINBOW_III_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWIIICLASSIC -q -N \"\" -f "
+                                OPENSSH_RAINBOW_III_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RAINBOW_V_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RAINBOWVCLASSIC -q -N \"\" -f "
+                                OPENSSH_RAINBOW_V_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+#endif
+        if (access(OPENSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                                OPENSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                                OPENSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                                OPENSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_OQSDEFAULT -q -N \"\" -f "
+                                OPENSSH_RSA3072_OQSDEFAULT_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_OQSDEFAULT_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_OQSDEFAULT -q -N \"\" -f "
+                                OPENSSH_P256_OQSDEFAULT_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_RSA3072_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_P256_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_FALCON_512_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_FALCON512 -q -N \"\" -f "
+                                OPENSSH_RSA3072_FALCON_512_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_FALCON_512_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_FALCON512 -q -N \"\" -f "
+                                OPENSSH_P256_FALCON_512_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNICL1FULL -q -N \"\" -f "
+                                OPENSSH_RSA3072_PICNIC_L1FULL_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_PICNIC_L1FULL_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_PICNICL1FULL -q -N \"\" -f "
+                                OPENSSH_P256_PICNIC_L1FULL_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNIC3L1 -q -N \"\" -f "
+                                OPENSSH_RSA3072_PICNIC3_L1_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_PICNIC3_L1_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_PICNIC3L1 -q -N \"\" -f "
+                                OPENSSH_P256_PICNIC3_L1_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+#ifdef WITH_PQ_RAINBOW_ALGS
+        if (access(OPENSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_RAINBOWICLASSIC -q -N \"\" -f "
+                                OPENSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_RAINBOW_I_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_RAINBOWICLASSIC -q -N \"\" -f "
+                                OPENSSH_P256_RAINBOW_I_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P384_RAINBOW_III_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P384_RAINBOWIIICLASSIC -q -N \"\" -f "
+                                OPENSSH_P384_RAINBOW_III_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P521_RAINBOW_V_CLASSIC_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P521_RAINBOWVCLASSIC -q -N \"\" -f "
+                                OPENSSH_P521_RAINBOW_V_CLASSIC_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+#endif
+        if (access(OPENSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                                OPENSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSHARAKA128FROBUST -q -N \"\" -f "
+                                OPENSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                                OPENSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSSHA256128FROBUST -q -N \"\" -f "
+                                OPENSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                                OPENSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t P256_SPHINCSSHAKE256128FROBUST -q -N \"\" -f "
+                                OPENSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+    }
+#endif
+
 }
 
 void cleanup_openssh_client_keys() {
@@ -197,6 +572,45 @@ void cleanup_openssh_client_keys() {
         cleanup_key(OPENSSH_DSA_TESTKEY);
 #endif
     }
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (!ssh_fips_mode()) {
+        cleanup_key(OPENSSH_OQSDEFAULT_TESTKEY);
+        cleanup_key(OPENSSH_DILITHIUM_2_TESTKEY);
+        cleanup_key(OPENSSH_FALCON_512_TESTKEY);
+        cleanup_key(OPENSSH_PICNIC_L1FULL_TESTKEY);
+        cleanup_key(OPENSSH_PICNIC3_L1_TESTKEY);
+#ifdef WITH_PQ_RAINBOW_ALGS
+        cleanup_key(OPENSSH_RAINBOW_I_CLASSIC_TESTKEY);
+        cleanup_key(OPENSSH_RAINBOW_III_CLASSIC_TESTKEY);
+        cleanup_key(OPENSSH_RAINBOW_V_CLASSIC_TESTKEY);
+#endif
+        cleanup_key(OPENSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_OQSDEFAULT_TESTKEY);
+        cleanup_key(OPENSSH_P256_OQSDEFAULT_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_DILITHIUM_2_TESTKEY);
+        cleanup_key(OPENSSH_P256_DILITHIUM_2_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_FALCON_512_TESTKEY);
+        cleanup_key(OPENSSH_P256_FALCON_512_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_PICNIC_L1FULL_TESTKEY);
+        cleanup_key(OPENSSH_P256_PICNIC_L1FULL_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_PICNIC3_L1_TESTKEY);
+        cleanup_key(OPENSSH_P256_PICNIC3_L1_TESTKEY);
+#ifdef WITH_PQ_RAINBOW_ALGS
+        cleanup_key(OPENSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY);
+        cleanup_key(OPENSSH_P256_RAINBOW_I_CLASSIC_TESTKEY);
+        cleanup_key(OPENSSH_P384_RAINBOW_III_CLASSIC_TESTKEY);
+        cleanup_key(OPENSSH_P521_RAINBOW_V_CLASSIC_TESTKEY);
+#endif
+        cleanup_key(OPENSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+    }
+#endif
 }
 
 void setup_dropbear_client_rsa_key() {

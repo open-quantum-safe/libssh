@@ -60,6 +60,9 @@
 #include "libssh/options.h"
 #include "libssh/curve25519.h"
 #include "libssh/token.h"
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#include "libssh/pki_priv.h"
+#endif
 
 #define set_status(session, status) do {\
         if (session->common.callbacks && session->common.callbacks->connect_status_function) \
@@ -100,9 +103,19 @@ int server_set_kex(ssh_session session)
         return -1;
     }
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (session->srv.oqs_key != NULL) {
+        len = strlen(hostkeys);
+        snprintf(hostkeys + len,
+                 sizeof(hostkeys) - len,
+                 "%s",
+                 ssh_key_type_to_char(ssh_key_type(session->srv.oqs_key)));
+    }
+#endif
     if (session->srv.ed25519_key != NULL) {
-        snprintf(hostkeys,
-                 sizeof(hostkeys),
+        len = strlen(hostkeys);
+        snprintf(hostkeys + len,
+                 sizeof(hostkeys) - len,
                  "%s",
                  ssh_key_type_to_char(ssh_key_type(session->srv.ed25519_key)));
     }
@@ -295,6 +308,12 @@ ssh_get_key_params(ssh_session session,
       case SSH_KEYTYPE_ED25519:
         *privkey = session->srv.ed25519_key;
         break;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+      CASE_KEY_OQS:
+      CASE_KEY_HYBRID:
+        *privkey = session->srv.oqs_key;
+        break;
+#endif
       case SSH_KEYTYPE_RSA1:
       case SSH_KEYTYPE_UNKNOWN:
       default:

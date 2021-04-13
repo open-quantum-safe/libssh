@@ -273,6 +273,10 @@ static int pkd_exec_hello(int fd, struct pkd_daemon_args *args)
 #endif
     } else if (type == PKD_ECDSA) {
         opts = SSH_BIND_OPTIONS_ECDSAKEY;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    } else if (IS_OQS_KEY_TYPE(type)) {
+        opts = SSH_BIND_OPTIONS_HOSTKEY;
+#endif
     } else {
         pkderr("unknown hostkey type: %d\n", type);
         rc = -1;

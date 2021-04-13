@@ -63,6 +63,33 @@ ssh_string ssh_make_bignum_string(bignum num) {
   return ptr;
 }
 
+ssh_string ssh_make_unsigned_bignum_string(bignum num, size_t paddedlen) {
+  ssh_string ptr = NULL;
+  size_t len = bignum_num_bytes(num);
+
+  if (len == 0) {
+      return NULL;
+  }
+
+  if (len > paddedlen) {
+      return NULL;
+  }
+
+  ptr = ssh_string_new(paddedlen);
+  if (ptr == NULL) {
+    return NULL;
+  }
+
+  /* We need to include any leading zeroes in this case. */
+  if (len < paddedlen) {
+      memset(ptr->data, 0, paddedlen - len);
+  }
+
+  bignum_bn2bin(num, len, &ptr->data[paddedlen - len]);
+
+  return ptr;
+}
+
 bignum ssh_make_string_bn(ssh_string string)
 {
     bignum bn = NULL;

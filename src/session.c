@@ -254,6 +254,10 @@ void ssh_free(ssh_session session)
   session->srv.ecdsa_key = NULL;
   ssh_key_free(session->srv.ed25519_key);
   session->srv.ed25519_key = NULL;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  ssh_key_free(session->srv.oqs_key);
+  session->srv.oqs_key = NULL;
+#endif
 
   if (session->ssh_message_list) {
       ssh_message msg;

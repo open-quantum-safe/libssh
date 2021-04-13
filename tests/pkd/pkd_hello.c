@@ -65,6 +65,8 @@ static struct argp_option options[] = {
       "Run in socket-wrapper mode using the given mkdtemp directory template", 0 },
     { "stdout", 'o', NULL, 0,
       "Emit pkd stdout messages", 0 },
+    { "preserve", 'p', NULL, 0,
+      "Preserve client and server authentication keys (preserved keys will be re-used by a future run)", 0 },
     { "rekey", 'r', "limit", 0,
       "Set the given rekey data limit, in bytes, using SSH_OPTIONS_REKEY_DATA", 0 },
     { "test", 't', "testname", 0,
@@ -98,6 +100,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'o':
         pkd_dargs.opts.log_stdout = 1;
+        break;
+    case 'p':
+        pkd_dargs.opts.preserve_keys = 1;
         break;
     case 'r':
         pkd_dargs.rekey_data_limit = atoi(arg);
@@ -207,6 +212,228 @@ static int torture_pkd_setup_ecdsa_521(void **state) {
     return 0;
 }
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+static int torture_pkd_setup_oqsdefault(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_OQSDEFAULT, LIBSSH_OQSDEFAULT_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_DILITHIUM_2, LIBSSH_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_falcon_512(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_FALCON_512, LIBSSH_FALCON_512_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_picnic_l1full(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_PICNIC_L1FULL, LIBSSH_PICNIC_L1FULL_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_picnic3_l1(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_PICNIC3_L1, LIBSSH_PICNIC3_L1_TESTKEY);
+
+    return 0;
+}
+
+#ifdef WITH_PQ_RAINBOW_ALGS
+static int torture_pkd_setup_rainbow_i_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void*)torture_pkd_setup(PKD_RAINBOW_I_CLASSIC, LIBSSH_RAINBOW_I_CLASSIC_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rainbow_iii_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RAINBOW_III_CLASSIC, LIBSSH_RAINBOW_III_CLASSIC_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rainbow_v_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RAINBOW_V_CLASSIC, LIBSSH_RAINBOW_V_CLASSIC_TESTKEY);
+
+    return 0;
+}
+#endif
+
+static int torture_pkd_setup_sphincs_haraka_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_HARAKA_128F_ROBUST, LIBSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_sphincs_sha256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_SHA256_128F_ROBUST, LIBSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_sphincs_shake256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_SHAKE256_128F_ROBUST, LIBSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_oqsdefault(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_OQSDEFAULT, LIBSSH_RSA3072_OQSDEFAULT_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_oqsdefault(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_OQSDEFAULT, LIBSSH_P256_OQSDEFAULT_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_DILITHIUM_2, LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_DILITHIUM_2, LIBSSH_P256_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_falcon_512(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_FALCON_512, LIBSSH_RSA3072_FALCON_512_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_falcon_512(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_FALCON_512, LIBSSH_P256_FALCON_512_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_picnic_l1full(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_PICNIC_L1FULL, LIBSSH_RSA3072_PICNIC_L1FULL_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_picnic_l1full(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_PICNIC_L1FULL, LIBSSH_P256_PICNIC_L1FULL_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_picnic3_l1(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_PICNIC3_L1, LIBSSH_RSA3072_PICNIC3_L1_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_picnic3_l1(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_PICNIC3_L1, LIBSSH_P256_PICNIC3_L1_TESTKEY);
+
+    return 0;
+}
+
+#ifdef WITH_PQ_RAINBOW_ALGS
+static int torture_pkd_setup_rsa3072_rainbow_i_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_RAINBOW_I_CLASSIC, LIBSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_rainbow_i_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_RAINBOW_I_CLASSIC, LIBSSH_P256_RAINBOW_I_CLASSIC_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p384_rainbow_iii_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P384_RAINBOW_III_CLASSIC, LIBSSH_P384_RAINBOW_III_CLASSIC_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p521_rainbow_v_classic(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P521_RAINBOW_V_CLASSIC, LIBSSH_P521_RAINBOW_V_CLASSIC_TESTKEY);
+
+    return 0;
+}
+#endif
+
+static int torture_pkd_setup_rsa3072_sphincs_haraka_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_SPHINCS_HARAKA_128F_ROBUST, LIBSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_sphincs_haraka_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_SPHINCS_HARAKA_128F_ROBUST, LIBSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_sphincs_sha256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_SPHINCS_SHA256_128F_ROBUST, LIBSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_sphincs_sha256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_SPHINCS_SHA256_128F_ROBUST, LIBSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_rsa3072_sphincs_shake256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_SPHINCS_SHAKE256_128F_ROBUST, LIBSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+
+static int torture_pkd_setup_p256_sphincs_shake256_128f_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_P256_SPHINCS_SHAKE256_128F_ROBUST, LIBSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY);
+
+    return 0;
+}
+#endif
 /*
  * Test matrices: f(clientname, testname, ssh-command, setup-function, teardown-function).
  */
@@ -391,6 +618,361 @@ static int torture_pkd_setup_ecdsa_521(void **state) {
     f(client, ed25519_diffie_hellman_group_exchange_sha1, kexcmd(GEX_SHA1),                    setup_ed25519,    teardown)
 #endif
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+
+#ifdef WITH_PURE_PQ_KEX
+#define PKDTESTS_KEX_OQS_PUREPQ(f, client, kexcmd) \
+    f(client, rsa_oqsdefault_sha384,                    kexcmd(KEX_OQSDEFAULT_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_bike1_l1_cpa_sha384,                  kexcmd(KEX_BIKE1_L1_CPA_SHA384),                setup_rsa, teardown) \
+    f(client, rsa_bike1_l3_cpa_sha384,                  kexcmd(KEX_BIKE1_L3_CPA_SHA384),                setup_rsa, teardown) \
+    f(client, rsa_bike1_l1_fo_sha384,                   kexcmd(KEX_BIKE1_L1_FO_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_bike1_l3_fo_sha384,                   kexcmd(KEX_BIKE1_L3_FO_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_348864_sha384,       kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA384),     setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_348864f_sha384,      kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_460896_sha384,       kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA384),     setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_460896f_sha384,      kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_6688128_sha384,      kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_6688128f_sha384,     kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_6960119_sha384,      kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_6960119f_sha384,     kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_8192128_sha384,      kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_classic_mceliece_8192128f_sha384,     kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_frodo_640_aes_sha384,                 kexcmd(KEX_FRODO_640_AES_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_frodo_640_shake_sha384,               kexcmd(KEX_FRODO_640_SHAKE_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_frodo_976_aes_sha384,                 kexcmd(KEX_FRODO_976_AES_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_frodo_976_shake_sha384,               kexcmd(KEX_FRODO_976_SHAKE_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_frodo_1344_aes_sha384,                kexcmd(KEX_FRODO_1344_AES_SHA384),              setup_rsa, teardown) \
+    f(client, rsa_frodo_1344_shake_sha384,              kexcmd(KEX_FRODO_1344_SHAKE_SHA384),            setup_rsa, teardown) \
+    f(client, rsa_kyber_512_sha384,                     kexcmd(KEX_KYBER_512_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_kyber_768_sha384,                     kexcmd(KEX_KYBER_768_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_kyber_1024_sha384,                    kexcmd(KEX_KYBER_1024_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_kyber_512_90s_sha384,                 kexcmd(KEX_KYBER_512_90S_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_kyber_768_90s_sha384,                 kexcmd(KEX_KYBER_768_90S_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_kyber_1024_90s_sha384,                kexcmd(KEX_KYBER_1024_90S_SHA384),              setup_rsa, teardown) \
+    f(client, rsa_ntru_hps_2048_509_sha384,             kexcmd(KEX_NTRU_HPS_2048_509_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_ntru_hps_2048_677_sha384,             kexcmd(KEX_NTRU_HPS_2048_677_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_ntru_hrss_701_sha384,                 kexcmd(KEX_NTRU_HRSS_701_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ntru_hps_4096_821_sha384,             kexcmd(KEX_NTRU_HPS_4096_821_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_saber_lightsaber_sha384,              kexcmd(KEX_SABER_LIGHTSABER_SHA384),            setup_rsa, teardown) \
+    f(client, rsa_saber_saber_sha384,                   kexcmd(KEX_SABER_SABER_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_saber_firesaber_sha384,               kexcmd(KEX_SABER_FIRESABER_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_sidh_p434_sha384,                     kexcmd(KEX_SIDH_p434_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sidh_p503_sha384,                     kexcmd(KEX_SIDH_p503_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sidh_p610_sha384,                     kexcmd(KEX_SIDH_p610_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sidh_p751_sha384,                     kexcmd(KEX_SIDH_p751_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sidh_p434_compressed_sha384,          kexcmd(KEX_SIDH_P434_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sidh_p503_compressed_sha384,          kexcmd(KEX_SIDH_P503_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sidh_p610_compressed_sha384,          kexcmd(KEX_SIDH_P610_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sidh_p751_compressed_sha384,          kexcmd(KEX_SIDH_P751_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sike_p434_sha384,                     kexcmd(KEX_SIKE_P434_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sike_p503_sha384,                     kexcmd(KEX_SIKE_P503_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sike_p610_sha384,                     kexcmd(KEX_SIKE_P610_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sike_p751_sha384,                     kexcmd(KEX_SIKE_P751_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_sike_p434_compressed_sha384,          kexcmd(KEX_SIKE_P434_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sike_p503_compressed_sha384,          kexcmd(KEX_SIKE_P503_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sike_p610_compressed_sha384,          kexcmd(KEX_SIKE_P610_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_sike_p751_compressed_sha384,          kexcmd(KEX_SIKE_P751_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_hqc_128_sha384,                       kexcmd(KEX_HQC_128_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_hqc_192_sha384,                       kexcmd(KEX_HQC_192_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_hqc_256_sha384,                       kexcmd(KEX_HQC_256_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_ntrulpr_653_sha384,                   kexcmd(KEX_NTRULPR_653_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ntrulpr_761_sha384,                   kexcmd(KEX_NTRULPR_761_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ntrulpr_857_sha384,                   kexcmd(KEX_NTRULPR_857_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_sntrup_653_sha384,                    kexcmd(KEX_SNTRUP_653_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_sntrup_761_sha384,                    kexcmd(KEX_SNTRUP_761_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_sntrup_857_sha384,                    kexcmd(KEX_SNTRUP_857_SHA384),                  setup_rsa, teardown)
+#else /* WITH_PURE_PQ_KEX */
+#define PKDTESTS_KEX_OQS_PUREPQ(f, client, kexcmd)
+#endif /* WITH_PURE_PQ_KEX */
+
+#define PKDTESTS_KEX_OQS_HYBRID(f, client, kexcmd) \
+    f(client, rsa_ecdh_nistp384_oqsdefault_sha384,                    kexcmd(KEX_ECDH_NISTP384_OQSDEFAULT_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_bike1_l1_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384),                setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_bike1_l3_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384),                setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_bike1_l1_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_bike1_l3_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_348864_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384),     setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_348864f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_460896_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384),     setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_460896f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_6688128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_6688128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_6960119_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_6960119f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_8192128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384),    setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_classic_mceliece_8192128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384),   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_640_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_640_AES_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_640_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_976_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_976_AES_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_976_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_1344_aes_sha384,                kexcmd(KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384),              setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_frodo_1344_shake_sha384,              kexcmd(KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384),            setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_512_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_512_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_768_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_1024_sha384,                    kexcmd(KEX_ECDH_NISTP384_KYBER_1024_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_512_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_512_90S_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_768_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_kyber_1024_90s_sha384,                kexcmd(KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384),              setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntru_hps_2048_509_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntru_hps_2048_677_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntru_hrss_701_sha384,                 kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384),               setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntru_hps_4096_821_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384),           setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_saber_lightsaber_sha384,              kexcmd(KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384),            setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_saber_saber_sha384,                   kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_saber_firesaber_sha384,               kexcmd(KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384),             setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p434_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p503_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p610_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p751_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sidh_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P434_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P503_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P610_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P751_SHA384),                   setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sike_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384),        setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_hqc_128_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_128_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_hqc_192_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_hqc_256_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_256_SHA384),                     setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntrulpr_653_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_653_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntrulpr_761_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_761_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_ntrulpr_857_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_857_SHA384),                 setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sntrup_653_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_653_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sntrup_761_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_761_SHA384),                  setup_rsa, teardown) \
+    f(client, rsa_ecdh_nistp384_sntrup_857_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_857_SHA384),                  setup_rsa, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_oqsdefault_sha384,                    kexcmd(KEX_ECDH_NISTP384_OQSDEFAULT_SHA384),                  setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_bike1_l1_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384),                setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_bike1_l3_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384),                setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_bike1_l1_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_bike1_l3_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_348864_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384),     setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_348864f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384),    setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_460896_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384),     setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_460896f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384),    setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_6688128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384),    setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_6688128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384),   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_6960119_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384),    setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_6960119f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384),   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_8192128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384),    setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_8192128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384),   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_640_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_640_AES_SHA384),               setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_640_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384),             setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_976_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_976_AES_SHA384),               setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_976_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384),             setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_1344_aes_sha384,                kexcmd(KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384),              setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_frodo_1344_shake_sha384,              kexcmd(KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384),            setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_512_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_512_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_768_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_1024_sha384,                    kexcmd(KEX_ECDH_NISTP384_KYBER_1024_SHA384),                  setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_512_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_512_90S_SHA384),               setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_768_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384),               setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_kyber_1024_90s_sha384,                kexcmd(KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384),              setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntru_hps_2048_509_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384),           setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntru_hps_2048_677_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384),           setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntru_hrss_701_sha384,                 kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384),               setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntru_hps_4096_821_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384),           setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_saber_lightsaber_sha384,              kexcmd(KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384),            setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_saber_saber_sha384,                   kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_saber_firesaber_sha384,               kexcmd(KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384),             setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p434_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p503_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p610_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p751_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sidh_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P434_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P503_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P610_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P751_SHA384),                   setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sike_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384),        setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_hqc_128_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_128_SHA384),                     setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_hqc_192_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384),                     setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_hqc_256_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_256_SHA384),                     setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntrulpr_653_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_653_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntrulpr_761_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_761_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_ntrulpr_857_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_857_SHA384),                 setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sntrup_653_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_653_SHA384),                  setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sntrup_761_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_761_SHA384),                  setup_ecdsa_256, teardown) \
+    f(client, ecdsa_256_ecdh_nistp384_sntrup_857_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_857_SHA384),                  setup_ecdsa_256, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_oqsdefault_sha384,                    kexcmd(KEX_ECDH_NISTP384_OQSDEFAULT_SHA384),                  setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_bike1_l1_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384),                setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_bike1_l3_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384),                setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_bike1_l1_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_bike1_l3_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_348864_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384),     setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_348864f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384),    setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_460896_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384),     setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_460896f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384),    setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_6688128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384),    setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_6688128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384),   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_6960119_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384),    setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_6960119f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384),   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_8192128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384),    setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_classic_mceliece_8192128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384),   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_640_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_640_AES_SHA384),               setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_640_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384),             setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_976_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_976_AES_SHA384),               setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_976_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384),             setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_1344_aes_sha384,                kexcmd(KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384),              setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_frodo_1344_shake_sha384,              kexcmd(KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384),            setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_512_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_512_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_768_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_1024_sha384,                    kexcmd(KEX_ECDH_NISTP384_KYBER_1024_SHA384),                  setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_512_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_512_90S_SHA384),               setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_768_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384),               setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_kyber_1024_90s_sha384,                kexcmd(KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384),              setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntru_hps_2048_509_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384),           setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntru_hps_2048_677_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384),           setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntru_hrss_701_sha384,                 kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384),               setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntru_hps_4096_821_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384),           setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_saber_lightsaber_sha384,              kexcmd(KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384),            setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_saber_saber_sha384,                   kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_saber_firesaber_sha384,               kexcmd(KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384),             setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p434_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p503_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p610_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p751_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sidh_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P434_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P503_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P610_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P751_SHA384),                   setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sike_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384),        setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_hqc_128_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_128_SHA384),                     setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_hqc_192_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384),                     setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_hqc_256_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_256_SHA384),                     setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntrulpr_653_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_653_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntrulpr_761_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_761_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_ntrulpr_857_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_857_SHA384),                 setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sntrup_653_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_653_SHA384),                  setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sntrup_761_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_761_SHA384),                  setup_oqsdefault, teardown) \
+    f(client, oqsdefault_ecdh_nistp384_sntrup_857_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_857_SHA384),                  setup_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_oqsdefault_sha384,                    kexcmd(KEX_ECDH_NISTP384_OQSDEFAULT_SHA384),                  setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_bike1_l1_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384),                setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_bike1_l3_cpa_sha384,                  kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384),                setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_bike1_l1_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_bike1_l3_fo_sha384,                   kexcmd(KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_348864_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384),     setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_348864f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384),    setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_460896_sha384,       kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384),     setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_460896f_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384),    setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_6688128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384),    setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_6688128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384),   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_6960119_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384),    setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_6960119f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384),   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_8192128_sha384,      kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384),    setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_classic_mceliece_8192128f_sha384,     kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384),   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_640_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_640_AES_SHA384),               setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_640_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384),             setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_976_aes_sha384,                 kexcmd(KEX_ECDH_NISTP384_FRODO_976_AES_SHA384),               setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_976_shake_sha384,               kexcmd(KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384),             setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_1344_aes_sha384,                kexcmd(KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384),              setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_frodo_1344_shake_sha384,              kexcmd(KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384),            setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_512_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_512_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_768_sha384,                     kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_1024_sha384,                    kexcmd(KEX_ECDH_NISTP384_KYBER_1024_SHA384),                  setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_512_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_512_90S_SHA384),               setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_768_90s_sha384,                 kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384),               setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_kyber_1024_90s_sha384,                kexcmd(KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384),              setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntru_hps_2048_509_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384),           setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntru_hps_2048_677_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384),           setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntru_hrss_701_sha384,                 kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384),               setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntru_hps_4096_821_sha384,             kexcmd(KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384),           setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_saber_lightsaber_sha384,              kexcmd(KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384),            setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_saber_saber_sha384,                   kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_saber_firesaber_sha384,               kexcmd(KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384),             setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p434_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p503_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p610_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIDH_p751_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sidh_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p434_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P434_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p503_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P503_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p610_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P610_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p751_sha384,                     kexcmd(KEX_ECDH_NISTP384_SIKE_P751_SHA384),                   setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p434_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p503_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p610_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sike_p751_compressed_sha384,          kexcmd(KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384),        setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_hqc_128_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_128_SHA384),                     setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_hqc_192_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384),                     setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_hqc_256_sha384,                       kexcmd(KEX_ECDH_NISTP384_HQC_256_SHA384),                     setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntrulpr_653_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_653_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntrulpr_761_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_761_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_ntrulpr_857_sha384,                   kexcmd(KEX_ECDH_NISTP384_NTRULPR_857_SHA384),                 setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sntrup_653_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_653_SHA384),                  setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sntrup_761_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_761_SHA384),                  setup_p256_oqsdefault, teardown) \
+    f(client, p256_oqsdefault_ecdh_nistp384_sntrup_857_sha384,                    kexcmd(KEX_ECDH_NISTP384_SNTRUP_857_SHA384),                  setup_p256_oqsdefault, teardown)
+
+
+/* Classical key exchange is used for testing the digital signature algorithms. We also test once with an ECDSA P-256 host key. */
+#define PKDTESTS_OQSKEYAUTH_NORAINBOW(f, client, kexcmd) \
+    f(client, rsa_ecdh_sha2_nistp256,                                   kexcmd("ecdh-sha2-nistp256"),   setup_rsa,                                   teardown) \
+    f(client, ecdsa_256_ecdh_sha2_nistp256,                             kexcmd("ecdh-sha2-nistp256"),   setup_ecdsa_256,                             teardown) \
+    f(client, ecdsa_384_ecdh_sha2_nistp384,                             kexcmd("ecdh-sha2-nistp384"),   setup_ecdsa_384,                             teardown) \
+    f(client, ecdsa_521_ecdh_sha2_nistp521,                             kexcmd("ecdh-sha2-nistp521"),   setup_ecdsa_521,                             teardown) \
+    f(client, oqsdefault_ecdh_sha2_nistp256,                            kexcmd("ecdh-sha2-nistp256"),   setup_oqsdefault,                            teardown) \
+    f(client, dilithium_2_ecdh_sha2_nistp256,                           kexcmd("ecdh-sha2-nistp256"),   setup_dilithium_2,                           teardown) \
+    f(client, falcon_512_ecdh_sha2_nistp256,                            kexcmd("ecdh-sha2-nistp256"),   setup_falcon_512,                            teardown) \
+    f(client, picnic_l1full_ecdh_sha2_nistp256,                         kexcmd("ecdh-sha2-nistp256"),   setup_picnic_l1full,                         teardown) \
+    f(client, picnic3_l1_ecdh_sha2_nistp256,                            kexcmd("ecdh-sha2-nistp256"),   setup_picnic3_l1,                            teardown) \
+    f(client, sphincs_haraka_128f_robust_ecdh_sha2_nistp256,            kexcmd("ecdh-sha2-nistp256"),   setup_sphincs_haraka_128f_robust,            teardown) \
+    f(client, sphincs_sha256_128f_robust_ecdh_sha2_nistp256,            kexcmd("ecdh-sha2-nistp256"),   setup_sphincs_sha256_128f_robust,            teardown) \
+    f(client, sphincs_shake256_128f_robust_ecdh_sha2_nistp256,          kexcmd("ecdh-sha2-nistp256"),   setup_sphincs_shake256_128f_robust,          teardown) \
+    f(client, rsa3072_oqsdefault_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_oqsdefault,                    teardown) \
+    f(client, p256_oqsdefault_ecdh_sha2_nistp256,                       kexcmd("ecdh-sha2-nistp256"),   setup_p256_oqsdefault,                       teardown) \
+    f(client, rsa3072_dilithium_2_ecdh_sha2_nistp256,                   kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_dilithium_2,                   teardown) \
+    f(client, p256_dilithium_2_ecdh_sha2_nistp256,                      kexcmd("ecdh-sha2-nistp256"),   setup_p256_dilithium_2,                      teardown) \
+    f(client, rsa3072_falcon_512_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_falcon_512,                    teardown) \
+    f(client, p256_falcon_512_ecdh_sha2_nistp256,                       kexcmd("ecdh-sha2-nistp256"),   setup_p256_falcon_512,                       teardown) \
+    f(client, rsa3072_picnic_l1full_ecdh_sha2_nistp256,                 kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_picnic_l1full,                 teardown) \
+    f(client, p256_picnic_l1full_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_p256_picnic_l1full,                    teardown) \
+    f(client, rsa3072_picnic3_l1_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_picnic3_l1,                    teardown) \
+    f(client, p256_picnic3_l1_ecdh_sha2_nistp256,                       kexcmd("ecdh-sha2-nistp256"),   setup_p256_picnic3_l1,                       teardown) \
+    f(client, rsa3072_sphincs_haraka_128f_robust_ecdh_sha2_nistp256,    kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_sphincs_haraka_128f_robust,    teardown) \
+    f(client, p256_sphincs_haraka_128f_robust_ecdh_sha2_nistp256,       kexcmd("ecdh-sha2-nistp256"),   setup_p256_sphincs_haraka_128f_robust,       teardown) \
+    f(client, rsa3072_sphincs_sha256_128f_robust_ecdh_sha2_nistp256,    kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_sphincs_sha256_128f_robust,    teardown) \
+    f(client, p256_sphincs_sha256_128f_robust_ecdh_sha2_nistp256,       kexcmd("ecdh-sha2-nistp256"),   setup_p256_sphincs_sha256_128f_robust,       teardown) \
+    f(client, rsa3072_sphincs_shake256_128f_robust_ecdh_sha2_nistp256,  kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_sphincs_shake256_128f_robust,  teardown) \
+    f(client, p256_sphincs_shake256_128f_robust_ecdh_sha2_nistp256,     kexcmd("ecdh-sha2-nistp256"),   setup_p256_sphincs_shake256_128f_robust,     teardown)
+
+#ifdef WITH_PQ_RAINBOW_ALGS
+#define PKDTESTS_OQSKEYAUTH_RAINBOW(f, client, kexcmd) \
+    f(client, rainbow_i_classic_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_rainbow_i_classic,                    teardown) \
+    f(client, rainbow_iii_classic_ecdh_sha2_nistp256,                  kexcmd("ecdh-sha2-nistp256"),   setup_rainbow_iii_classic,                  teardown) \
+    f(client, rainbow_v_classic_ecdh_sha2_nistp256,                    kexcmd("ecdh-sha2-nistp256"),   setup_rainbow_v_classic,                    teardown) \
+    f(client, rsa3072_rainbow_i_classic_ecdh_sha2_nistp256,            kexcmd("ecdh-sha2-nistp256"),   setup_rsa3072_rainbow_i_classic,            teardown) \
+    f(client, p256_rainbow_i_classic_ecdh_sha2_nistp256,               kexcmd("ecdh-sha2-nistp256"),   setup_p256_rainbow_i_classic,               teardown) \
+    f(client, p384_rainbow_iii_classic_ecdh_sha2_nistp384,             kexcmd("ecdh-sha2-nistp384"),   setup_p384_rainbow_iii_classic,             teardown) \
+    f(client, p521_rainbow_v_classic_ecdh_sha2_nistp521,               kexcmd("ecdh-sha2-nistp521"),   setup_p521_rainbow_v_classic,               teardown)
+#else
+#define PKDTESTS_OQSKEYAUTH_RAINBOW(f, client, kexcmd)
+#endif
+
+#define PKDTESTS_OQSKEYAUTH(f, client, kexcmd) \
+        PKDTESTS_OQSKEYAUTH_NORAINBOW(f, client, kexcmd) \
+        PKDTESTS_OQSKEYAUTH_RAINBOW(f, client, kexcmd)
+
+#endif
 
 #define PKDTESTS_CIPHER_COMMON(f, client, ciphercmd) \
     f(client, rsa_aes128_ctr,          ciphercmd("aes128-ctr"),    setup_rsa,        teardown) \
@@ -629,7 +1211,7 @@ static void torture_pkd_runtest(const char *testname,
 #define emit_keytest(client, testname, sshcmd, setup, teardown) \
     static void torture_pkd_## client ## _ ## testname(void **state) { \
         const char *tname = "torture_pkd_" #client "_" #testname;      \
-        char testcmd[2048] = { 0 };                                    \
+        char testcmd[3072] = { 0 };                                    \
         (void) state;                                                  \
         snprintf(&testcmd[0], sizeof(testcmd), sshcmd, tname, tname);  \
         torture_pkd_runtest(tname, testcmd);                           \
@@ -701,6 +1283,144 @@ PKDTESTS_CIPHER(emit_keytest, dropbear, DROPBEAR_CIPHER_CMD)
 PKDTESTS_MAC(emit_keytest, dropbear, DROPBEAR_MAC_CMD)
 #undef CLIENT_ID_FILE
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+
+#define CLIENT_ID_FILE OPENSSH_RSA_TESTKEY
+PKDTESTS_KEX_OQS_PUREPQ(emit_keytest, openssh_rsa, OPENSSH_KEX_CMD)
+PKDTESTS_KEX_OQS_HYBRID(emit_keytest, openssh_rsa, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_OQSDEFAULT_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_oqsdefault, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_FALCON_512_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_falcon_512, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_PICNIC_L1FULL_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_picnic_l1full, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_PICNIC3_L1_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_picnic3_l1, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#ifdef WITH_PQ_RAINBOW_ALGS
+#define CLIENT_ID_FILE OPENSSH_RAINBOW_I_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rainbow_i_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RAINBOW_III_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rainbow_iii_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RAINBOW_V_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rainbow_v_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+#endif
+
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_HARAKA_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_SHA256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_OQSDEFAULT_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_oqsdefault, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_OQSDEFAULT_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_oqsdefault, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_FALCON_512_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_falcon_512, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_FALCON_512_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_falcon_512, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_PICNIC_L1FULL_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_picnic_l1full, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_PICNIC_L1FULL_TESTKEY
+//#define PRESSENTER_KEX_CMD(kexcmd) "./pressenter.sh %s %s"
+//PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_picnic_l1full, PRESSENTER_KEX_CMD)
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_picnic_l1full, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_PICNIC3_L1_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_picnic3_l1, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_PICNIC3_L1_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_picnic3_l1, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#ifdef WITH_PQ_RAINBOW_ALGS
+#define CLIENT_ID_FILE OPENSSH_RSA3072_RAINBOW_I_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_rainbow_i_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_RAINBOW_I_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_rainbow_i_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P384_RAINBOW_III_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p384_rainbow_iii_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P521_RAINBOW_V_CLASSIC_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p521_rainbow_v_classic, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+#endif
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_SPHINCS_HARAKA_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_SPHINCS_HARAKA_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_SPHINCS_SHA256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_SPHINCS_SHA256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_P256_SPHINCS_SHAKE256_128F_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#endif
 /*
  * Define an array of testname strings mapped to their associated
  * test function.  Enables running tests individually by name from
@@ -772,6 +1492,49 @@ struct {
     PKDTESTS_DEFAULT(emit_testmap, dropbear, DROPBEAR_CMD)
     PKDTESTS_CIPHER(emit_testmap, dropbear, DROPBEAR_CIPHER_CMD)
     PKDTESTS_MAC(emit_testmap, dropbear, DROPBEAR_MAC_CMD)
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    /* OQS */
+
+    PKDTESTS_KEX_OQS_PUREPQ(emit_testmap, openssh_rsa, OPENSSH_KEX_CMD)
+    PKDTESTS_KEX_OQS_HYBRID(emit_testmap, openssh_rsa, OPENSSH_KEX_CMD)
+
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_oqsdefault, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_2, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_falcon_512, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_picnic_l1full, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_picnic3_l1, OPENSSH_KEX_CMD)
+#ifdef WITH_PQ_RAINBOW_ALGS
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rainbow_i_classic, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rainbow_iii_classic, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rainbow_v_classic, OPENSSH_KEX_CMD)
+#endif
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_oqsdefault, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_oqsdefault, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_dilithium_2, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_falcon_512, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_falcon_512, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_picnic_l1full, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_picnic_l1full, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_picnic3_l1, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_picnic3_l1, OPENSSH_KEX_CMD)
+#ifdef WITH_PQ_RAINBOW_ALGS
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_rainbow_i_classic, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_rainbow_i_classic, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p384_rainbow_iii_classic, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p521_rainbow_v_classic, OPENSSH_KEX_CMD)
+#endif
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_p256_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+#endif
 
     /* Noop */
     emit_testmap(client, noop, "", setup_noop, teardown)
@@ -859,11 +1622,68 @@ static int pkd_run_tests(void) {
         emit_unit_test(client, noop, "", setup_noop, teardown)
     };
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+
+    const struct CMUnitTest oqs_pq_kex_tests[] = {
+        PKDTESTS_KEX_OQS_PUREPQ(emit_unit_test_comma, openssh_rsa, OPENSSH_KEX_CMD)
+        PKDTESTS_KEX_OQS_HYBRID(emit_unit_test_comma, openssh_rsa, OPENSSH_KEX_CMD)
+    };
+
+    const struct CMUnitTest oqs_keyauth_tests[] = {
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_oqsdefault, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_2, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_falcon_512, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_picnic_l1full, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_picnic3_l1, OPENSSH_KEX_CMD)
+#ifdef WITH_PQ_RAINBOW_ALGS
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rainbow_i_classic, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rainbow_iii_classic, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rainbow_v_classic, OPENSSH_KEX_CMD)
+#endif
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_oqsdefault, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_oqsdefault, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_dilithium_2, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_falcon_512, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_falcon_512, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_picnic_l1full, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_picnic_l1full, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_picnic3_l1, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_picnic3_l1, OPENSSH_KEX_CMD)
+#ifdef WITH_PQ_RAINBOW_ALGS
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_rainbow_i_classic, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_rainbow_i_classic, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p384_rainbow_iii_classic, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p521_rainbow_v_classic, OPENSSH_KEX_CMD)
+#endif
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_sphincs_haraka_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_sphincs_sha256_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_p256_sphincs_shake256_128f_robust, OPENSSH_KEX_CMD)
+    };
+#endif
+
     /* Test list is populated depending on which clients are enabled. */
     struct CMUnitTest all_tests[(sizeof(openssh_tests) / sizeof(openssh_tests[0])) +
                                 (sizeof(dropbear_tests) / sizeof(dropbear_tests[0])) +
-                                (sizeof(noop_tests) / sizeof(noop_tests[0]))];
+                                (sizeof(noop_tests) / sizeof(noop_tests[0]))
+#ifdef WITH_POST_QUANTUM_CRYPTO
+                              + (sizeof(oqs_pq_kex_tests) / sizeof(oqs_pq_kex_tests[0]))
+                              + (sizeof(oqs_keyauth_tests) / sizeof(oqs_keyauth_tests[0]))
+#endif
+                               ];
+
     memset(&all_tests[0], 0x0, sizeof(all_tests));
+
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    printf("Post-quantum cryptography is enabled. If keys from a previous run were not preserved, there can be\n"
+           "a delay of up to a few minutes while keys are generated before tests run. This is normal.\n");
+#endif
 
     /* Generate client keys and populate test list for each enabled client. */
     if (is_openssh_client_enabled()) {
@@ -874,9 +1694,15 @@ static int pkd_run_tests(void) {
         } else {
             memcpy(&all_tests[tindex], &openssh_tests[0], sizeof(openssh_tests));
             tindex += (sizeof(openssh_tests) / sizeof(openssh_tests[0]));
+#ifdef WITH_POST_QUANTUM_CRYPTO
+            memcpy(&all_tests[tindex], &oqs_pq_kex_tests[0], sizeof(oqs_pq_kex_tests));
+            tindex += (sizeof(oqs_pq_kex_tests) / sizeof(oqs_pq_kex_tests[0]));
+            memcpy(&all_tests[tindex], &oqs_keyauth_tests[0], sizeof(oqs_keyauth_tests));
+            tindex += (sizeof(oqs_keyauth_tests) / sizeof(oqs_keyauth_tests[0]));
+#endif
         }
     }
-
+    
     if (is_dropbear_client_enabled()) {
         setup_dropbear_client_rsa_key();
         if (!ssh_fips_mode()) {
@@ -928,23 +1754,28 @@ static int pkd_run_tests(void) {
         }
     }
 
-    /* Clean up client keys for each enabled client. */
-    if (is_dropbear_client_enabled()) {
-        cleanup_dropbear_client_rsa_key();
-    }
+    /* Clean up client keys for each enabled client, unless user has chosen to preserve them. */
+    if (!pkd_dargs.opts.preserve_keys) {
+        if (is_dropbear_client_enabled()) {
+            cleanup_dropbear_client_rsa_key();
+        }
 
-    if (is_openssh_client_enabled()) {
-        cleanup_openssh_client_keys();
-    }
+        if (is_openssh_client_enabled()) {
+            cleanup_openssh_client_keys();
+        }
 
-    /* Clean up any server keys that were generated. */
-    cleanup_rsa_key();
-    cleanup_ecdsa_keys();
-    if (!ssh_fips_mode()) {
-        cleanup_ed25519_key();
+        /* Clean up any server keys that were generated. */
+        cleanup_rsa_key();
+        cleanup_ecdsa_keys();
+        if (!ssh_fips_mode()) {
+            cleanup_ed25519_key();
 #ifdef HAVE_DSA
-        cleanup_dsa_key();
+            cleanup_dsa_key();
 #endif
+#ifdef WITH_POST_QUANTUM_CRYPTO
+            cleanup_post_quantum_keys();
+#endif
+        }
     }
 
     return rc;

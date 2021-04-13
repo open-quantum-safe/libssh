@@ -657,6 +657,7 @@ void torture_setup_create_libssh_config(void **state)
              "%s\n"; /* The space for test-specific options */
     bool written = false;
     int rc;
+    int out_len;
 
     assert_non_null(s->socket_dir);
 
@@ -713,15 +714,19 @@ void torture_setup_create_libssh_config(void **state)
     additional_config = (s->srv_additional_config != NULL ?
                          s->srv_additional_config : "");
 
-    snprintf(sshd_config, sizeof(sshd_config),
-            config_string,
-            "HostKey", ed25519_hostkey,
-            "HostKey", rsa_hostkey,
-            "HostKey", ecdsa_hostkey,
+    out_len = snprintf(sshd_config, sizeof(sshd_config),
+                       config_string,
+                       "HostKey", ed25519_hostkey,
+                       "HostKey", rsa_hostkey,
+                       "HostKey", ecdsa_hostkey,
 #ifdef HAVE_DSA
-            "HostKey", dsa_hostkey,
+                       "HostKey", dsa_hostkey,
 #endif /* HAVE_DSA */
-            additional_config);
+                        additional_config);
+
+    /* If out_len > sizeof(sshd_config)-1, then sshd_config wasn't big enough to contain the whole string. Make sshd_config bigger if this
+     * assertion fails; the failed test output will print out_len's value, and sshd_config needs to be at least one byte bigger than that. */
+    assert_in_range(out_len, 0, sizeof(sshd_config) - 1);
 
     torture_write_file(s->srv_config, sshd_config);
 }
@@ -736,7 +741,7 @@ static void torture_setup_create_sshd_config(void **state, bool pam)
     char rsa_hostkey[1024];
     char ecdsa_hostkey[1024];
     char trusted_ca_pubkey[1024];
-    char sshd_config[4096];
+    char sshd_config[10240];
     char sshd_path[1024];
     const char *additional_config = NULL;
     struct stat sb;
@@ -772,6 +777,9 @@ static void torture_setup_create_sshd_config(void **state, bool pam)
              "\n"
              /* add all supported algorithms */
              "HostKeyAlgorithms " OPENSSH_KEYS "\n"
+#ifdef WITH_POST_QUANTUM_CRYPTO
+             "PubkeyAcceptedKeyTypes " OPENSSH_KEYS ",rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com\n"
+#endif
 #if OPENSSH_VERSION_MAJOR == 8 && OPENSSH_VERSION_MINOR >= 2
              "CASignatureAlgorithms " OPENSSH_KEYS "\n"
 #endif
@@ -935,19 +943,23 @@ static void torture_setup_create_sshd_config(void **state, bool pam)
                 additional_config,
                 s->srv_pidfile);
     } else {
-        snprintf(sshd_config, sizeof(sshd_config),
-                config_string,
-                "HostKey", ed25519_hostkey,
+        int out_len;
+        out_len = snprintf(sshd_config, sizeof(sshd_config),
+                           config_string,
+                           "HostKey", ed25519_hostkey,
 #ifdef HAVE_DSA
-                "HostKey", dsa_hostkey,
+                           "HostKey", dsa_hostkey,
 #endif /* HAVE_DSA */
-                "HostKey", rsa_hostkey,
-                "HostKey", ecdsa_hostkey,
-                trusted_ca_pubkey,
-                sftp_server,
-                usepam,
-                additional_config,
-                s->srv_pidfile);
+                           "HostKey", rsa_hostkey,
+                           "HostKey", ecdsa_hostkey,
+                           trusted_ca_pubkey,
+                           sftp_server,
+                           usepam,
+                           additional_config,
+                           s->srv_pidfile);
+        /* If out_len > sizeof(sshd_config)-1, then sshd_config wasn't big enough to contain the whole string. Make sshd_config bigger if this
+         * assertion fails; the failed test output will print out_len's value, and sshd_config needs to be at least one byte bigger than that. */
+        assert_in_range(out_len, 0, sizeof(sshd_config) - 1);
     }
 
     torture_write_file(s->srv_config, sshd_config);

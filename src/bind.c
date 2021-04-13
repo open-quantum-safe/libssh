@@ -39,6 +39,9 @@
 #include "libssh/socket.h"
 #include "libssh/session.h"
 #include "libssh/token.h"
+#ifdef WITH_POST_QUANTUM_CRYPTO
+#include "libssh/pki_priv.h"
+#endif
 
 /**
  * @addtogroup libssh_server
@@ -150,9 +153,13 @@ static int ssh_bind_import_keys(ssh_bind sshbind) {
   if (sshbind->ecdsakey == NULL &&
       sshbind->dsakey == NULL &&
       sshbind->rsakey == NULL &&
-      sshbind->ed25519key == NULL) {
+      sshbind->ed25519key == NULL
+#ifdef WITH_POST_QUANTUM_CRYPTO
+      && sshbind->oqskey == NULL
+#endif
+      ) {
       ssh_set_error(sshbind, SSH_FATAL,
-                    "ECDSA, ED25519, DSA, or RSA host key file must be set");
+                    "ECDSA, ED25519, DSA, RSA, or PQ host key file must be set");
       return SSH_ERROR;
   }
 
@@ -245,6 +252,29 @@ static int ssh_bind_import_keys(ssh_bind sshbind) {
       }
   }
 
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  if (sshbind->oqs == NULL && sshbind->oqskey != NULL) {
+      rc = ssh_pki_import_privkey_file(sshbind->oqskey,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       &sshbind->oqs);
+      if (rc == SSH_ERROR || rc == SSH_EOF) {
+          ssh_set_error(sshbind, SSH_FATAL,
+                        "Failed to import private OQS host key");
+          return SSH_ERROR;
+      }
+
+      if (!IS_OQS_KEY_TYPE(ssh_key_type(sshbind->oqs))) {
+          ssh_set_error(sshbind, SSH_FATAL,
+                        "OQS host key has the wrong type");
+          ssh_key_free(sshbind->oqs);
+          sshbind->oqs = NULL;
+          return SSH_ERROR;
+      }
+  }
+#endif
+
   return SSH_OK;
 }
 
@@ -256,7 +286,11 @@ int ssh_bind_listen(ssh_bind sshbind) {
   if (sshbind->rsa == NULL &&
       sshbind->dsa == NULL &&
       sshbind->ecdsa == NULL &&
-      sshbind->ed25519 == NULL) {
+      sshbind->ed25519 == NULL
+#ifdef WITH_POST_QUANTUM_CRYPTO
+      && sshbind->oqs == NULL
+#endif
+      ) {
       rc = ssh_bind_import_keys(sshbind);
       if (rc != SSH_OK) {
           return SSH_ERROR;
@@ -401,6 +435,9 @@ void ssh_bind_free(ssh_bind sshbind){
   SAFE_FREE(sshbind->rsakey);
   SAFE_FREE(sshbind->ecdsakey);
   SAFE_FREE(sshbind->ed25519key);
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  SAFE_FREE(sshbind->oqskey);
+#endif
 
   ssh_key_free(sshbind->dsa);
   sshbind->dsa = NULL;
@@ -410,6 +447,10 @@ void ssh_bind_free(ssh_bind sshbind){
   sshbind->ecdsa = NULL;
   ssh_key_free(sshbind->ed25519);
   sshbind->ed25519 = NULL;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  ssh_key_free(sshbind->oqs);
+  sshbind->oqs = NULL;
+#endif
 
   for (i = 0; i < SSH_KEX_METHODS; i++) {
     if (sshbind->wanted_methods[i]) {
@@ -505,7 +546,11 @@ int ssh_bind_accept_fd(ssh_bind sshbind, ssh_session session, socket_t fd){
     if (sshbind->rsa == NULL &&
         sshbind->dsa == NULL &&
         sshbind->ecdsa == NULL &&
-        sshbind->ed25519 == NULL) {
+        sshbind->ed25519 == NULL
+#ifdef WITH_POST_QUANTUM_CRYPTO
+        && sshbind->oqs == NULL
+#endif
+                            ) {
         rc = ssh_bind_import_keys(sshbind);
         if (rc != SSH_OK) {
             return SSH_ERROR;
@@ -544,6 +589,15 @@ int ssh_bind_accept_fd(ssh_bind sshbind, ssh_session session, socket_t fd){
             return SSH_ERROR;
         }
     }
+#ifdef WITH_POST_QUANTUM_CRYPTO
+    if (sshbind->oqs != NULL) {
+        session->srv.oqs_key = ssh_key_dup(sshbind->oqs);
+        if (session->srv.oqs_key == NULL) {
+            ssh_set_error_oom(sshbind);
+            return SSH_ERROR;
+        }
+    }
+#endif
 
     /* force PRNG to change state in case we fork after ssh_bind_accept */
     ssh_reseed();

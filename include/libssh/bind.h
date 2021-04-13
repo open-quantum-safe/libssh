@@ -38,10 +38,16 @@ struct ssh_bind_struct {
   char *dsakey;
   char *rsakey;
   char *ed25519key;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  char *oqskey;
+#endif
   ssh_key ecdsa;
   ssh_key dsa;
   ssh_key rsa;
   ssh_key ed25519;
+#ifdef WITH_POST_QUANTUM_CRYPTO
+  ssh_key oqs;
+#endif
   char *bindaddr;
   socket_t bindfd;
   unsigned int bindport;
