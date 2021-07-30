@@ -25,6 +25,14 @@ clients must be made or how a client should react.
 #include <string.h>
 #include <stdio.h>
 
+#ifdef _WIN32
+#include <io.h>
+#endif
+
+#ifndef BUF_SIZE
+#define BUF_SIZE 2049
+#endif
+
 #ifndef KEYS_FOLDER
 #ifdef _WIN32
 #define KEYS_FOLDER
@@ -60,6 +68,7 @@ static int auth_password(ssh_session session, const char *user,
     return SSH_AUTH_DENIED;
 }
 
+#ifdef WITH_GSSAPI
 static int auth_gssapi_mic(ssh_session session, const char *user, const char *principal, void *userdata){
     ssh_gssapi_creds creds = ssh_gssapi_get_creds(session);
     (void)userdata;
@@ -72,6 +81,7 @@ static int auth_gssapi_mic(ssh_session session, const char *user, const char *pr
     authenticated = 1;
     return SSH_AUTH_SUCCESS;
 }
+#endif
 
 static int pty_request(ssh_session session, ssh_channel channel, const char *term,
         int x,int y, int px, int py, void *userdata){
@@ -233,11 +243,13 @@ int main(int argc, char **argv){
     struct ssh_server_callbacks_struct cb = {
         .userdata = NULL,
         .auth_password_function = auth_password,
+#ifdef WITH_GSSAPI
         .auth_gssapi_mic_function = auth_gssapi_mic,
+#endif
         .channel_open_request_session_function = new_session_channel
     };
 
-    char buf[2048];
+    char buf[BUF_SIZE];
     int i;
     int r;
 
@@ -293,19 +305,24 @@ int main(int argc, char **argv){
     } else
         printf("Authenticated and got a channel\n");
     do{
-        i=ssh_channel_read(chan,buf, 2048, 0);
+        i=ssh_channel_read(chan, buf, sizeof(buf) - 1, 0);
         if(i>0) {
-            ssh_channel_write(chan, buf, i);
-            if (write(1,buf,i) < 0) {
-                printf("error writing to buffer\n");
+            if (ssh_channel_write(chan, buf, i) == SSH_ERROR) {
+                printf("error writing to channel\n");
                 return 1;
             }
+
+            buf[i] = '\0';
+            printf("%s", buf);
+            fflush(stdout);
+
             if (buf[0] == '\x0d') {
-                if (write(1, "\n", 1) < 0) {
-                    printf("error writing to buffer\n");
+                if (ssh_channel_write(chan, "\n", 1) == SSH_ERROR) {
+                    printf("error writing to channel\n");
                     return 1;
                 }
-                ssh_channel_write(chan, "\n", 1);
+
+                printf("\n");
             }
         }
     } while (i>0);

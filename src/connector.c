@@ -30,7 +30,9 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 
+#ifndef CHUNKSIZE
 #define CHUNKSIZE 4096
+#endif
 
 #ifdef _WIN32
 # ifdef HAVE_IO_H
@@ -443,6 +445,9 @@ static int ssh_connector_channel_data_cb(ssh_session session,
         return 0;
     } else if (!is_stderr && !(connector->in_flags & SSH_CONNECTOR_STDOUT)) {
         /* ignore stdout */
+        return 0;
+    } else if (len == 0) {
+        /* ignore empty data */
         return 0;
     }
 

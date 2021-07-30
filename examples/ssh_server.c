@@ -24,6 +24,7 @@ The goal is to show the API in action.
 #ifdef HAVE_LIBUTIL_H
 #include <libutil.h>
 #endif
+#include <pthread.h>
 #ifdef HAVE_PTY_H
 #include <pty.h>
 #endif
@@ -40,6 +41,10 @@ The goal is to show the API in action.
 #include <sys/stat.h>
 #include <stdio.h>
 
+#ifndef BUF_SIZE
+#define BUF_SIZE 1048576
+#endif
+
 #ifndef KEYS_FOLDER
 #ifdef _WIN32
 #define KEYS_FOLDER
@@ -48,9 +53,6 @@ The goal is to show the API in action.
 #endif
 #endif
 
-#define USER "myuser"
-#define PASS "mypassword"
-#define BUF_SIZE 1048576
 #define SESSION_END (SSH_CLOSED | SSH_CLOSED_ERROR)
 #define SFTP_SERVER_PATH "/usr/lib/sftp-server"
 
@@ -75,6 +77,8 @@ static void set_default_keys(ssh_bind sshbind,
 }
 #define DEF_STR_SIZE 1024
 char authorizedkeys[DEF_STR_SIZE] = {0};
+char username[128] = "myuser";
+char password[128] = "mypassword";
 #ifdef HAVE_ARGP_H
 const char *argp_program_version = "libssh server example "
 SSH_STRINGIFY(LIBSSH_VERSION);
@@ -138,6 +142,22 @@ static struct argp_option options[] = {
         .group = 0
     },
     {
+        .name  = "user",
+        .key   = 'u',
+        .arg   = "USERNAME",
+        .flags = 0,
+        .doc   = "Set expected username.",
+        .group = 0
+    },
+    {
+        .name  = "pass",
+        .key   = 'P',
+        .arg   = "PASSWORD",
+        .flags = 0,
+        .doc   = "Set expected password.",
+        .group = 0
+    },
+    {
         .name  = "no-default-keys",
         .key   = 'n',
         .arg   = NULL,
@@ -193,6 +213,12 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
         case 'a':
             strncpy(authorizedkeys, arg, DEF_STR_SIZE-1);
             break;
+        case 'u':
+            strncpy(username, arg, sizeof(username) - 1);
+            break;
+        case 'P':
+            strncpy(password, arg, sizeof(password) - 1);
+            break;
         case 'v':
             ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR,
                                  "3");
@@ -226,6 +252,89 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 
 /* Our argp parser. */
 static struct argp argp = {options, parse_opt, args_doc, doc, NULL, NULL, NULL};
+#else
+static int parse_opt(int argc, char **argv, ssh_bind sshbind) {
+    int no_default_keys = 0;
+    int rsa_already_set = 0;
+    int dsa_already_set = 0;
+    int ecdsa_already_set = 0;
+    int key;
+
+    while((key = getopt(argc, argv, "a:d:e:k:np:P:r:u:v")) != -1) {
+        if (key == 'n') {
+            no_default_keys = 1;
+        } else if (key == 'p') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_BINDPORT_STR, optarg);
+        } else if (key == 'd') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_DSAKEY, optarg);
+            dsa_already_set = 1;
+        } else if (key == 'k') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_HOSTKEY, optarg);
+            /* We can't track the types of keys being added with this
+            option, so let's ensure we keep the keys we're adding
+            by just not setting the default keys */
+            no_default_keys = 1;
+        } else if (key == 'r') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_RSAKEY, optarg);
+            rsa_already_set = 1;
+        } else if (key == 'e') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_ECDSAKEY, optarg);
+            ecdsa_already_set = 1;
+        } else if (key == 'a') {
+            strncpy(authorizedkeys, optarg, DEF_STR_SIZE-1);
+        } else if (key == 'u') {
+            strncpy(username, optarg, sizeof(username) - 1);
+        } else if (key == 'P') {
+            strncpy(password, optarg, sizeof(password) - 1);
+        } else if (key == 'v') {
+            ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR,
+                                 "3");
+        } else {
+            break;
+        }
+    }
+
+    if (key != -1) {
+        printf("Usage: %s [OPTION...] BINDADDR\n"
+               "libssh %s -- a Secure Shell protocol implementation\n"
+               "\n"
+               "  -a, --authorizedkeys=FILE  Set the authorized keys file.\n"
+               "  -d, --dsakey=FILE          Set the dsa key.\n"
+               "  -e, --ecdsakey=FILE        Set the ecdsa key.\n"
+               "  -k, --hostkey=FILE         Set a host key.  Can be used multiple times.\n"
+               "                             Implies no default keys.\n"
+               "  -n, --no-default-keys      Do not set default key locations.\n"
+               "  -p, --port=PORT            Set the port to bind.\n"
+               "  -P, --pass=PASSWORD        Set expected password.\n"
+               "  -r, --rsakey=FILE          Set the rsa key.\n"
+               "  -u, --user=USERNAME        Set expected username.\n"
+               "  -v, --verbose              Get verbose output.\n"
+               "  -?, --help                 Give this help list\n"
+               "\n"
+               "Mandatory or optional arguments to long options are also mandatory or optional\n"
+               "for any corresponding short options.\n"
+               "\n"
+               "Report bugs to <libssh@libssh.org>.\n",
+               argv[0], SSH_STRINGIFY(LIBSSH_VERSION));
+        return -1;
+    }
+
+    if (optind != argc - 1) {
+        printf("Usage: %s [OPTION...] BINDADDR\n", argv[0]);
+        return -1;
+    }
+
+    ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_BINDADDR, argv[optind]);
+
+    if (!no_default_keys) {
+        set_default_keys(sshbind,
+                         rsa_already_set,
+                         dsa_already_set,
+                         ecdsa_already_set);
+    }
+
+    return 0;
+}
 #endif /* HAVE_ARGP_H */
 
 /* A userdata struct for channel. */
@@ -440,7 +549,7 @@ static int auth_password(ssh_session session, const char *user,
 
     (void) session;
 
-    if (strcmp(user, USER) == 0 && strcmp(pass, PASS) == 0) {
+    if (strcmp(user, username) == 0 && strcmp(pass, password) == 0) {
         sdata->authenticated = 1;
         return SSH_AUTH_SUCCESS;
     }
@@ -678,18 +787,38 @@ static void handle_session(ssh_event event, ssh_session session) {
     }
 }
 
+#ifdef WITH_FORK
 /* SIGCHLD handler for cleaning up dead children. */
 static void sigchld_handler(int signo) {
     (void) signo;
     while (waitpid(-1, NULL, WNOHANG) > 0);
 }
+#else
+static void *session_thread(void *arg) {
+    ssh_session session = arg;
+    ssh_event event;
+
+    event = ssh_event_new();
+    if (event != NULL) {
+        /* Blocks until the SSH session ends by either
+         * child thread exiting, or client disconnecting. */
+        handle_session(event, session);
+        ssh_event_free(event);
+    } else {
+        fprintf(stderr, "Could not create polling context\n");
+    }
+    ssh_disconnect(session);
+    ssh_free(session);
+    return NULL;
+}
+#endif
 
 int main(int argc, char **argv) {
     ssh_bind sshbind;
     ssh_session session;
-    ssh_event event;
-    struct sigaction sa;
     int rc;
+#ifdef WITH_FORK
+    struct sigaction sa;
 
     /* Set up SIGCHLD handler. */
     sa.sa_handler = sigchld_handler;
@@ -699,6 +828,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Failed to register SIGCHLD handler\n");
         return 1;
     }
+#endif
 
     rc = ssh_init();
     if (rc < 0) {
@@ -709,20 +839,24 @@ int main(int argc, char **argv) {
     sshbind = ssh_bind_new();
     if (sshbind == NULL) {
         fprintf(stderr, "ssh_bind_new failed\n");
+        ssh_finalize();
         return 1;
     }
 
 #ifdef HAVE_ARGP_H
     argp_parse(&argp, argc, argv, 0, 0, sshbind);
 #else
-    (void) argc;
-    (void) argv;
-
-    set_default_keys(sshbind, 0, 0, 0);
+    if (parse_opt(argc, argv, sshbind) < 0) {
+        ssh_bind_free(sshbind);
+        ssh_finalize();
+        return 1;
+    }
 #endif /* HAVE_ARGP_H */
 
     if(ssh_bind_listen(sshbind) < 0) {
         fprintf(stderr, "%s\n", ssh_get_error(sshbind));
+        ssh_bind_free(sshbind);
+        ssh_finalize();
         return 1;
     }
 
@@ -735,6 +869,9 @@ int main(int argc, char **argv) {
 
         /* Blocks until there is a new incoming connection. */
         if(ssh_bind_accept(sshbind, session) != SSH_ERROR) {
+#ifdef WITH_FORK
+            ssh_event event;
+
             switch(fork()) {
                 case 0:
                     /* Remove the SIGCHLD handler inherited from parent. */
@@ -760,6 +897,16 @@ int main(int argc, char **argv) {
                 case -1:
                     fprintf(stderr, "Failed to fork\n");
             }
+#else
+            pthread_t tid;
+
+            rc = pthread_create(&tid, NULL, session_thread, session);
+            if (rc == 0) {
+                pthread_detach(tid);
+                continue;
+            }
+            fprintf(stderr, "Failed to pthread_create\n");
+#endif
         } else {
             fprintf(stderr, "%s\n", ssh_get_error(sshbind));
         }

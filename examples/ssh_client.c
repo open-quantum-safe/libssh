@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include <sys/select.h>
 #include <sys/time.h>
@@ -82,7 +83,7 @@ static void add_cmd(char *cmd)
         return;
     }
 
-    cmds[n] = strdup(cmd);
+    cmds[n] = cmd;
 }
 
 static void usage(void)
@@ -127,7 +128,7 @@ static int opts(int argc, char **argv)
 #endif
         default:
             fprintf(stderr, "Unknown option %c\n", optopt);
-            usage();
+            return -1;
         }
     }
     if (optind < argc) {
@@ -139,7 +140,7 @@ static int opts(int argc, char **argv)
     }
 
     if (host == NULL) {
-        usage();
+        return -1;
     }
 
     return 0;
@@ -174,22 +175,25 @@ static void do_exit(int i)
     exit(0);
 }
 
-static ssh_channel chan;
 static int signal_delayed = 0;
 
+#ifdef SIGWINCH
 static void sigwindowchanged(int i)
 {
     (void) i;
     signal_delayed = 1;
 }
+#endif
 
 static void setsignal(void)
 {
+#ifdef SIGWINCH
     signal(SIGWINCH, sigwindowchanged);
+#endif
     signal_delayed = 0;
 }
 
-static void sizechanged(void)
+static void sizechanged(ssh_channel chan)
 {
     struct winsize win = {
         .ws_row = 0,
@@ -227,7 +231,7 @@ static void select_loop(ssh_session session,ssh_channel channel)
 
     while (ssh_channel_is_open(channel)) {
         if (signal_delayed) {
-            sizechanged();
+            sizechanged(channel);
         }
         rc = ssh_event_dopoll(event, 60000);
         if (rc == SSH_ERROR) {
@@ -267,10 +271,9 @@ static void shell(ssh_session session)
         ssh_channel_free(channel);
         return;
     }
-    chan = channel;
     if (interactive) {
         ssh_channel_request_pty(channel);
-        sizechanged();
+        sizechanged(channel);
     }
 
     if (ssh_channel_request_shell(channel)) {
@@ -295,14 +298,12 @@ static void shell(ssh_session session)
 static void batch_shell(ssh_session session)
 {
     ssh_channel channel;
-    char buffer[1024];
+    char buffer[PATH_MAX];
     size_t i;
     int s = 0;
 
     for (i = 0; i < MAXCMD && cmds[i]; ++i) {
         s += snprintf(buffer + s, sizeof(buffer) - s, "%s ", cmds[i]);
-        free(cmds[i]);
-        cmds[i] = NULL;
     }
 
     channel = ssh_channel_new(session);
@@ -409,18 +410,20 @@ int main(int argc, char **argv)
 {
     ssh_session session;
 
+    ssh_init();
     session = ssh_new();
 
     ssh_callbacks_init(&cb);
     ssh_set_callbacks(session,&cb);
 
-    if (ssh_options_getopt(session, &argc, argv)) {
+    if (ssh_options_getopt(session, &argc, argv) || opts(argc, argv)) {
         fprintf(stderr,
                 "Error parsing command line: %s\n",
                 ssh_get_error(session));
+        ssh_free(session);
+        ssh_finalize();
         usage();
     }
-    opts(argc, argv);
     signal(SIGTERM, do_exit);
 
     set_pcap(session);

@@ -37,16 +37,16 @@ if (UNIX AND NOT WIN32)
 
     if (WITH_SERVER AND (ARGP_LIBRARY OR HAVE_ARGP_H))
         if (HAVE_LIBUTIL)
-            add_executable(ssh_server_fork ssh_server_fork.c)
-            target_compile_options(ssh_server_fork PRIVATE ${DEFAULT_C_COMPILE_FLAGS})
+            add_executable(ssh_server_fork ssh_server.c)
+            target_compile_options(ssh_server_fork PRIVATE ${DEFAULT_C_COMPILE_FLAGS} -DWITH_FORK)
             target_link_libraries(ssh_server_fork ssh::ssh ${ARGP_LIBRARY} util)
+
+            add_executable(ssh_server_pthread ssh_server.c)
+            target_compile_options(ssh_server_pthread PRIVATE ${DEFAULT_C_COMPILE_FLAGS})
+            target_link_libraries(ssh_server_pthread ssh::ssh ${ARGP_LIBRARY} pthread util)
         endif (HAVE_LIBUTIL)
 
         if (WITH_GSSAPI AND GSSAPI_FOUND)
-            add_executable(samplesshd-cb samplesshd-cb.c)
-            target_compile_options(samplesshd-cb PRIVATE ${DEFAULT_C_COMPILE_FLAGS})
-            target_link_libraries(samplesshd-cb ssh::ssh ${ARGP_LIBRARY})
-
             add_executable(proxy proxy.c)
             target_compile_options(proxy PRIVATE ${DEFAULT_C_COMPILE_FLAGS})
             target_link_libraries(proxy ssh::ssh ${ARGP_LIBRARY})
@@ -66,6 +66,15 @@ if (UNIX AND NOT WIN32)
 
     endif()
 endif (UNIX AND NOT WIN32)
+
+if (WITH_SERVER)
+    add_executable(samplesshd-cb samplesshd-cb.c)
+    target_compile_options(samplesshd-cb PRIVATE ${DEFAULT_C_COMPILE_FLAGS})
+    target_link_libraries(samplesshd-cb ssh::ssh)
+    if (ARGP_LIBRARY OR HAVE_ARGP_H)
+        target_link_libraries(samplesshd-cb ${ARGP_LIBRARY})
+    endif(ARGP_LIBRARY OR HAVE_ARGP_H)
+endif()
 
 add_executable(exec exec.c ${examples_SRCS})
 target_compile_options(exec PRIVATE ${DEFAULT_C_COMPILE_FLAGS})

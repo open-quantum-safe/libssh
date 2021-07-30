@@ -63,10 +63,6 @@
 #define TORTURE_SSHD_CONFIG "sshd/sshd_config"
 #define TORTURE_PCAP_FILE "socket_trace.pcap"
 
-#ifndef PATH_MAX
-# define PATH_MAX 4096
-#endif
-
 static const char torture_rsa_certauth_pub[]=
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnA2n5vHzZbs/GvRkGloJNV1CXHI"
         "S5Xnrm05HusUJSWyPq3I1iCMHdYA7oezHa9GCFYbIenaYPy+G6USQRjYQz8SvAZo06"
@@ -1344,8 +1340,8 @@ end:
 char *torture_make_temp_dir(const char *template)
 {
     DWORD rc = 0;
-    char tmp_dir_path[MAX_PATH];
-    char tmp_file_name[MAX_PATH];
+    char tmp_dir_path[PATH_MAX];
+    char tmp_file_name[PATH_MAX];
     char *prefix = NULL;
     char *path = NULL;
     char *prefix_end = NULL;
@@ -1373,8 +1369,8 @@ char *torture_make_temp_dir(const char *template)
         *prefix_end = '\0';
     }
 
-    rc = GetTempPathA(MAX_PATH, tmp_dir_path);
-    if ((rc > MAX_PATH) || (rc == 0)) {
+    rc = GetTempPathA(PATH_MAX, tmp_dir_path);
+    if ((rc > PATH_MAX) || (rc == 0)) {
         goto free_prefix;
     }
 
@@ -1415,7 +1411,7 @@ static int recursive_rm_dir_content(const char *path)
 
     DWORD last_error = 0;
 
-    char file_path[MAX_PATH];
+    char file_path[PATH_MAX];
 
     int rc = 0;
     BOOL removed;
@@ -1523,8 +1519,8 @@ int torture_isdir(const char *path)
 char *torture_create_temp_file(const char *template)
 {
     DWORD rc = 0;
-    char tmp_dir_path[MAX_PATH];
-    char tmp_file_name[MAX_PATH];
+    char tmp_dir_path[PATH_MAX];
+    char tmp_file_name[PATH_MAX];
     char *prefix = NULL;
     char *path = NULL;
     char *prefix_end = NULL;
@@ -1550,8 +1546,8 @@ char *torture_create_temp_file(const char *template)
         *prefix_end = '\0';
     }
 
-    rc = GetTempPathA(MAX_PATH, tmp_dir_path);
-    if ((rc > MAX_PATH) || (rc == 0)) {
+    rc = GetTempPathA(PATH_MAX, tmp_dir_path);
+    if ((rc > PATH_MAX) || (rc == 0)) {
         goto free_prefix;
     }
 

@@ -29,6 +29,7 @@
 #ifndef _LIBSSH_PRIV_H
 #define _LIBSSH_PRIV_H
 
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -167,6 +168,14 @@ int gettimeofday(struct timeval *__p, void *__t);
 #include "libssh/callbacks.h"
 
 /* some constants */
+#ifndef PATH_MAX
+#ifdef MAX_PATH
+#define PATH_MAX MAX_PATH
+#else
+#define PATH_MAX 4096
+#endif
+#endif
+
 #ifndef MAX_PACKET_LEN
 #ifdef WITH_POST_QUANTUM_CRYPTO
 #define MAX_PACKET_LEN 2097152
