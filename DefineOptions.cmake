@@ -63,3 +63,7 @@ endif (NOT GLOBAL_CLIENT_CONFIG)
 if (FUZZ_TESTING)
   set(WITH_INSECURE_NONE ON)
 endif (FUZZ_TESTING)
+
+if (WITH_PQ_RAINBOW_ALGS)
+  message(WARNING "WITH_PQ_RAINBOW_ALGS=ON is now deprecated. OQS-OpenSSH no longer supports these algorithms.")
+endif (WITH_PQ_RAINBOW_ALGS)

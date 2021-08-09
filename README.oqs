@@ -2,7 +2,7 @@ This version of libssh provides support for using "post-quantum" (PQ) cryptograp
 
 WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID c600d653b6ce79c81f98d674e99c16d816008301 "Merge pull request #96 from thomwiggers/revert-86-mb-focalupdate".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID d04c1be823318fe3f9ef4c1aa23e8d1333ac731d "disable rainbow (#105)".
 
 This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.6.0 (commit ID 00d6c7d5410fe5949a75e5f4d86120bd1c60bef6 "liboqs 0.6.0". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
@@ -50,6 +50,8 @@ Including the Rainbow family of digital signature algorithms (-DWITH_PQ_RAINBOW_
 ==============================================================================================
 By default, the Rainbow family of digital signature algorithms are excluded because they significantly increase the time required to run the pkd_hello test suite. Their algorithms and their associated tests can be included in the build by providing -DWITH_PQ_RAINBOW_ALGS=ON on the CMake command line.
 
+OQS-OpenSSH has also removed support for the Rainbow algorithms as part of OQS-OpenSSH commit d04c1be823318fe3f9ef4c1aa23e8d1333ac731d. Configuring libssh with -DWITH_PQ_RAINBOW_ALGS=ON is now deprecated, and there is no further expectation these algorithms will work. Turning this option on will raise a warning when running CMake, but the algorithms will still be included in the build.
+
 With the Rainbow algorithms included, on an ubuntu 18 VM running on a reasonably recent and powerful development workstation, a full run of pkd_hello includes 1778 test cases and took 6 hours 33 minutes to complete.
 
 With the Rainbow algorithms excluded, on the same VM, a full run of pkd_hello includes 1365 test cases and took 57 minutes to complete.
@@ -68,11 +70,11 @@ The OQS version of OpenSSH can be used by building it and adding an entry to you
 
 These instructions assume you have completed the build above; in particular, that liboqs is built and copied to ${OQS_ROOT_DIR}.
 
-1. Clone the openssh repository OQS-master branch, and then snap to the particular commit above. Do this outside of the libssh or liboqs repository clones.
+1. Clone the openssh repository OQS-v7.9 branch, and then snap to the particular commit above. Do this outside of the libssh or liboqs repository clones.
 
-  git clone --branch OQS-master --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
+  git clone --branch OQS-v7.9 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
   cd openssh
-  git checkout c600d653b6ce79c81f98d674e99c16d816008301
+  git checkout d04c1be823318fe3f9ef4c1aa23e8d1333ac731d
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
 
