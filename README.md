@@ -1,45 +1,288 @@
-[![pipeline status](https://gitlab.com/libssh/libssh-mirror/badges/master/pipeline.svg)](https://gitlab.com/libssh/libssh-mirror/commits/master)
-[![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/libssh.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:libssh)
+OQS-libssh
+==================================
+
+[libssh](https://libssh.org/) is an open-source implementation of the Secure Shell protocol. This version of libssh provides support for using "post-quantum" (PQ) cryptographic algorithms. Not to be confused with "quantum cryptography," which is cryptography done on quantum computers, "post-quantum" cryptography (PQC) is algorithms to be used on classical computers which are not vulnerable to the attacks the algorithms in current use (primarily RSA and Elliptic Curve Cryptography) are. See the home page for the Open Quantum Safe (OQS) project at https://openquantumsafe.org/ for further information.
+
+WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
+
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID d04c1be823318fe3f9ef4c1aa23e8d1333ac731d "disable rainbow (#105)".
+
+This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.6.0 (commit ID 00d6c7d5410fe5949a75e5f4d86120bd1c60bef6 "liboqs 0.6.0". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
+
+This support can only be built if OpenSSL is used as the cryptographic library for libssh, due to liboqs's reliance on OpenSSL for some symmetric cryptographic primitives. libgcrypt and mbedTLS are not supported.
+
+# Build instructions
+
+1. Clone the liboqs repository's main branch, and then snap to the particular commit above. Do this outside of the libssh repository clone.
 
 ```
-  _   _   _                          _
- (_) (_) (_)                        (_)
- (_)  _  (_) _         _  _   _  _  (_) _
- (_) (_) (_)(_) _     (_)(_) (_)(_) (_)(_) _
- (_) (_) (_)   (_)  _ (_)  _ (_)    (_)   (_)
- (_) (_) (_)(_)(_) (_)(_) (_)(_)    (_)   (_).org
-
- The SSH library
-
+    git clone --branch main --single-branch --depth 1 https://github.com/open-quantum-safe/liboqs.git
+    cd liboqs
+    git checkout 0.6.0
 ```
 
-# Why?
+2. Install necessary dependencies. In particular, you will need CMake, Ninja, gcc, and libssl-dev to build. On Ubuntu:
 
-Why not ? :) I've began to work on my own implementation of the ssh protocol
-because i didn't like the currently public ones.
-Not any allowed you to import and use the functions as a powerful library,
-and so i worked on a library-based SSH implementation which was non-existing
-in the free and open source software world.
+```
+    sudo apt install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz
+```
+ 
+3. Choose an appropriate installation location for OQS's libraries and include files. Example choices are `/usr/local` or `/usr/local/oqs` for a system-wide installation, or `${HOME}/oqs` or `${HOME}/build/oqs` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OQS_ROOT_DIR}`. 
+
+4. Build and install liboqs.
+
+```
+  mkdir build && cd build
+  cmake -GNinja -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX=${OQS_ROOT_DIR} ..
+  ninja
+  ninja install
+```
+ 
+5. OPTIONAL: Build OQS-OpenSSH using the instructions below. This is REQUIRED to run tests, which use OpenSSH as the remote client or server. To run any tests, including the pkd_hello test suite, you MUST build OQS-OpenSSH, and add the path to the ssh binary it creates to your PATH environment variable before any official version of OpenSSH, so that libssh's CMake detects it and not the official version. 
+
+   Failing to do this step BEFORE running CMake in step 6 will cause tests to fail en masse, as it will not call the PQ-enabled OpenSSH client.
+  
+6. Configure and build libssh with the post-quantum cryptography turned on. We follow the regular instructions for libssh (see `INSTALL`), but we add two new configuration directives for cmake: `WITH_POST_QUANTUM_CRYPTO` and `OQS_ROOT_DIR`. Set `WITH_POST_QUANTUM_CRYPTO` to `ON` to enable the algorithms, and set `OQS_ROOT_DIR` to be the value of `${OQS_ROOT_DIR}` you chose above. Without the `WITH_POST_QUANTUM_CRYPTO` setting, PQC is not included. For example, from your libssh repository root:
+
+```
+  mkdir build && cd build
+  cmake -DUNIT_TESTING=ON -DWITH_SERVER=ON -DSERVER_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_POST_QUANTUM_CRYPTO=ON -DWITH_PQ_RAINBOW_ALGS=OFF -DWITH_PURE_PQ_KEX=OFF -DOQS_ROOT_DIR=${OQS_ROOT_DIR} ..
+  make -j
+```
+
+## Including pure post-quantum key exchange algorithms (`-DWITH_PURE_PQ_KEX={ON|OFF}`)
+
+By default, pure post-quantum key exchange algorithms are not included. We recommend always using a hybrid key exchange algorithm, which combines Elliptic Curve Diffie-Hellman (ECDH) on the NIST P-384 elliptic curve with each of the post quantum options.
+
+You can opt into the post-quantum key exchange algorithms by themselves by supplying `-DWITH_PURE_PQ_KEX=ON` on the `CMake` command line. This causes some strings in the code to exceed 4096 characters, which is the maximum required by the ISO C99 standard. Modern compilers don't typically have a problem with longer strings, and so you can opt into these algorithms if you know your compiler will handle these correctly.
+
+## Including the Rainbow family of digital signature algorithms (`-DWITH_PQ_RAINBOW_ALGS={ON|OFF}`)
+
+By default, the Rainbow family of digital signature algorithms are excluded because they significantly increase the time required to run the pkd_hello test suite. Their algorithms and their associated tests can be included in the build by providing `-DWITH_PQ_RAINBOW_ALGS=ON` on the `CMake` command line.
+
+OQS-OpenSSH has also removed support for the Rainbow algorithms as part of OQS-OpenSSH commit d04c1be823318fe3f9ef4c1aa23e8d1333ac731d. Configuring libssh with `-DWITH_PQ_RAINBOW_ALGS=ON` is now deprecated, and there is no further expectation these algorithms will work. Turning this option on will raise a warning when running CMake, but the algorithms will still be included in the build.
+
+With the Rainbow algorithms included, on an ubuntu 18 VM running on a reasonably recent and powerful development workstation, a full run of pkd_hello includes 1778 test cases and took 6 hours 33 minutes to complete.
+
+With the Rainbow algorithms excluded, on the same VM, a full run of pkd_hello includes 1365 test cases and took 57 minutes to complete.
+
+Without post-quantum support at all (`-DWITH_POST_QUANTUM-CRYPTO=OFF`), a full run of pkd_hello includes 398 test cases and took 13 minutes to complete.
 
 
-# How/Who?
+## Preserving client and server authentication keys for runs of the `pkd_hello` suite
 
-If you downloaded this file, you must know what it is : a library for
-accessing ssh client services through C libraries calls in a simple manner.
-Everybody can use this software under the terms of the LGPL - see the COPYING
-file
+By default, the `pkd_hello` test suite deletes all the authentication keys used by libssh as a server and OpenSSH as a client after the test run is complete. Because `WITH_POST_QUANTUM_CRYPTO=ON` adds many more key types, there can be a delay of up to a couple of minutes before test runs while keys are generated. pkd_hello now has a command option `-p` for "preserve," which will not delete these keys. If the key files are then present when pkd_hello runs, those keys will be reused. While we recommend the default behavior and always generate fresh keys for CI or other automated test runs, developers may find it convenient to preserve keys to speed up testing during development.
 
-If you ask yourself how to compile libssh, please read INSTALL before anything.
 
-# Where ?
+# Build instructions for OQS-OpenSSH
 
-https://www.libssh.org
+The OQS version of OpenSSH can be used by building it and adding an entry to your PATH that precedes where the system-installed versions of OpenSSH are located. These will also be used by other clients that rely on OpenSSH, such as git. See https://github.com/open-quantum-safe/openssh/ for more information on using OQS-OpenSSH.
 
-# Contributing
+These instructions assume you have completed the build above; in particular, that liboqs is built and copied to `${OQS_ROOT_DIR}`.
 
-Please read the file 'CONTRIBUTING.md' next to this README file. It explains
-our copyright policy and how you should send patches for upstream inclusion.
+1. Clone the openssh repository `OQS-v7.9` branch, and then snap to the particular commit above. Do this outside of the libssh or liboqs repository clones.
 
-Have fun and happy libssh hacking!
+```
+  git clone --branch OQS-v7.9 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
+  cd openssh
+  git checkout d04c1be823318fe3f9ef4c1aa23e8d1333ac731d
+```
+  
+2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
 
-The libssh Team
+```
+  sudo apt install autoconf automake cmake gcc libtool libssl-dev make ninja-build zlib1g-dev
+```
+  
+3. Choose an appropriate installation location for OQS's version of OpenSSH. Example choices are `/usr/local` or `/usr/local/openssh` for a system-wide installation, or `${HOME}/openssh` or `${HOME}/build/openssh` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OPENSSH_INSTALL}`. We strongly discourage installing this over top of your existing OpenSSH installation.
+
+4. Configure and build OQS-OpenSSH.
+
+```
+  autoreconf
+  ./configure --with-libs=-lm --prefix=${OPENSSH_INSTALL} --sysconfdir=${OPENSSH_INSTALL} --with-liboqs-dir=${OQS_ROOT_DIR}
+  make -j
+  make install
+```
+  
+5. Prefix your installation path to your `PATH` to default to those binaries. This setting will only persist for your current shell session; add the appropriate commands to your shell dot files (such as `.bashrc`) for a permanent change. For bash:
+
+```
+  PATH=${OPENSSH_INSTALL}/bin:$PATH
+```
+
+Available key exchange algorithms:
+==================================
+The following key exchange algorithm strings are the hybrid algorithms we recommend using, that combine an established classical algorithm with a post-quantum algorithm. They can be provided to the "-o KexAlgorithms" option to both ssh and sshd. The "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org" option chooses a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
+
+* ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org
+* ecdh-nistp384-bike1-l1-cpa-sha384@openquantumsafe.org
+* ecdh-nistp384-bike1-l3-cpa-sha384@openquantumsafe.org
+* ecdh-nistp384-bike1-l1-fo-sha384@openquantumsafe.org
+* ecdh-nistp384-bike1-l3-fo-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-348864-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-348864f-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-460896-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-460896f-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-6688128-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-6688128f-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-6960119-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-6960119f-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-8192128-sha384@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-8192128f-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-640-aes-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-640-shake-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-976-aes-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-976-shake-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-1344-aes-sha384@openquantumsafe.org
+* ecdh-nistp384-frodo-1344-shake-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-512-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-768-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-1024-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-512-90s-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-768-90s-sha384@openquantumsafe.org
+* ecdh-nistp384-kyber-1024-90s-sha384@openquantumsafe.org
+* ecdh-nistp384-ntru-hps-2048-509-sha384@openquantumsafe.org
+* ecdh-nistp384-ntru-hps-2048-677-sha384@openquantumsafe.org
+* ecdh-nistp384-ntru-hrss-701-sha384@openquantumsafe.org
+* ecdh-nistp384-ntru-hps-4096-821-sha384@openquantumsafe.org
+* ecdh-nistp384-saber-lightsaber-sha384@openquantumsafe.org
+* ecdh-nistp384-saber-saber-sha384@openquantumsafe.org
+* ecdh-nistp384-saber-firesaber-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p434-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p503-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p610-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p751-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p434-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p503-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p610-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sidh-p751-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p434-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p503-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p610-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p751-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p434-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p503-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p610-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-sike-p751-compressed-sha384@openquantumsafe.org
+* ecdh-nistp384-hqc-128-sha384@openquantumsafe.org
+* ecdh-nistp384-hqc-192-sha384@openquantumsafe.org
+* ecdh-nistp384-hqc-256-sha384@openquantumsafe.org
+* ecdh-nistp384-ntrulpr-653-sha384@openquantumsafe.org
+* ecdh-nistp384-ntrulpr-761-sha384@openquantumsafe.org
+* ecdh-nistp384-ntrulpr-857-sha384@openquantumsafe.org
+* ecdh-nistp384-sntrup-653-sha384@openquantumsafe.org
+* ecdh-nistp384-sntrup-761-sha384@openquantumsafe.org
+* ecdh-nistp384-sntrup-857-sha384@openquantumsafe.org
+
+The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
+
+* oqsdefault-sha384@openquantumsafe.org
+* bike1-l1-cpa-sha384@openquantumsafe.org
+* bike1-l3-cpa-sha384@openquantumsafe.org
+* bike1-l1-fo-sha384@openquantumsafe.org
+* bike1-l3-fo-sha384@openquantumsafe.org
+* classic-mceliece-348864-sha384@openquantumsafe.org
+* classic-mceliece-348864f-sha384@openquantumsafe.org
+* classic-mceliece-460896-sha384@openquantumsafe.org
+* classic-mceliece-460896f-sha384@openquantumsafe.org
+* classic-mceliece-6688128-sha384@openquantumsafe.org
+* classic-mceliece-6688128f-sha384@openquantumsafe.org
+* classic-mceliece-6960119-sha384@openquantumsafe.org
+* classic-mceliece-6960119f-sha384@openquantumsafe.org
+* classic-mceliece-8192128-sha384@openquantumsafe.org
+* classic-mceliece-8192128f-sha384@openquantumsafe.org
+* frodo-640-aes-sha384@openquantumsafe.org
+* frodo-640-shake-sha384@openquantumsafe.org
+* frodo-976-aes-sha384@openquantumsafe.org
+* frodo-976-shake-sha384@openquantumsafe.org
+* frodo-1344-aes-sha384@openquantumsafe.org
+* frodo-1344-shake-sha384@openquantumsafe.org
+* kyber-512-sha384@openquantumsafe.org
+* kyber-768-sha384@openquantumsafe.org
+* kyber-1024-sha384@openquantumsafe.org
+* kyber-512-90s-sha384@openquantumsafe.org
+* kyber-768-90s-sha384@openquantumsafe.org
+* kyber-1024-90s-sha384@openquantumsafe.org
+* ntru-hps-2048-509-sha384@openquantumsafe.org
+* ntru-hps-2048-677-sha384@openquantumsafe.org
+* ntru-hrss-701-sha384@openquantumsafe.org
+* ntru-hps-4096-821-sha384@openquantumsafe.org
+* saber-lightsaber-sha384@openquantumsafe.org
+* saber-saber-sha384@openquantumsafe.org
+* saber-firesaber-sha384@openquantumsafe.org
+* sidh-p434-sha384@openquantumsafe.org
+* sidh-p503-sha384@openquantumsafe.org
+* sidh-p610-sha384@openquantumsafe.org
+* sidh-p751-sha384@openquantumsafe.org
+* sidh-p434-compressed-sha384@openquantumsafe.org
+* sidh-p503-compressed-sha384@openquantumsafe.org
+* sidh-p610-compressed-sha384@openquantumsafe.org
+* sidh-p751-compressed-sha384@openquantumsafe.org
+* sike-p434-sha384@openquantumsafe.org
+* sike-p503-sha384@openquantumsafe.org
+* sike-p610-sha384@openquantumsafe.org
+* sike-p751-sha384@openquantumsafe.org
+* sike-p434-compressed-sha384@openquantumsafe.org
+* sike-p503-compressed-sha384@openquantumsafe.org
+* sike-p610-compressed-sha384@openquantumsafe.org
+* sike-p751-compressed-sha384@openquantumsafe.org
+* hqc-128-sha384@openquantumsafe.org
+* hqc-192-sha384@openquantumsafe.org
+* hqc-256-sha384@openquantumsafe.org
+* ntrulpr-653-sha384@openquantumsafe.org
+* ntrulpr-761-sha384@openquantumsafe.org
+* ntrulpr-857-sha384@openquantumsafe.org
+* sntrup-653-sha384@openquantumsafe.org
+* sntrup-761-sha384@openquantumsafe.org
+* sntrup-857-sha384@openquantumsafe.org
+
+Available digital signature algorithms:
+=======================================
+Digital signature algorithms are used in SSH for host key authentication and user key authentication. These strings can be used with the -t argument to ssh-keygen from OQS-OpenSSH to generate a particular type of user authentication key pair. Currently, libssh as a server can only load one OQS-provided host key, in addition to the classical key types already supported, so presently it is not possible to offer multiple PQ/hybrid host keys. There is no such limitation on the number of user authentication keys or key types that can be authorized.
+
+The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. The options ending in "-oqsdefault" will choose a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
+
+* ssh-rsa3072-oqsdefault
+* ssh-p256-oqsdefault
+* ssh-rsa3072-dilithium2
+* ssh-p256-dilithium2
+* ssh-rsa3072-falcon512
+* ssh-p256-falcon512
+* ssh-rsa3072-picnicl1full
+* ssh-p256-picnicl1full
+* ssh-rsa3072-picnic3l1
+* ssh-p256-picnic3l1
+* ssh-rsa3072-rainbowiaclassic
+* ssh-p256-rainbowiaclassic
+* ssh-p384-rainbowiiicclassic
+* ssh-p521-rainbowvcclassic
+* ssh-rsa3072-sphincsharaka128frobust 
+* ssh-p256-sphincsharaka128frobust
+* ssh-rsa3072-sphincssha256128frobust
+* ssh-p256-sphincssha256128frobust
+* ssh-rsa3072-sphincsshake256128frobust
+* ssh-p256-sphincsshake256128frobust
+
+The following digital signature algorithm strings are pure-PQ algorithms. They should only be used experimentally.
+
+* ssh-oqsdefault
+* ssh-dilithium2
+* ssh-falcon512
+* ssh-picnicl1full
+* ssh-picnic3l1
+* ssh-rainbowiaclassic
+* ssh-rainbowiiicclassic
+* ssh-rainbowvcclassic
+* ssh-sphincsharaka128frobust
+* ssh-sphincssha256128frobust
+* ssh-sphincsshake256128frobust
+
+
+KNOWN ISSUES
+============
+1. When running as a server, currently only one host key of an PQ/hybrid type can be loaded alongside the usual classical key types, to be presented to clients.
+
+2. The Rainbow family of digital signature algorithms incur a noticeably longer time to generate key pairs, as well as perform digital signing and verification operations. Test cases and normal uses of these algorithms for host or user authentication will be slower. This is a known property of the algorithms themselves.
+
+3. The larger key sizes and payloads required of PQ/hybrid algorithms causes individual messages to be much larger, and this can cause problems with the socket_wrapper library used in test code, causing parts of messages to be lost. These problems have not yet been observed when running without socket_wrapper and using real network sockets.
