@@ -1,0 +1,15 @@
+{%- set with_p384 = [] -%}
+{%- for sig in config['sigs'] -%}
+    {%- for variant in sig['variants'] -%}
+        {%- for classical_alg in variant['mix_with'] -%}
+            {%- if classical_alg.name == 'p384' -%}
+                {%- do with_p384.append(variant) -%}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endfor -%}
+{%- endfor %}
+
+{%- for pq_alg in with_p384 %}
+    case SSH_KEYTYPE_P384_{{ pq_alg['name'] }}:
+{%- endfor %}
+

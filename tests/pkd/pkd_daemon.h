@@ -18,48 +18,43 @@ enum pkd_hostkey_type_e {
     PKD_ED25519,
     PKD_ECDSA,
 #ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_ADD_HOSTKEY_TYPES_START
     PKD_OQSDEFAULT,
-    PKD_DILITHIUM_2,
-    PKD_FALCON_512,
-    PKD_PICNIC_L1FULL,
-    PKD_PICNIC3_L1,
-    PKD_RAINBOW_I_CLASSIC,
-    PKD_RAINBOW_III_CLASSIC,
-    PKD_RAINBOW_V_CLASSIC,
-    PKD_SPHINCS_HARAKA_128F_ROBUST,
-    PKD_SPHINCS_SHA256_128F_ROBUST,
-    PKD_SPHINCS_SHAKE256_128F_ROBUST,
     PKD_RSA3072_OQSDEFAULT,
     PKD_P256_OQSDEFAULT,
+    PKD_DILITHIUM_2,
     PKD_RSA3072_DILITHIUM_2,
     PKD_P256_DILITHIUM_2,
+    PKD_FALCON_512,
     PKD_RSA3072_FALCON_512,
     PKD_P256_FALCON_512,
+    PKD_PICNIC_L1FULL,
     PKD_RSA3072_PICNIC_L1FULL,
     PKD_P256_PICNIC_L1FULL,
+    PKD_PICNIC3_L1,
     PKD_RSA3072_PICNIC3_L1,
     PKD_P256_PICNIC3_L1,
-    PKD_RSA3072_RAINBOW_I_CLASSIC,
-    PKD_P256_RAINBOW_I_CLASSIC,
-    PKD_P384_RAINBOW_III_CLASSIC,
-    PKD_P521_RAINBOW_V_CLASSIC,
+    PKD_SPHINCS_HARAKA_128F_ROBUST,
     PKD_RSA3072_SPHINCS_HARAKA_128F_ROBUST,
     PKD_P256_SPHINCS_HARAKA_128F_ROBUST,
+    PKD_SPHINCS_SHA256_128F_ROBUST,
     PKD_RSA3072_SPHINCS_SHA256_128F_ROBUST,
     PKD_P256_SPHINCS_SHA256_128F_ROBUST,
+    PKD_SPHINCS_SHAKE256_128F_ROBUST,
     PKD_RSA3072_SPHINCS_SHAKE256_128F_ROBUST,
-    PKD_P256_SPHINCS_SHAKE256_128F_ROBUST
+    PKD_P256_SPHINCS_SHAKE256_128F_ROBUST,
+///// OQS_TEMPLATE_FRAGMENT_ADD_HOSTKEY_TYPES_END
 #endif
 };
 
-/* Adapted from pki_priv.h's versions, but for pkd host keys. */
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_START
+
 #define IS_RSA_HYBRID(alg) ( \
                              alg == PKD_RSA3072_OQSDEFAULT || \
                              alg == PKD_RSA3072_DILITHIUM_2 || \
                              alg == PKD_RSA3072_FALCON_512 || \
                              alg == PKD_RSA3072_PICNIC_L1FULL || \
                              alg == PKD_RSA3072_PICNIC3_L1 || \
-                             alg == PKD_RSA3072_RAINBOW_I_CLASSIC || \
                              alg == PKD_RSA3072_SPHINCS_HARAKA_128F_ROBUST || \
                              alg == PKD_RSA3072_SPHINCS_SHA256_128F_ROBUST || \
                              alg == PKD_RSA3072_SPHINCS_SHAKE256_128F_ROBUST)
@@ -70,28 +65,25 @@ enum pkd_hostkey_type_e {
                                alg == PKD_P256_FALCON_512 || \
                                alg == PKD_P256_PICNIC_L1FULL || \
                                alg == PKD_P256_PICNIC3_L1 || \
-                               alg == PKD_P256_RAINBOW_I_CLASSIC || \
                                alg == PKD_P256_SPHINCS_HARAKA_128F_ROBUST || \
                                alg == PKD_P256_SPHINCS_SHA256_128F_ROBUST || \
-                               alg == PKD_P256_SPHINCS_SHAKE256_128F_ROBUST || \
-                               alg == PKD_P384_RAINBOW_III_CLASSIC || \
-                               alg == PKD_P521_RAINBOW_V_CLASSIC)
+                               alg == PKD_P256_SPHINCS_SHAKE256_128F_ROBUST)
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_END
 
 #define IS_HYBRID(alg) (IS_RSA_HYBRID(alg) || IS_ECDSA_HYBRID(alg))
 
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_START
 #define IS_OQS_KEY_TYPE(type) ( \
                                 (type) == PKD_OQSDEFAULT || \
                                 (type) == PKD_DILITHIUM_2 || \
                                 (type) == PKD_FALCON_512 || \
                                 (type) == PKD_PICNIC_L1FULL || \
                                 (type) == PKD_PICNIC3_L1 || \
-                                (type) == PKD_RAINBOW_I_CLASSIC || \
-                                (type) == PKD_RAINBOW_III_CLASSIC || \
-                                (type) == PKD_RAINBOW_V_CLASSIC || \
                                 (type) == PKD_SPHINCS_HARAKA_128F_ROBUST || \
                                 (type) == PKD_SPHINCS_SHA256_128F_ROBUST || \
                                 (type) == PKD_SPHINCS_SHAKE256_128F_ROBUST || \
                                 IS_HYBRID(type))
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_END
 
 struct pkd_daemon_args {
     enum pkd_hostkey_type_e type;

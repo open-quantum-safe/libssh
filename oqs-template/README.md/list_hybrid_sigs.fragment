@@ -1,0 +1,9 @@
+
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+        {%- for classical_alg in variant['mix_with'] %}
+* ssh-{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }}
+        {%- endfor -%}
+    {%- endfor %}
+{%- endfor %}
+

@@ -1,0 +1,9 @@
+
+#define OQS_PUREPQ_HOSTKEYS \
+{%- for sig in config['sigs'] %}
+    {%- set outer_loop_last = loop.last %}
+    {%- for variant in sig['variants'] %}
+                            "ssh-{{ variant['name']|lower|replace('_','') }},"{% if not (outer_loop_last and loop.last) %} \{% endif %}
+    {%- endfor %}
+{%- endfor %}
+

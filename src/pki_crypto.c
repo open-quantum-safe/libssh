@@ -2467,6 +2467,7 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
 {
     switch (keytype)
     {
+///// OQS_TEMPLATE_FRAGMENT_GET_OQS_ALG_NAME_START
     case SSH_KEYTYPE_OQSDEFAULT:
     case SSH_KEYTYPE_RSA3072_OQSDEFAULT:
     case SSH_KEYTYPE_P256_OQSDEFAULT:
@@ -2487,18 +2488,6 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     case SSH_KEYTYPE_RSA3072_PICNIC3_L1:
     case SSH_KEYTYPE_P256_PICNIC3_L1:
         return OQS_SIG_alg_picnic3_L1;
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_RAINBOW_I_CLASSIC:
-    case SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC:
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
-        return OQS_SIG_alg_rainbow_I_classic;
-    case SSH_KEYTYPE_RAINBOW_III_CLASSIC:
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
-        return OQS_SIG_alg_rainbow_III_classic;
-    case SSH_KEYTYPE_RAINBOW_V_CLASSIC:
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
-        return OQS_SIG_alg_rainbow_V_classic;
-#endif
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST:
     case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
@@ -2511,6 +2500,7 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     case SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
         return OQS_SIG_alg_sphincs_shake256_128f_robust;
+///// OQS_TEMPLATE_FRAGMENT_GET_OQS_ALG_NAME_END
     default:
         return NULL;
     }

@@ -1,0 +1,10 @@
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+    case SSH_KEYTYPE_{{ variant['name'] }}:
+        {%- for classical_alg in variant['mix_with'] %}
+    case SSH_KEYTYPE_{{ classical_alg.name|upper }}_{{ variant['name'] }}:
+        {%- endfor %}
+        return {{ variant['oqs_meth'] }};
+    {%- endfor %}
+{%- endfor %}
+

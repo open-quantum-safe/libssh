@@ -1,0 +1,9 @@
+
+#define PURE_PQ_KEY_EXCHANGE \
+{%- for kem in config['kems'] %}
+    {%- set outer_loop_last = loop.last %}
+    {%- for variant in kem['variants'] %}
+    KEX_{{ variant['name'] }}_SHA384 ","{% if not (outer_loop_last and loop.last) %} \{% endif %}
+    {%- endfor %}
+{%- endfor %}
+

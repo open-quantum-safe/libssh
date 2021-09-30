@@ -55,9 +55,7 @@
 #include "libssh/ecdh.h"
 #include "libssh/curve25519.h"
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
 #include "libssh/pqkex.h"
-#endif
 #include "libssh/hykex.h"
 #endif
 
@@ -605,11 +603,9 @@ int crypt_set_algorithms_server(ssh_session session){
         break;
 #endif
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
     CASE_SSH_KEX_PURE_PQ:
         ssh_server_pqkex_init(session);
         break;
-#endif
     CASE_SSH_KEX_HYBRID:
         ssh_server_hykex_init(session);
         break;

@@ -278,13 +278,6 @@
 /* Define to 1 if you want to enable post-quantum cryptographic algorithms through liboqs */
 #cmakedefine WITH_POST_QUANTUM_CRYPTO 1
 
-/* Define to 1 if you want to include the Rainbow algorithms through liboqs; WITH_POST_QUANTUM_CRYPTO must also be 1 */
-#cmakedefine WITH_PQ_RAINBOW_ALGS 1
-
-/* Define to 1 if you want to include pure post-quantum key exchange algorithms. If not defined, only hybrids are included. 
- * This may not work with some C99-compliant compilers. */
-#cmakedefine WITH_PURE_PQ_KEX 1 
-
 /*************************** ENDIAN *****************************/
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most

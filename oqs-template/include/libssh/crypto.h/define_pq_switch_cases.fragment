@@ -1,0 +1,12 @@
+
+#define CASE_SSH_KEX_PURE_PQ \
+{%- set last_kem_loop = false -%}
+{%- for kem in config['kems'] %}
+    {%- if loop.last -%}
+        {%- set last_kem_loop = true -%}
+    {%- endif -%}
+    {%- for variant in kem['variants'] %}
+    case SSH_KEX_{{ variant['name'] }}_SHA384{%- if not loop.last or not last_kem_loop %}: \{% endif %}
+    {%- endfor %}
+{%- endfor %}
+

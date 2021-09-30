@@ -1,0 +1,28 @@
+
+{%- for kem in config['kems'] %}
+    {%- for variant in kem['variants'] %}
+static void torture_algorithms_{{ variant['name']|lower|replace('_','') }}_sha384(void** state)
+{
+    struct torture_state* s = *state;
+
+    if (ssh_fips_mode()) {
+        skip();
+    }
+
+    test_algorithm(s->ssh.session, KEX_{{ variant['name'] }}_SHA384, NULL, NULL);
+}
+
+static void torture_algorithms_ecdh_nistp384_{{ variant['name']|lower|replace('_','') }}_sha384(void** state)
+{
+    struct torture_state* s = *state;
+
+    if (ssh_fips_mode()) {
+        skip();
+    }
+
+    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384, NULL, NULL);
+}
+
+    {%- endfor %}
+{%- endfor %}
+

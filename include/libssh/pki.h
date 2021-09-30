@@ -47,7 +47,7 @@
 #endif
 
 #define MAX_PUBKEY_SIZE 0x100000 /* 1M */
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PQ_RAINBOW_ALGS)
+#ifdef WITH_POST_QUANTUM_CRYPTO
 #define MAX_PRIVKEY_SIZE 0x800000 /* 8M */
 #else
 #define MAX_PRIVKEY_SIZE 0x400000 /* 4M */

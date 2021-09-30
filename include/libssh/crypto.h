@@ -87,10 +87,10 @@ enum ssh_key_exchange_e {
   /* diffie-hellman-group14-sha256 */
   SSH_KEX_DH_GROUP14_SHA256,
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
   /* Pure PQ key exchange algorithms. Algorithm strings are the same as the token name after SSH_KEX, in lower case, with underscores
    * changed to hyphens, and @openquantumsafe.org on the end. For example, SSH_KEX_OQSDEFAULT_SHA384's
    * algorithm string is "oqsdefault-sha384@openquantumsafe.org". */
+///// OQS_TEMPLATE_FRAGMENT_ENUM_PQ_KEXS_START
   SSH_KEX_OQSDEFAULT_SHA384,
   SSH_KEX_BIKE1_L1_CPA_SHA384,
   SSH_KEX_BIKE1_L3_CPA_SHA384,
@@ -150,10 +150,11 @@ enum ssh_key_exchange_e {
   SSH_KEX_SNTRUP_653_SHA384,
   SSH_KEX_SNTRUP_761_SHA384,
   SSH_KEX_SNTRUP_857_SHA384,
-#endif /* WITH_PURE_PQ_KEX */
+///// OQS_TEMPLATE_FRAGMENT_ENUM_PQ_KEXS_END
   /* Hybrid PQ key exchange algorithms. Algorithm strings are the same as the token name after SSH_KEX, in lower case, with underscores
    * changed to hyphens, and @openquantumsafe.org on the end. For example, SSH_KEX_ECDH_NISTP384_OQSDEFAULT_SHA384's
    * algorithm string is "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org". */
+///// OQS_TEMPLATE_FRAGMENT_ENUM_HYBRID_KEXS_START
   SSH_KEX_ECDH_NISTP384_OQSDEFAULT_SHA384,
   SSH_KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384,
   SSH_KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384,
@@ -213,11 +214,13 @@ enum ssh_key_exchange_e {
   SSH_KEX_ECDH_NISTP384_SNTRUP_653_SHA384,
   SSH_KEX_ECDH_NISTP384_SNTRUP_761_SHA384,
   SSH_KEX_ECDH_NISTP384_SNTRUP_857_SHA384,
+///// OQS_TEMPLATE_FRAGMENT_ENUM_HYBRID_KEXS_END
 #endif /* WITH_POST_QUANTUM_CRYPTO */
 };
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
 
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_START
 #define CASE_SSH_KEX_HYBRID \
     case SSH_KEX_ECDH_NISTP384_OQSDEFAULT_SHA384: \
     case SSH_KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384: \
@@ -278,8 +281,9 @@ enum ssh_key_exchange_e {
     case SSH_KEX_ECDH_NISTP384_SNTRUP_653_SHA384: \
     case SSH_KEX_ECDH_NISTP384_SNTRUP_761_SHA384: \
     case SSH_KEX_ECDH_NISTP384_SNTRUP_857_SHA384
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_END
 
-#ifdef WITH_PURE_PQ_KEX
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_SWITCH_CASES_START
 #define CASE_SSH_KEX_PURE_PQ \
     case SSH_KEX_OQSDEFAULT_SHA384: \
     case SSH_KEX_BIKE1_L1_CPA_SHA384: \
@@ -340,14 +344,11 @@ enum ssh_key_exchange_e {
     case SSH_KEX_SNTRUP_653_SHA384: \
     case SSH_KEX_SNTRUP_761_SHA384: \
     case SSH_KEX_SNTRUP_857_SHA384
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_SWITCH_CASES_END
 
 #define CASE_SSH_KEX_POST_QUANTUM \
     CASE_SSH_KEX_PURE_PQ: \
     CASE_SSH_KEX_HYBRID
-#else /* WITH_PURE_PQ_KEX */
-#define CASE_SSH_KEX_POST_QUANTUM \
-    CASE_SSH_KEX_HYBRID
-#endif /* WITH_PURE_PQ_KEX */
 #endif /* WITH_POST_QUANTUM_CRYPTO */
 
 enum ssh_cipher_e {
