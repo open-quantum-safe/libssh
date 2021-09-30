@@ -1365,8 +1365,6 @@ PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_picnic_l1full, OPENSSH_KEX_CMD
 #undef CLIENT_ID_FILE
 
 #define CLIENT_ID_FILE OPENSSH_P256_PICNIC_L1FULL_TESTKEY
-//#define PRESSENTER_KEX_CMD(kexcmd) "./pressenter.sh %s %s"
-//PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_picnic_l1full, PRESSENTER_KEX_CMD)
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_p256_picnic_l1full, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 

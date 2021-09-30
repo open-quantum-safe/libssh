@@ -617,7 +617,7 @@ pending:
             timeout = 10 * 1000;
         }
         SSH_LOG(SSH_LOG_PACKET, "Actual timeout : %d", timeout);
-        ret = ssh_handle_packets_termination(session, -1,
+        ret = ssh_handle_packets_termination(session, timeout,
                                              ssh_connect_termination, session);
         if (session->session_state != SSH_SESSION_STATE_ERROR &&
             (ret == SSH_ERROR || !ssh_connect_termination(session)))
