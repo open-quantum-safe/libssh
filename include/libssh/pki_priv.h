@@ -182,33 +182,13 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
                                       enum ssh_keytypes_e type,
                                       enum ssh_digest_e hash_type);
 
-#ifdef WITH_PQ_RAINBOW_ALGS
-#define IS_RAINBOW_RSA_HYBRID_ALG_NAME(alg) (strcmp(alg, "ssh-rsa3072-rainbowiclassic") == 0)
-#define IS_RAINBOW_RSA_HYBRID(alg) (alg == SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC)
-#define IS_RAINBOW_ECDSA_HYBRID(alg) ( \
-                                       alg == SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC || \
-                                       alg == SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC || \
-                                       alg == SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC \
-                                     )
-#define IS_RAINBOW_KEY_TYPE(type)    ( \
-                                       (type) == SSH_KEYTYPE_RAINBOW_I_CLASSIC || \
-                                       (type) == SSH_KEYTYPE_RAINBOW_III_CLASSIC || \
-                                       (type) == SSH_KEYTYPE_RAINBOW_V_CLASSIC \
-                                     )
-#else
-#define IS_RAINBOW_RSA_HYBRID_ALG_NAME(alg) 0
-#define IS_RAINBOW_RSA_HYBRID(alg)          0
-#define IS_RAINBOW_ECDSA_HYBRID(alg)        0
-#define IS_RAINBOW_KEY_TYPE(type)           0
-#endif
-
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_START
 #define IS_RSA_HYBRID_ALG_NAME(alg) ( \
                                       strcmp(alg, "ssh-rsa3072-oqsdefault") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-dilithium2") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-falcon512") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-picnicl1full") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-picnic3l1") == 0 || \
-                                      IS_RAINBOW_RSA_HYBRID_ALG_NAME(alg) || \
                                       strcmp(alg, "ssh-rsa3072-sphincsharaka128frobust") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-sphincssha256128frobust") == 0 || \
                                       strcmp(alg, "ssh-rsa3072-sphincsshake256128frobust") == 0)
@@ -219,7 +199,6 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
                              alg == SSH_KEYTYPE_RSA3072_FALCON_512 || \
                              alg == SSH_KEYTYPE_RSA3072_PICNIC_L1FULL || \
                              alg == SSH_KEYTYPE_RSA3072_PICNIC3_L1 || \
-                             IS_RAINBOW_RSA_HYBRID(alg) || \
                              alg == SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST || \
                              alg == SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_ROBUST || \
                              alg == SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST)
@@ -232,61 +211,24 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
                                alg == SSH_KEYTYPE_P256_PICNIC3_L1 || \
                                alg == SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST || \
                                alg == SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST || \
-                               alg == SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST || \
-                               IS_RAINBOW_ECDSA_HYBRID(alg))
-
+                               alg == SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST)
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_END
 #define IS_HYBRID(alg) (IS_RSA_HYBRID(alg) || IS_ECDSA_HYBRID(alg))
 
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_START
 #define IS_OQS_KEY_TYPE(type) ( \
                                 (type) == SSH_KEYTYPE_OQSDEFAULT || \
                                 (type) == SSH_KEYTYPE_DILITHIUM_2 || \
                                 (type) == SSH_KEYTYPE_FALCON_512 || \
                                 (type) == SSH_KEYTYPE_PICNIC_L1FULL || \
                                 (type) == SSH_KEYTYPE_PICNIC3_L1 || \
-                                IS_RAINBOW_KEY_TYPE(type) || \
                                 (type) == SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST || \
                                 (type) == SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST || \
                                 (type) == SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST || \
                                 IS_HYBRID(type))
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_END
 
-#ifdef WITH_PQ_RAINBOW_ALGS
-#define CASE_KEY_OQS \
-    case SSH_KEYTYPE_OQSDEFAULT: \
-    case SSH_KEYTYPE_DILITHIUM_2: \
-    case SSH_KEYTYPE_FALCON_512: \
-    case SSH_KEYTYPE_PICNIC_L1FULL: \
-    case SSH_KEYTYPE_PICNIC3_L1: \
-    case SSH_KEYTYPE_RAINBOW_I_CLASSIC: \
-    case SSH_KEYTYPE_RAINBOW_III_CLASSIC: \
-    case SSH_KEYTYPE_RAINBOW_V_CLASSIC: \
-    case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST: \
-    case SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST: \
-    case SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST
-
-#define CASE_KEY_RSA_HYBRID \
-    case SSH_KEYTYPE_RSA3072_OQSDEFAULT: \
-    case SSH_KEYTYPE_RSA3072_DILITHIUM_2: \
-    case SSH_KEYTYPE_RSA3072_FALCON_512: \
-    case SSH_KEYTYPE_RSA3072_PICNIC_L1FULL: \
-    case SSH_KEYTYPE_RSA3072_PICNIC3_L1: \
-    case SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC: \
-    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST: \
-    case SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_ROBUST: \
-    case SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST
-
-#define CASE_KEY_ECDSA_HYBRID \
-    case SSH_KEYTYPE_P256_OQSDEFAULT: \
-    case SSH_KEYTYPE_P256_DILITHIUM_2: \
-    case SSH_KEYTYPE_P256_FALCON_512: \
-    case SSH_KEYTYPE_P256_PICNIC_L1FULL: \
-    case SSH_KEYTYPE_P256_PICNIC3_L1: \
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC: \
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC: \
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC: \
-    case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST: \
-    case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST: \
-    case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST
-#else
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_SWITCH_CASES_START
 #define CASE_KEY_OQS \
     case SSH_KEYTYPE_OQSDEFAULT: \
     case SSH_KEYTYPE_DILITHIUM_2: \
@@ -296,7 +238,9 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST: \
     case SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST: \
     case SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_SWITCH_CASES_END
 
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_START
 #define CASE_KEY_RSA_HYBRID \
     case SSH_KEYTYPE_RSA3072_OQSDEFAULT: \
     case SSH_KEYTYPE_RSA3072_DILITHIUM_2: \
@@ -316,7 +260,7 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
     case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST: \
     case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST: \
     case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST
-#endif
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_END
 
 #define CASE_KEY_HYBRID \
     CASE_KEY_RSA_HYBRID: \
@@ -324,4 +268,4 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
 
 #endif /* WITH_POST_QUANTUM_CRYPTO */
 
-#endif /* PKI_PRIV_H_ */
+#endif /* PKI_PRIV_H */

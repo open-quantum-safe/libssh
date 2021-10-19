@@ -340,6 +340,7 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "sk-ssh-ed25519-cert-v01@openssh.com";
 #ifdef WITH_POST_QUANTUM_CRYPTO
     /* OQS-OpenSSH source: See keytypes array in sshkey.c:130 for this translation. */
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_START
     case SSH_KEYTYPE_OQSDEFAULT:
       return "ssh-oqsdefault";
     case SSH_KEYTYPE_DILITHIUM_2:
@@ -350,20 +351,14 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-picnicl1full";
     case SSH_KEYTYPE_PICNIC3_L1:
       return "ssh-picnic3l1";
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_RAINBOW_I_CLASSIC:
-      return "ssh-rainbowiclassic";
-    case SSH_KEYTYPE_RAINBOW_III_CLASSIC:
-      return "ssh-rainbowiiiclassic";
-    case SSH_KEYTYPE_RAINBOW_V_CLASSIC:
-      return "ssh-rainbowvclassic";
-#endif
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST:
       return "ssh-sphincsharaka128frobust";
     case SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST:
       return "ssh-sphincssha256128frobust";
     case SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST:
       return "ssh-sphincsshake256128frobust";
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_END
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_START
     case SSH_KEYTYPE_RSA3072_OQSDEFAULT:
       return "ssh-rsa3072-oqsdefault";
     case SSH_KEYTYPE_P256_OQSDEFAULT:
@@ -384,16 +379,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-rsa3072-picnic3l1";
     case SSH_KEYTYPE_P256_PICNIC3_L1:
       return "ssh-p256-picnic3l1";
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC:
-      return "ssh-rsa3072-rainbowiclassic";
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
-      return "ssh-p256-rainbowiclassic";
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
-      return "ssh-p384-rainbowiiiclassic";
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
-      return "ssh-p521-rainbowvclassic";
-#endif
     case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST:
       return "ssh-rsa3072-sphincsharaka128frobust";
     case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
@@ -406,6 +391,7 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-rsa3072-sphincsshake256128frobust";
     case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
       return "ssh-p256-sphincsshake256128frobust";
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_END
 #endif /* WITH_POST_QUANTUM_CRYPTO */
     case SSH_KEYTYPE_RSA1:
     case SSH_KEYTYPE_UNKNOWN:
@@ -418,10 +404,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
 
 enum ssh_digest_e ssh_key_hash_from_name(const char *name)
 {
-#ifdef WITH_POST_QUANTUM_CRYPTO
-    enum ssh_keytypes_e kt;
-#endif
-
     if (name == NULL) {
         /* TODO we should rather fail */
         return SSH_DIGEST_AUTO;
@@ -450,33 +432,82 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     }
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
-    /* Use ssh_key_type_from_name to keep us from repeating a bunch of strcmps in code. */
-    kt = ssh_key_type_from_name(name);
-    switch (kt) {
-    CASE_KEY_OQS:
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_START
+    if (strcmp(name, "ssh-oqsdefault") == 0) {
         return SSH_DIGEST_AUTO;
-    CASE_KEY_RSA_HYBRID:
-    case SSH_KEYTYPE_P256_OQSDEFAULT:
-    case SSH_KEYTYPE_P256_DILITHIUM_2:
-    case SSH_KEYTYPE_P256_FALCON_512:
-    case SSH_KEYTYPE_P256_PICNIC_L1FULL:
-    case SSH_KEYTYPE_P256_PICNIC3_L1:
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
-#endif
-    case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
-    case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST:
-    case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
-        return SSH_DIGEST_SHA256;
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
-        return SSH_DIGEST_SHA384;
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
-        return SSH_DIGEST_SHA512;
-#endif
-    default:
-        break;
     }
+    if (strcmp(name, "ssh-dilithium2") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-falcon512") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-picnicl1full") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-picnic3l1") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-sphincsharaka128frobust") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-sphincssha256128frobust") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+    if (strcmp(name, "ssh-sphincsshake256128frobust") == 0) {
+        return SSH_DIGEST_AUTO;
+    }
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_END
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KEY_HASH_START
+    if (strcmp(name, "ssh-rsa3072-oqsdefault") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-dilithium2") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-falcon512") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-picnicl1full") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-picnic3l1") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincsharaka128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincssha256128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincsshake256128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-oqsdefault") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-dilithium2") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-falcon512") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-picnicl1full") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-picnic3l1") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-sphincsharaka128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-sphincssha256128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+    if (strcmp(name, "ssh-p256-sphincsshake256128frobust") == 0) {
+        return SSH_DIGEST_SHA256;
+    }
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KEY_HASH_END
 #endif
 
     SSH_LOG(SSH_LOG_WARN, "Unknown signature name %s", name);
@@ -586,25 +617,19 @@ enum ssh_digest_e ssh_key_type_to_hash(ssh_session session,
 #ifdef WITH_POST_QUANTUM_CRYPTO
     CASE_KEY_OQS:
        return SSH_DIGEST_AUTO;
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_KT_TO_HASH_START
     CASE_KEY_RSA_HYBRID:
     case SSH_KEYTYPE_P256_OQSDEFAULT:
     case SSH_KEYTYPE_P256_DILITHIUM_2:
     case SSH_KEYTYPE_P256_FALCON_512:
     case SSH_KEYTYPE_P256_PICNIC_L1FULL:
     case SSH_KEYTYPE_P256_PICNIC3_L1:
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
-#endif
     case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
+
         return SSH_DIGEST_SHA256;
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
-        return SSH_DIGEST_SHA384;
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
-        return SSH_DIGEST_SHA512;
-#endif
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_KT_TO_HASH_END
 #endif
     case SSH_KEYTYPE_RSA1:
     case SSH_KEYTYPE_ECDSA:
@@ -728,73 +753,82 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
     /* OQS-OpenSSH source: See keytypes array in sshkey.c:130 for this translation. */
-    if(strcmp(name, "ssh-oqsdefault") == 0) {
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_STRING_START
+    if (strcmp(name, "ssh-oqsdefault") == 0) {
         return SSH_KEYTYPE_OQSDEFAULT;
-    } else if(strcmp(name, "ssh-dilithium2") == 0) {
+    }
+    if (strcmp(name, "ssh-dilithium2") == 0) {
         return SSH_KEYTYPE_DILITHIUM_2;
-    } else if(strcmp(name, "ssh-falcon512") == 0) {
+    }
+    if (strcmp(name, "ssh-falcon512") == 0) {
         return SSH_KEYTYPE_FALCON_512;
-    } else if(strcmp(name, "ssh-picnicl1full") == 0) {
+    }
+    if (strcmp(name, "ssh-picnicl1full") == 0) {
         return SSH_KEYTYPE_PICNIC_L1FULL;
-    } else if(strcmp(name, "ssh-picnic3l1") == 0) {
+    }
+    if (strcmp(name, "ssh-picnic3l1") == 0) {
         return SSH_KEYTYPE_PICNIC3_L1;
-#ifdef WITH_PQ_RAINBOW_ALGS
-    } else if(strcmp(name, "ssh-rainbowiclassic") == 0) {
-        return SSH_KEYTYPE_RAINBOW_I_CLASSIC;
-    } else if(strcmp(name, "ssh-rainbowiiiclassic") == 0) {
-        return SSH_KEYTYPE_RAINBOW_III_CLASSIC;
-    } else if(strcmp(name, "ssh-rainbowvclassic") == 0) {
-        return SSH_KEYTYPE_RAINBOW_V_CLASSIC;
-#endif
-    } else if(strcmp(name, "ssh-sphincsharaka128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-sphincsharaka128frobust") == 0) {
         return SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST;
-    } else if(strcmp(name, "ssh-sphincssha256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-sphincssha256128frobust") == 0) {
         return SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST;
-    } else if(strcmp(name, "ssh-sphincsshake256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-sphincsshake256128frobust") == 0) {
         return SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST;
-    } else if(strcmp(name, "ssh-rsa3072-oqsdefault") == 0) {
+    }
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_STRING_END
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_STRING_START
+    if (strcmp(name, "ssh-rsa3072-oqsdefault") == 0) {
         return SSH_KEYTYPE_RSA3072_OQSDEFAULT;
-    } else if(strcmp(name, "ssh-p256-oqsdefault") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-oqsdefault") == 0) {
         return SSH_KEYTYPE_P256_OQSDEFAULT;
-    } else if(strcmp(name, "ssh-rsa3072-dilithium2") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-dilithium2") == 0) {
         return SSH_KEYTYPE_RSA3072_DILITHIUM_2;
-    } else if(strcmp(name, "ssh-p256-dilithium2") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-dilithium2") == 0) {
         return SSH_KEYTYPE_P256_DILITHIUM_2;
-    } else if(strcmp(name, "ssh-rsa3072-falcon512") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-falcon512") == 0) {
         return SSH_KEYTYPE_RSA3072_FALCON_512;
-    } else if(strcmp(name, "ssh-p256-falcon512") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-falcon512") == 0) {
         return SSH_KEYTYPE_P256_FALCON_512;
-    } else if(strcmp(name, "ssh-rsa3072-picnicl1full") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-picnicl1full") == 0) {
         return SSH_KEYTYPE_RSA3072_PICNIC_L1FULL;
-    } else if(strcmp(name, "ssh-p256-picnicl1full") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-picnicl1full") == 0) {
         return SSH_KEYTYPE_P256_PICNIC_L1FULL;
-    } else if(strcmp(name, "ssh-rsa3072-picnic3l1") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-picnic3l1") == 0) {
         return SSH_KEYTYPE_RSA3072_PICNIC3_L1;
-    } else if(strcmp(name, "ssh-p256-picnic3l1") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-picnic3l1") == 0) {
         return SSH_KEYTYPE_P256_PICNIC3_L1;
-#ifdef WITH_PQ_RAINBOW_ALGS
-    } else if(strcmp(name, "ssh-rsa3072-rainbowiclassic") == 0) {
-        return SSH_KEYTYPE_RSA3072_RAINBOW_I_CLASSIC;
-    } else if(strcmp(name, "ssh-p256-rainbowiclassic") == 0) {
-        return SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC;
-    } else if(strcmp(name, "ssh-p384-rainbowiiiclassic") == 0) {
-        return SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC;
-    } else if(strcmp(name, "ssh-p521-rainbowvclassic") == 0) {
-        return SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC;
-#endif
-    } else if(strcmp(name, "ssh-rsa3072-sphincsharaka128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincsharaka128frobust") == 0) {
         return SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST;
-    } else if(strcmp(name, "ssh-p256-sphincsharaka128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-sphincsharaka128frobust") == 0) {
         return SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST;
-    } else if(strcmp(name, "ssh-rsa3072-sphincssha256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincssha256128frobust") == 0) {
         return SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_ROBUST;
-    } else if(strcmp(name, "ssh-p256-sphincssha256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-sphincssha256128frobust") == 0) {
         return SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST;
-    } else if(strcmp(name, "ssh-rsa3072-sphincsshake256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-rsa3072-sphincsshake256128frobust") == 0) {
         return SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST;
-    } else if(strcmp(name, "ssh-p256-sphincsshake256128frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-p256-sphincsshake256128frobust") == 0) {
         return SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST;
     }
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_STRING_END
 #endif
 
     return SSH_KEYTYPE_UNKNOWN;
@@ -1172,7 +1206,7 @@ int ssh_pki_import_privkey_file(const char *filename,
     }
 
     if (sb.st_size > MAX_PRIVKEY_SIZE) {
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PQ_RAINBOW_ALGS)
+#ifdef WITH_POST_QUANTUM_CRYPTO
         SSH_LOG(SSH_LOG_WARN,
                 "Private key is bigger than 8M.");
 #else
@@ -2921,18 +2955,16 @@ int pki_key_check_hash_compatible(ssh_key key,
     case SSH_KEYTYPE_SK_ECDSA_CERT01:
     case SSH_KEYTYPE_SK_ECDSA:
 #ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA256_OK_START
     case SSH_KEYTYPE_P256_OQSDEFAULT:
     case SSH_KEYTYPE_P256_DILITHIUM_2:
     case SSH_KEYTYPE_P256_FALCON_512:
     case SSH_KEYTYPE_P256_PICNIC_L1FULL:
     case SSH_KEYTYPE_P256_PICNIC3_L1:
-#ifdef WITH_PQ_RAINBOW_ALGS
-    case SSH_KEYTYPE_P256_RAINBOW_I_CLASSIC:
-#endif
     case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST:
     case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
-
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA256_OK_END
 #endif
         if (hash_type == SSH_DIGEST_SHA256) {
             return SSH_OK;
@@ -2940,8 +2972,9 @@ int pki_key_check_hash_compatible(ssh_key key,
         break;
     case SSH_KEYTYPE_ECDSA_P384_CERT01:
     case SSH_KEYTYPE_ECDSA_P384:
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PQ_RAINBOW_ALGS)
-    case SSH_KEYTYPE_P384_RAINBOW_III_CLASSIC:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA384_OK_START
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA384_OK_END
 #endif
         if (hash_type == SSH_DIGEST_SHA384) {
             return SSH_OK;
@@ -2949,8 +2982,9 @@ int pki_key_check_hash_compatible(ssh_key key,
         break;
     case SSH_KEYTYPE_ECDSA_P521_CERT01:
     case SSH_KEYTYPE_ECDSA_P521:
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PQ_RAINBOW_ALGS)
-    case SSH_KEYTYPE_P521_RAINBOW_V_CLASSIC:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA512_OK_START
+///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA512_OK_END
 #endif
         if (hash_type == SSH_DIGEST_SHA512) {
             return SSH_OK;

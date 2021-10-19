@@ -141,16 +141,37 @@ if (SSH_EXECUTABLE)
         ecdsa-sha2-nistp521-cert-v01@openssh.com
         )
     if (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
+##### OQS_TEMPLATE_FRAGMENT_SSH_ALGORITHMS_START
+        set(PQ_SSH_ALGORITHMS
+            ssh-oqsdefault
+            ssh-rsa3072-oqsdefault
+            ssh-p256-oqsdefault
+            ssh-dilithium2
+            ssh-rsa3072-dilithium2
+            ssh-p256-dilithium2
+            ssh-falcon512
+            ssh-rsa3072-falcon512
+            ssh-p256-falcon512
+            ssh-picnicl1full
+            ssh-rsa3072-picnicl1full
+            ssh-p256-picnicl1full
+            ssh-picnic3l1
+            ssh-rsa3072-picnic3l1
+            ssh-p256-picnic3l1
+            ssh-sphincsharaka128frobust
+            ssh-rsa3072-sphincsharaka128frobust
+            ssh-p256-sphincsharaka128frobust
+            ssh-sphincssha256128frobust
+            ssh-rsa3072-sphincssha256128frobust
+            ssh-p256-sphincssha256128frobust
+            ssh-sphincsshake256128frobust
+            ssh-rsa3072-sphincsshake256128frobust
+            ssh-p256-sphincsshake256128frobust
+            )
+##### OQS_TEMPLATE_FRAGMENT_SSH_ALGORITHMS_END
         set(SSH_ALGORITHMS
             ${SSH_ALGORITHMS}
-            ssh-rsa3072-oqsdefault ssh-p256-oqsdefault ssh-rsa3072-dilithium2 ssh-p256-dilithium2 ssh-rsa3072-falcon512
-            ssh-p256-falcon512 ssh-rsa3072-picnicl1full ssh-p256-picnicl1full ssh-rsa3072-picnic3l1 ssh-p256-picnic3l1
-            ssh-rsa3072-rainbowiaclassic ssh-p256-rainbowiaclassic ssh-p384-rainbowiiicclassic ssh-p521-rainbowvcclassic
-            ssh-rsa3072-sphincsharaka128frobust ssh-p256-sphincsharaka128frobust ssh-rsa3072-sphincssha256128frobust
-            ssh-p256-sphincssha256128frobust ssh-rsa3072-sphincsshake256128frobust ssh-p256-sphincsshake256128frobust
-            ssh-oqsdefault ssh-dilithium2 ssh-falcon512 ssh-picnicl1full ssh-picnic3l1 ssh-rainbowiaclassic
-            ssh-rainbowiiicclassic ssh-rainbowvcclassic ssh-sphincsharaka128frobustssh-sphincssha256128frobust
-            ssh-sphincsshake256128frobust
+            ${PQ_SSH_ALGORITHMS}
             )
     endif(WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
 

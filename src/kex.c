@@ -123,23 +123,37 @@
 #endif
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#define OQS_PUREPQ_HOSTKEYS "ssh-oqsdefault,ssh-dilithium2,ssh-falcon512,ssh-picnicl1full," \
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_START
+#define OQS_PUREPQ_HOSTKEYS \
+                            "ssh-oqsdefault," \
+                            "ssh-dilithium2," \
+                            "ssh-falcon512," \
+                            "ssh-picnicl1full," \
                             "ssh-picnic3l1," \
-                            "ssh-sphincsharaka128frobust,ssh-sphincssha256128frobust,ssh-sphincsshake256128frobust,"
-#define OQS_HYBRID_HOSTKEYS "ssh-rsa3072-oqsdefault,ssh-p256-oqsdefault,ssh-rsa3072-dilithium2,ssh-p256-dilithium2," \
-                            "ssh-rsa3072-falcon512,ssh-p256-falcon512,ssh-rsa3072-picnicl1full,ssh-p256-picnicl1full," \
-                            "ssh-rsa3072-picnic3l1,ssh-p256-picnic3l1," \
-                            "ssh-rsa3072-sphincsharaka128frobust," \
-                            "ssh-p256-sphincsharaka128frobust,ssh-rsa3072-sphincssha256128frobust,ssh-p256-sphincssha256128frobust," \
-                            "ssh-rsa3072-sphincsshake256128frobust,ssh-p256-sphincsshake256128frobust,"
-#ifdef WITH_PQ_RAINBOW_ALGS
-#define OQS_RAINBOW_HOSTKEYS        "ssh-rainbowiclassic,ssh-rainbowiiiclassic,ssh-rainbowvclassic,"
-#define OQS_RAINBOW_HYBRID_HOSTKEYS "ssh-rsa3072-rainbowiclassic,ssh-p256-rainbowiclassic,ssh-p384-rainbowiiiclassic,ssh-p521-rainbowvclassic,"
-#else
-#define OQS_RAINBOW_HOSTKEYS ""
-#define OQS_RAINBOW_HYBRID_HOSTKEYS ""
-#endif
-#define OQS_HOSTKEYS        OQS_PUREPQ_HOSTKEYS OQS_RAINBOW_HOSTKEYS OQS_HYBRID_HOSTKEYS OQS_RAINBOW_HYBRID_HOSTKEYS
+                            "ssh-sphincsharaka128frobust," \
+                            "ssh-sphincssha256128frobust," \
+                            "ssh-sphincsshake256128frobust,"
+///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_END
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_START
+#define OQS_HYBRID_HOSTKEYS \
+                           "ssh-rsa3072-oqsdefault," \
+                           "ssh-p256-oqsdefault," \
+                           "ssh-rsa3072-dilithium2," \
+                           "ssh-p256-dilithium2," \
+                           "ssh-rsa3072-falcon512," \
+                           "ssh-p256-falcon512," \
+                           "ssh-rsa3072-picnicl1full," \
+                           "ssh-p256-picnicl1full," \
+                           "ssh-rsa3072-picnic3l1," \
+                           "ssh-p256-picnic3l1," \
+                           "ssh-rsa3072-sphincsharaka128frobust," \
+                           "ssh-p256-sphincsharaka128frobust," \
+                           "ssh-rsa3072-sphincssha256128frobust," \
+                           "ssh-p256-sphincssha256128frobust," \
+                           "ssh-rsa3072-sphincsshake256128frobust," \
+                           "ssh-p256-sphincsshake256128frobust,"
+///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_END
+#define OQS_HOSTKEYS        OQS_PUREPQ_HOSTKEYS OQS_HYBRID_HOSTKEYS
 
 #else
 #define OQS_HOSTKEYS ""
@@ -188,7 +202,7 @@
 #define CHACHA20 "chacha20-poly1305@openssh.com,"
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_KEXS_START
 #define PURE_PQ_KEY_EXCHANGE \
     KEX_OQSDEFAULT_SHA384 "," \
     KEX_BIKE1_L1_CPA_SHA384 "," \
@@ -249,8 +263,9 @@
     KEX_SNTRUP_653_SHA384 "," \
     KEX_SNTRUP_761_SHA384 "," \
     KEX_SNTRUP_857_SHA384 ","
-#endif /* WITH_PURE_PQ_KEX */
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_KEXS_END
 
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_KEXS_START
 #define HYBRID_ECDH_KEY_EXCHANGE \
     KEX_ECDH_NISTP384_OQSDEFAULT_SHA384 "," \
     KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384 "," \
@@ -311,15 +326,11 @@
     KEX_ECDH_NISTP384_SNTRUP_653_SHA384 "," \
     KEX_ECDH_NISTP384_SNTRUP_761_SHA384 "," \
     KEX_ECDH_NISTP384_SNTRUP_857_SHA384 ","
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_KEXS_END
 
-#ifdef WITH_PURE_PQ_KEX
 #define POST_QUANTUM_KEY_EXCHANGE \
     HYBRID_ECDH_KEY_EXCHANGE \
     PURE_PQ_KEY_EXCHANGE
-#else /* WITH_PURE_PQ_KEX */
-#define POST_QUANTUM_KEY_EXCHANGE \
-    HYBRID_ECDH_KEY_EXCHANGE
-#endif /* WITH_PURE_PQ_KEX */
 #else /* WITH_POST_QUANTUM_CRYPTO */
 #define POST_QUANTUM_KEY_EXCHANGE ""
 #endif /* WITH_POST_QUANTUM_CRYPTO */
@@ -387,10 +398,9 @@ static const char *fips_methods[] = {
     NULL
 };
 
-#if defined(__GNUC__) && defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX)
+#if defined(__GNUC__) && defined(WITH_POST_QUANTUM_CRYPTO)
 /* ISO C99 only requires compilers to accept strings of length 4096, and with the pure PQ kex algorithms included, this causes DEFAULT_KEY_EXCHANGE
- * and KEY_EXCHANGE_SUPPORTED to exceed that. We allow users to opt-in to the pure PQ kex algorithms by setting -DWITH_PURE_PQ_KEX=ON, 
- * and suppress the warning if they do. */
+ * and KEY_EXCHANGE_SUPPORTED to exceed that. */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Woverlength-strings"
 #endif
@@ -425,7 +435,7 @@ static const char *supported_methods[] = {
   NULL
 };
 
-#if defined(__GNUC__) && defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX)
+#if defined(__GNUC__) && defined(WITH_POST_QUANTUM_CRYPTO)
 #pragma GCC diagnostic pop
 #endif
 
@@ -1003,7 +1013,7 @@ int ssh_kex_select_methods (ssh_session session)
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], "curve25519-sha256") == 0){
       session->next_crypto->kex_type=SSH_KEX_CURVE25519_SHA256;
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
+///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_START
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_OQSDEFAULT_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_OQSDEFAULT_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE1_L1_CPA_SHA384) == 0){
@@ -1042,8 +1052,8 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_FRODO_976_AES_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_976_SHAKE_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_FRODO_976_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_1344_AES_SHA384) == 0){ 
-        session->next_crypto->kex_type=SSH_KEX_FRODO_1344_AES_SHA384; 
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_1344_AES_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODO_1344_AES_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_1344_SHAKE_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_FRODO_1344_SHAKE_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_512_SHA384) == 0){
@@ -1122,7 +1132,8 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_SNTRUP_761_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SNTRUP_857_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_SNTRUP_857_SHA384;
-#endif /* WITH_PURE_PQ_KEX */
+///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_END
+///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_HYBRID_START
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_OQSDEFAULT_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_OQSDEFAULT_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384) == 0){
@@ -1241,6 +1252,7 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SNTRUP_761_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SNTRUP_857_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SNTRUP_857_SHA384;
+///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_HYBRID_END
 #endif /* WITH_POST_QUANTUM_CRYPTO */
     }
     SSH_LOG(SSH_LOG_INFO, "Negotiated %s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
@@ -1572,7 +1584,6 @@ int ssh_make_sessionid(ssh_session session)
         break;
 #endif
 #ifdef WITH_POST_QUANTUM_CRYPTO
-#ifdef WITH_PURE_PQ_KEX
     CASE_SSH_KEX_PURE_PQ:
         /* Order is always client message and then server message. Pack them in the right order. 
          * OpenSSH reference: pq_oqs_hash in kexpqoqs.c
@@ -1592,7 +1603,6 @@ int ssh_make_sessionid(ssh_session session)
             goto error;
         }
         break;
-#endif /* WITH_PURE_PQ_KEX */
     CASE_SSH_KEX_HYBRID:
         /* Order is always client ECDH public key, client OQS message, server ECDH public key, server OQS message. Pack them in the right order.
          * OpenSSH reference: hybrid_ecdh_oqs_hash in kexhyecdhoqs.c 

@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX)
+#ifdef WITH_POST_QUANTUM_CRYPTO
 
 #include "libssh/session.h"
 
@@ -37,6 +37,6 @@ void ssh_server_pqkex_init(ssh_session session);
 SSH_PACKET_CALLBACK(ssh_packet_server_pqkex_init);
 #endif /* WITH_SERVER */
 
-#endif /* defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX) */
+#endif /* WITH_POST_QUANTUM_CRYPTO */
 
 #endif /* PQKEX_H_ */

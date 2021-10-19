@@ -26,6 +26,12 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 ```
     sudo apt install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz
 ```
+
+If you want to build client as well as server tests for libssh (-DCLIENT_TESTING=ON) below in step 6, install these additional dependencies. On Ubuntu:
+
+```
+    sudo apt install libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper
+```
  
 3. Choose an appropriate installation location for OQS's libraries and include files. Example choices are `/usr/local` or `/usr/local/oqs` for a system-wide installation, or `${HOME}/oqs` or `${HOME}/build/oqs` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OQS_ROOT_DIR}`. 
 
@@ -46,28 +52,11 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 
 ```
   mkdir build && cd build
-  cmake -DUNIT_TESTING=ON -DWITH_SERVER=ON -DSERVER_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_POST_QUANTUM_CRYPTO=ON -DWITH_PQ_RAINBOW_ALGS=OFF -DWITH_PURE_PQ_KEX=OFF -DOQS_ROOT_DIR=${OQS_ROOT_DIR} ..
+  cmake -DUNIT_TESTING=ON -DWITH_SERVER=ON -DSERVER_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_POST_QUANTUM_CRYPTO=ON -DOQS_ROOT_DIR=${OQS_ROOT_DIR} ..
   make -j
 ```
 
-## Including pure post-quantum key exchange algorithms (`-DWITH_PURE_PQ_KEX={ON|OFF}`)
-
-By default, pure post-quantum key exchange algorithms are not included. We recommend always using a hybrid key exchange algorithm, which combines Elliptic Curve Diffie-Hellman (ECDH) on the NIST P-384 elliptic curve with each of the post quantum options.
-
-You can opt into the post-quantum key exchange algorithms by themselves by supplying `-DWITH_PURE_PQ_KEX=ON` on the `CMake` command line. This causes some strings in the code to exceed 4096 characters, which is the maximum required by the ISO C99 standard. Modern compilers don't typically have a problem with longer strings, and so you can opt into these algorithms if you know your compiler will handle these correctly.
-
-## Including the Rainbow family of digital signature algorithms (`-DWITH_PQ_RAINBOW_ALGS={ON|OFF}`)
-
-By default, the Rainbow family of digital signature algorithms are excluded because they significantly increase the time required to run the pkd_hello test suite. Their algorithms and their associated tests can be included in the build by providing `-DWITH_PQ_RAINBOW_ALGS=ON` on the `CMake` command line.
-
-OQS-OpenSSH has also removed support for the Rainbow algorithms as part of OQS-OpenSSH commit d04c1be823318fe3f9ef4c1aa23e8d1333ac731d. Configuring libssh with `-DWITH_PQ_RAINBOW_ALGS=ON` is now deprecated, and there is no further expectation these algorithms will work. Turning this option on will raise a warning when running CMake, but the algorithms will still be included in the build.
-
-With the Rainbow algorithms included, on an ubuntu 18 VM running on a reasonably recent and powerful development workstation, a full run of pkd_hello includes 1778 test cases and took 6 hours 33 minutes to complete.
-
-With the Rainbow algorithms excluded, on the same VM, a full run of pkd_hello includes 1365 test cases and took 57 minutes to complete.
-
-Without post-quantum support at all (`-DWITH_POST_QUANTUM-CRYPTO=OFF`), a full run of pkd_hello includes 398 test cases and took 13 minutes to complete.
-
+If you want to build the tests for libssh in client mode as well as server mode, add `-DCLIENT_TESTING=ON` to the `cmake` command line above. See Known Issues at the bottom of this document concerning the client tests.
 
 ## Preserving client and server authentication keys for runs of the `pkd_hello` suite
 
@@ -115,6 +104,7 @@ Available key exchange algorithms:
 ==================================
 The following key exchange algorithm strings are the hybrid algorithms we recommend using, that combine an established classical algorithm with a post-quantum algorithm. They can be provided to the "-o KexAlgorithms" option to both ssh and sshd. The "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org" option chooses a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_START -->
 * ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org
 * ecdh-nistp384-bike1-l1-cpa-sha384@openquantumsafe.org
 * ecdh-nistp384-bike1-l3-cpa-sha384@openquantumsafe.org
@@ -174,9 +164,11 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 * ecdh-nistp384-sntrup-653-sha384@openquantumsafe.org
 * ecdh-nistp384-sntrup-761-sha384@openquantumsafe.org
 * ecdh-nistp384-sntrup-857-sha384@openquantumsafe.org
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_END -->
 
 The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_KEXS_START -->
 * oqsdefault-sha384@openquantumsafe.org
 * bike1-l1-cpa-sha384@openquantumsafe.org
 * bike1-l3-cpa-sha384@openquantumsafe.org
@@ -236,6 +228,7 @@ The following key exchange algorithm strings are pure-PQ algorithms. They should
 * sntrup-653-sha384@openquantumsafe.org
 * sntrup-761-sha384@openquantumsafe.org
 * sntrup-857-sha384@openquantumsafe.org
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_KEXS_END -->
 
 Available digital signature algorithms:
 =======================================
@@ -243,6 +236,7 @@ Digital signature algorithms are used in SSH for host key authentication and use
 
 The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. The options ending in "-oqsdefault" will choose a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_SIGS_START -->
 * ssh-rsa3072-oqsdefault
 * ssh-p256-oqsdefault
 * ssh-rsa3072-dilithium2
@@ -253,31 +247,26 @@ The following digital signature algorithm strings are the hybrid algorithms we r
 * ssh-p256-picnicl1full
 * ssh-rsa3072-picnic3l1
 * ssh-p256-picnic3l1
-* ssh-rsa3072-rainbowiaclassic
-* ssh-p256-rainbowiaclassic
-* ssh-p384-rainbowiiicclassic
-* ssh-p521-rainbowvcclassic
-* ssh-rsa3072-sphincsharaka128frobust 
+* ssh-rsa3072-sphincsharaka128frobust
 * ssh-p256-sphincsharaka128frobust
 * ssh-rsa3072-sphincssha256128frobust
 * ssh-p256-sphincssha256128frobust
 * ssh-rsa3072-sphincsshake256128frobust
 * ssh-p256-sphincsshake256128frobust
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_SIGS_END -->
 
 The following digital signature algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_SIGS_START -->
 * ssh-oqsdefault
 * ssh-dilithium2
 * ssh-falcon512
 * ssh-picnicl1full
 * ssh-picnic3l1
-* ssh-rainbowiaclassic
-* ssh-rainbowiiicclassic
-* ssh-rainbowvcclassic
 * ssh-sphincsharaka128frobust
 * ssh-sphincssha256128frobust
 * ssh-sphincsshake256128frobust
-
+<!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_SIGS_END -->
 
 KNOWN ISSUES
 ============
@@ -285,4 +274,4 @@ KNOWN ISSUES
 
 2. The Rainbow family of digital signature algorithms incur a noticeably longer time to generate key pairs, as well as perform digital signing and verification operations. Test cases and normal uses of these algorithms for host or user authentication will be slower. This is a known property of the algorithms themselves.
 
-3. The larger key sizes and payloads required of PQ/hybrid algorithms causes individual messages to be much larger, and this can cause problems with the socket_wrapper library used in test code, causing parts of messages to be lost. These problems have not yet been observed when running without socket_wrapper and using real network sockets.
+3. The larger key sizes and payloads required of PQ/hybrid algorithms causes individual messages to be much larger, and this can cause problems with the socket_wrapper library used in test code, causing parts of messages to be lost. These problems have not yet been observed when running without socket_wrapper and using real network sockets. This can result in client tests failing, but so far this appears to be a problem with the test libraries, and libssh operates correctly in client mode.

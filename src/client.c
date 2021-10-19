@@ -282,11 +282,9 @@ static int dh_handshake(ssh_session session) {
         CASE_SSH_KEX_HYBRID:
           rc = ssh_client_hykex_init(session);
           break;
-#ifdef WITH_PURE_PQ_KEX
         CASE_SSH_KEX_PURE_PQ:
           rc = ssh_client_pqkex_init(session);
           break;
-#endif
 #endif
         default:
           rc = SSH_ERROR;

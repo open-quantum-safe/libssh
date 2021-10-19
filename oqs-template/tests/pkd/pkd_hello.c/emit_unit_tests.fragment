@@ -1,0 +1,9 @@
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_{{ variant['name']|lower }}, OPENSSH_KEX_CMD)
+        {%- for classical_alg in variant['mix_with'] %}
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_{{ classical_alg['name']|lower }}_{{ variant['name']|lower }}, OPENSSH_KEX_CMD)
+        {%- endfor %}
+    {%- endfor %}
+{%- endfor %}
+

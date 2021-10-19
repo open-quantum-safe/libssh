@@ -23,7 +23,7 @@
 
 #include "libssh/pqkex.h"
 
-#if defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX)
+#ifdef WITH_POST_QUANTUM_CRYPTO
 
 #include "libssh/ssh2.h"
 #include "libssh/buffer.h"
@@ -377,4 +377,4 @@ error:
 
 #endif /* WITH_SERVER */
 
-#endif /* defined(WITH_POST_QUANTUM_CRYPTO) && defined(WITH_PURE_PQ_KEX) */
+#endif /* WITH_POST_QUANTUM_CRYPTO */

@@ -1,0 +1,39 @@
+{%- set with_p256 = [] -%}
+{%- set with_p384 = [] -%}
+{%- set with_p521 = [] -%}
+{%- for sig in config['sigs'] -%}
+    {%- for variant in sig['variants'] -%}
+        {%- for classical_alg in variant['mix_with'] -%}
+            {%- if classical_alg.name == 'p256' -%}
+                {%- do with_p256.append(variant) -%}
+            {%- elif classical_alg.name == 'p384' -%}
+                {%- do with_p384.append(variant) -%}
+            {%- elif classical_alg.name == 'p521' -%}
+                {%- do with_p521.append(variant) -%}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endfor -%}
+{%- endfor %}
+    CASE_KEY_RSA_HYBRID:
+{%- for pq_alg in with_p256 %}
+    case SSH_KEYTYPE_P256_{{ pq_alg['name']|upper }}:
+{%- endfor %}
+{%- if with_p256 %}
+
+        return SSH_DIGEST_SHA256;
+{%- endif %}
+{%- for pq_alg in with_p384 %}
+    case SSH_KEYTYPE_P384_{{ pq_alg['name']|upper }}:
+{%- endfor %}
+{%- if with_p384 %}
+
+        return SSH_DIGEST_SHA384;
+{%- endif %}
+{%- for pq_alg in with_p521 %}
+    case SSH_KEYTYPE_P521_{{ pq_alg['name']|upper }}:
+{%- endfor %}
+{%- if with_p521 %}
+
+        return SSH_DIGEST_SHA512;
+{%- endif %}
+

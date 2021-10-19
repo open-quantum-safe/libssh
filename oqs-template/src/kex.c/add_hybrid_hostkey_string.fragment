@@ -1,0 +1,13 @@
+
+#define OQS_HYBRID_HOSTKEYS \
+
+{%- for sig in config['sigs'] %}
+    {%- set outer_loop_last = loop.last %}
+    {%- for variant in sig['variants'] %}
+        {%- set variant_loop_last = loop.last %}
+        {%- for classical_alg in variant['mix_with'] %}
+                           "ssh-{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }},"{% if not (outer_loop_last and variant_loop_last and loop.last) %} \{% endif %}
+        {%- endfor -%}
+    {%- endfor %}
+{%- endfor %}
+

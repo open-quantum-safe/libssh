@@ -1,0 +1,12 @@
+
+{%- for kem in config['kems'] %}
+    {%- for variant in kem['variants'] %}
+         cmocka_unit_test_setup_teardown(torture_algorithms_{{ variant['name']|lower|replace('_','') }}_sha384,
+                                         session_setup,
+                                         session_teardown),
+         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_{{ variant['name']|lower|replace('_','') }}_sha384,
+                                         session_setup,
+                                         session_teardown),
+    {%- endfor %}
+{%- endfor %}
+

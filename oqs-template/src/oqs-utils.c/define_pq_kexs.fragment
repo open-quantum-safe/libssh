@@ -1,0 +1,6 @@
+{%- for kem in config['kems'] %}
+    {%- for variant in kem['variants'] %}
+    {SSH_KEX_{{ variant['name'] }}_SHA384, KEX_{{ variant['name'] }}_SHA384, {{ variant['oqs_meth'] }}},
+    {%- endfor %}
+{%- endfor %}
+

@@ -1,0 +1,10 @@
+
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+    PKD_{{ variant['name']|upper }},
+        {%- for classical_alg in variant['mix_with'] %}
+    PKD_{{ classical_alg.name|upper }}_{{ variant['name']|upper }},
+        {%- endfor -%}
+    {%- endfor %}
+{%- endfor %}
+
