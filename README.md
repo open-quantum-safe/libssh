@@ -26,6 +26,12 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 ```
     sudo apt install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz
 ```
+
+If you want to build client as well as server tests for libssh (-DCLIENT_TESTING=ON) below in step 6, install these additional dependencies. On Ubuntu:
+
+```
+    sudo apt install libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper
+```
  
 3. Choose an appropriate installation location for OQS's libraries and include files. Example choices are `/usr/local` or `/usr/local/oqs` for a system-wide installation, or `${HOME}/oqs` or `${HOME}/build/oqs` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OQS_ROOT_DIR}`. 
 
@@ -49,6 +55,8 @@ This support can only be built if OpenSSL is used as the cryptographic library f
   cmake -DUNIT_TESTING=ON -DWITH_SERVER=ON -DSERVER_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_POST_QUANTUM_CRYPTO=ON -DOQS_ROOT_DIR=${OQS_ROOT_DIR} ..
   make -j
 ```
+
+If you want to build the tests for libssh in client mode as well as server mode, add `-DCLIENT_TESTING=ON` to the `cmake` command line above. See Known Issues at the bottom of this document concerning the client tests.
 
 ## Preserving client and server authentication keys for runs of the `pkd_hello` suite
 
@@ -266,4 +274,4 @@ KNOWN ISSUES
 
 2. The Rainbow family of digital signature algorithms incur a noticeably longer time to generate key pairs, as well as perform digital signing and verification operations. Test cases and normal uses of these algorithms for host or user authentication will be slower. This is a known property of the algorithms themselves.
 
-3. The larger key sizes and payloads required of PQ/hybrid algorithms causes individual messages to be much larger, and this can cause problems with the socket_wrapper library used in test code, causing parts of messages to be lost. These problems have not yet been observed when running without socket_wrapper and using real network sockets.
+3. The larger key sizes and payloads required of PQ/hybrid algorithms causes individual messages to be much larger, and this can cause problems with the socket_wrapper library used in test code, causing parts of messages to be lost. These problems have not yet been observed when running without socket_wrapper and using real network sockets. This can result in client tests failing, but so far this appears to be a problem with the test libraries, and libssh operates correctly in client mode.
