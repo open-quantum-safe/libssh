@@ -1,0 +1,45 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install prerequisites
+      run: |
+        sudo apt-get update
+        sudo apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper
+      
+    - name: Clone liboqs
+      uses: actions/checkout@v2
+      with:
+        path: oqs-scripts/tmp/liboqs
+        repository: open-quantum-safe/liboqs
+        ref: 0.6.0
+
+    - name: Clone OQS-OpenSSH
+      uses: actions/checkout@v2
+      with:
+        path: oqs-scripts/tmp/openssh
+        repository: open-quantum-safe/openssh
+        ref: d04c1be823318fe3f9ef4c1aa23e8d1333ac731d
+
+    - name: Build liboqs
+      run: ./oqs-scripts/build_liboqs.sh
+
+    - name: Create sshd privilege separation directory
+      run: sudo mkdir -p -m 0755 /var/empty
+      
+    - name: Build OQS-OpenSSH
+      run: ./oqs-scripts/build_openssh.sh
+      
+    - name: Build libssh
+      run: ./oqs-scripts/build_libssh.sh
+
+    - name: Run pkd_hello test suite
+      run: ./oqs-test/run_pkd_hello.sh
