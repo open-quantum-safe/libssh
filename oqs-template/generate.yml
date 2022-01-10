@@ -1,16 +1,5 @@
 sigs:
   -
-    # TODO: At the moment this should
-    # always be enabled to avoid build errors.
-    family: 'OQSDEFAULT'
-    variants:
-      -
-        enable: true
-        name: 'OQSDEFAULT'
-        oqs_meth: 'OQS_SIG_alg_default'
-        mix_with: [{'name':'rsa3072'},
-                   {'name': 'p256', 'curve':'NID_X9_62_prime256v1'}]
-  -
     family: 'DILITHIUM'
     variants:
       -
@@ -363,26 +352,14 @@ sigs:
 
 kems:
   -
-    family: 'OQSDEFAULT'
-    variants:
-      -
-        name: 'OQSDEFAULT'
-        oqs_meth: 'OQS_KEM_alg_default'  
-  -
     family: 'BIKE'
     variants:
       -
-        name: 'BIKE1_L1_CPA'
-        oqs_meth: 'OQS_KEM_alg_bike1_l1_cpa'
+        name: 'BIKE_L1'
+        oqs_meth: 'OQS_KEM_alg_bike_l1'
       -
-        name: 'BIKE1_L3_CPA'
-        oqs_meth: 'OQS_KEM_alg_bike1_l3_cpa'
-      -
-        name: 'BIKE1_L1_FO'
-        oqs_meth: 'OQS_KEM_alg_bike1_l1_fo'
-      -
-        name: 'BIKE1_L3_FO'
-        oqs_meth: 'OQS_KEM_alg_bike1_l3_fo'
+        name: 'BIKE_L3'
+        oqs_meth: 'OQS_KEM_alg_bike_l3'
   -
     family: 'CLASSIC_MCELIECE'
     variants:

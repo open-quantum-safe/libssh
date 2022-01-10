@@ -7,7 +7,7 @@ WARNING: These algorithms and implementations are experimental. Standards for po
 
 This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID d04c1be823318fe3f9ef4c1aa23e8d1333ac731d "disable rainbow (#105)".
 
-This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.6.0 (commit ID 00d6c7d5410fe5949a75e5f4d86120bd1c60bef6 "liboqs 0.6.0". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
+This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
 This support can only be built if OpenSSL is used as the cryptographic library for libssh, due to liboqs's reliance on OpenSSL for some symmetric cryptographic primitives. libgcrypt and mbedTLS are not supported.
 
@@ -18,7 +18,7 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 ```
     git clone --branch main --single-branch --depth 1 https://github.com/open-quantum-safe/liboqs.git
     cd liboqs
-    git checkout 0.6.0
+    git checkout 0.7.1
 ```
 
 2. Install necessary dependencies. In particular, you will need CMake, Ninja, gcc, and libssl-dev to build. On Ubuntu:

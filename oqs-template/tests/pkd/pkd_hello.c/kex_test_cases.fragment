@@ -5,7 +5,7 @@
     {%- for variant in kem['variants'] %}
     f(client, rsa_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_ecdsa_256, teardown) \
-    f(client, oqsdefault_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_oqsdefault, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
+    f(client, picnic_l1full_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_picnic_l1full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
     {%- endfor %}
 {%- endfor %}
 
@@ -15,8 +15,8 @@
     {%- for variant in kem['variants'] %}
     f(client, rsa_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_ecdsa_256, teardown) \
-    f(client, oqsdefault_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_oqsdefault, teardown) \
-    f(client, p256_oqsdefault_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_p256_oqsdefault, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
+    f(client, picnic_l1full_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_picnic_l1full, teardown) \
+    f(client, p256_picnic_l1full_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_p256_picnic_l1full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
     {%- endfor %}
 {%- endfor %}
 
