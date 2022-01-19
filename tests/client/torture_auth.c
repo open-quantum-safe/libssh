@@ -1122,18 +1122,6 @@ static void torture_auth_pubkey_types_oqs_nonblocking_wrapper(void **state, cons
 }
 
 ///// OQS_TEMPLATE_FRAGMENT_OQS_FUNCS_START
-static void torture_auth_pubkey_types_oqsdefault(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "oqsdefault");
-}
-static void torture_auth_pubkey_types_rsa3072_oqsdefault(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-oqsdefault");
-}
-static void torture_auth_pubkey_types_p256_oqsdefault(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-oqsdefault");
-}
 static void torture_auth_pubkey_types_dilithium2(void** state)
 {
     torture_auth_pubkey_types_oqs_wrapper(state, "dilithium2");
@@ -1286,15 +1274,6 @@ int torture_run_tests(void) {
                                         session_teardown),
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_OQS_CASES_START
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_oqsdefault,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_oqsdefault,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_oqsdefault,
-                                        session_setup,
-                                        session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_dilithium2,
                                         session_setup,
                                         session_teardown),

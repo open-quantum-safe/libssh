@@ -5,9 +5,9 @@ OQS-libssh
 
 WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID d04c1be823318fe3f9ef4c1aa23e8d1333ac731d "disable rainbow (#105)".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v7.9 branch at commit ID f41bbe652c522db1bec388f82db369e4e5f0f405 "Merge pull request #114 from kevinmkane/kkane/liboqs-update".
 
-This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.6.0 (commit ID 00d6c7d5410fe5949a75e5f4d86120bd1c60bef6 "liboqs 0.6.0". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
+This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
 This support can only be built if OpenSSL is used as the cryptographic library for libssh, due to liboqs's reliance on OpenSSL for some symmetric cryptographic primitives. libgcrypt and mbedTLS are not supported.
 
@@ -18,7 +18,7 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 ```
     git clone --branch main --single-branch --depth 1 https://github.com/open-quantum-safe/liboqs.git
     cd liboqs
-    git checkout 0.6.0
+    git checkout 0.7.1
 ```
 
 2. Install necessary dependencies. In particular, you will need CMake, Ninja, gcc, and libssl-dev to build. On Ubuntu:
@@ -74,7 +74,7 @@ These instructions assume you have completed the build above; in particular, tha
 ```
   git clone --branch OQS-v7.9 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
   cd openssh
-  git checkout d04c1be823318fe3f9ef4c1aa23e8d1333ac731d
+  git checkout f41bbe652c522db1bec388f82db369e4e5f0f405
 ```
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
@@ -105,11 +105,8 @@ Available key exchange algorithms:
 The following key exchange algorithm strings are the hybrid algorithms we recommend using, that combine an established classical algorithm with a post-quantum algorithm. They can be provided to the "-o KexAlgorithms" option to both ssh and sshd. The "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org" option chooses a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_START -->
-* ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l1-cpa-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l3-cpa-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l1-fo-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l3-fo-sha384@openquantumsafe.org
+* ecdh-nistp384-bike-l1-sha384@openquantumsafe.org
+* ecdh-nistp384-bike-l3-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-348864-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-348864f-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-460896-sha384@openquantumsafe.org
@@ -169,11 +166,8 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_KEXS_START -->
-* oqsdefault-sha384@openquantumsafe.org
-* bike1-l1-cpa-sha384@openquantumsafe.org
-* bike1-l3-cpa-sha384@openquantumsafe.org
-* bike1-l1-fo-sha384@openquantumsafe.org
-* bike1-l3-fo-sha384@openquantumsafe.org
+* bike-l1-sha384@openquantumsafe.org
+* bike-l3-sha384@openquantumsafe.org
 * classic-mceliece-348864-sha384@openquantumsafe.org
 * classic-mceliece-348864f-sha384@openquantumsafe.org
 * classic-mceliece-460896-sha384@openquantumsafe.org
@@ -237,8 +231,6 @@ Digital signature algorithms are used in SSH for host key authentication and use
 The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. The options ending in "-oqsdefault" will choose a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_SIGS_START -->
-* ssh-rsa3072-oqsdefault
-* ssh-p256-oqsdefault
 * ssh-rsa3072-dilithium2
 * ssh-p256-dilithium2
 * ssh-rsa3072-falcon512
@@ -258,7 +250,6 @@ The following digital signature algorithm strings are the hybrid algorithms we r
 The following digital signature algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_SIGS_START -->
-* ssh-oqsdefault
 * ssh-dilithium2
 * ssh-falcon512
 * ssh-picnicl1full

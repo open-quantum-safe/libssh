@@ -75,21 +75,6 @@ void setup_ecdsa_keys() {
 void setup_post_quantum_keys() {
     int rc = 0;
 ///// OQS_TEMPLATE_FRAGMENT_SETUP_PQ_KEYS_START
-    if (access(LIBSSH_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t OQSDEFAULT -q -N \"\" -f "
-                            LIBSSH_OQSDEFAULT_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_RSA3072_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_OQSDEFAULT -q -N \"\" -f "
-                            LIBSSH_RSA3072_OQSDEFAULT_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_P256_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t P256_OQSDEFAULT -q -N \"\" -f "
-                            LIBSSH_P256_OQSDEFAULT_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
     if (access(LIBSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
         rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
                             LIBSSH_DILITHIUM_2_TESTKEY);
@@ -222,9 +207,6 @@ void cleanup_ecdsa_keys() {
 #ifdef WITH_POST_QUANTUM_CRYPTO
 void cleanup_post_quantum_keys() {
 ///// OQS_TEMPLATE_FRAGMENT_CLEANUP_PQ_KEYS_START
-    cleanup_key(LIBSSH_OQSDEFAULT_TESTKEY);
-    cleanup_key(LIBSSH_RSA3072_OQSDEFAULT_TESTKEY);
-    cleanup_key(LIBSSH_P256_OQSDEFAULT_TESTKEY);
     cleanup_key(LIBSSH_DILITHIUM_2_TESTKEY);
     cleanup_key(LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
     cleanup_key(LIBSSH_P256_DILITHIUM_2_TESTKEY);
@@ -350,21 +332,6 @@ void setup_openssh_client_keys() {
          * in the keytypes struct as sshkey.c:119 in OpenSSH for the correct string to pass to ssh-keygen's -t parameter.
          */
 ///// OQS_TEMPLATE_FRAGMENT_SETUP_CLIENT_PQ_KEYS_START
-        if (access(OPENSSH_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t OQSDEFAULT -q -N \"\" -f "
-                                OPENSSH_OQSDEFAULT_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_RSA3072_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_OQSDEFAULT -q -N \"\" -f "
-                                OPENSSH_RSA3072_OQSDEFAULT_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_P256_OQSDEFAULT_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t P256_OQSDEFAULT -q -N \"\" -f "
-                                OPENSSH_P256_OQSDEFAULT_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
         if (access(OPENSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
             rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
                                 OPENSSH_DILITHIUM_2_TESTKEY);
@@ -492,9 +459,6 @@ void cleanup_openssh_client_keys() {
 #ifdef WITH_POST_QUANTUM_CRYPTO
     if (!ssh_fips_mode()) {
 ///// OQS_TEMPLATE_FRAGMENT_CLEANUP_CLIENT_PQ_KEYS_START
-        cleanup_key(OPENSSH_OQSDEFAULT_TESTKEY);
-        cleanup_key(OPENSSH_RSA3072_OQSDEFAULT_TESTKEY);
-        cleanup_key(OPENSSH_P256_OQSDEFAULT_TESTKEY);
         cleanup_key(OPENSSH_DILITHIUM_2_TESTKEY);
         cleanup_key(OPENSSH_RSA3072_DILITHIUM_2_TESTKEY);
         cleanup_key(OPENSSH_P256_DILITHIUM_2_TESTKEY);

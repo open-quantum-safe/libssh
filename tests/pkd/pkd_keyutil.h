@@ -20,9 +20,6 @@
 #define LIBSSH_ECDSA_521_TESTKEY  "libssh_testkey.id_ecdsa521"
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_LIBSSH_TESTKEYS_START
-#define LIBSSH_OQSDEFAULT_TESTKEY "libssh_testkey.id_oqsdefault"
-#define LIBSSH_RSA3072_OQSDEFAULT_TESTKEY "libssh_testkey.id_rsa3072_oqsdefault"
-#define LIBSSH_P256_OQSDEFAULT_TESTKEY "libssh_testkey.id_p256_oqsdefault"
 #define LIBSSH_DILITHIUM_2_TESTKEY "libssh_testkey.id_dilithium_2"
 #define LIBSSH_RSA3072_DILITHIUM_2_TESTKEY "libssh_testkey.id_rsa3072_dilithium_2"
 #define LIBSSH_P256_DILITHIUM_2_TESTKEY "libssh_testkey.id_p256_dilithium_2"
@@ -77,9 +74,6 @@ void cleanup_post_quantum_keys(void);
 #define OPENSSH_ED25519_TESTKEY   "openssh_testkey.id_ed25519"
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_CLIENT_TESTKEYS_START
-#define OPENSSH_OQSDEFAULT_TESTKEY "openssh_testkey.id_oqsdefault"
-#define OPENSSH_RSA3072_OQSDEFAULT_TESTKEY "openssh_testkey.id_rsa3072_oqsdefault"
-#define OPENSSH_P256_OQSDEFAULT_TESTKEY "openssh_testkey.id_p256_oqsdefault"
 #define OPENSSH_DILITHIUM_2_TESTKEY "openssh_testkey.id_dilithium_2"
 #define OPENSSH_RSA3072_DILITHIUM_2_TESTKEY "openssh_testkey.id_rsa3072_dilithium_2"
 #define OPENSSH_P256_DILITHIUM_2_TESTKEY "openssh_testkey.id_p256_dilithium_2"

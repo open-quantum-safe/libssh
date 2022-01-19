@@ -125,7 +125,6 @@
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_START
 #define OQS_PUREPQ_HOSTKEYS \
-                            "ssh-oqsdefault," \
                             "ssh-dilithium2," \
                             "ssh-falcon512," \
                             "ssh-picnicl1full," \
@@ -136,8 +135,6 @@
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_START
 #define OQS_HYBRID_HOSTKEYS \
-                           "ssh-rsa3072-oqsdefault," \
-                           "ssh-p256-oqsdefault," \
                            "ssh-rsa3072-dilithium2," \
                            "ssh-p256-dilithium2," \
                            "ssh-rsa3072-falcon512," \
@@ -204,11 +201,8 @@
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_KEXS_START
 #define PURE_PQ_KEY_EXCHANGE \
-    KEX_OQSDEFAULT_SHA384 "," \
-    KEX_BIKE1_L1_CPA_SHA384 "," \
-    KEX_BIKE1_L3_CPA_SHA384 "," \
-    KEX_BIKE1_L1_FO_SHA384 "," \
-    KEX_BIKE1_L3_FO_SHA384 "," \
+    KEX_BIKE_L1_SHA384 "," \
+    KEX_BIKE_L3_SHA384 "," \
     KEX_CLASSIC_MCELIECE_348864_SHA384 "," \
     KEX_CLASSIC_MCELIECE_348864F_SHA384 "," \
     KEX_CLASSIC_MCELIECE_460896_SHA384 "," \
@@ -267,11 +261,8 @@
 
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_KEXS_START
 #define HYBRID_ECDH_KEY_EXCHANGE \
-    KEX_ECDH_NISTP384_OQSDEFAULT_SHA384 "," \
-    KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384 "," \
-    KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384 "," \
-    KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384 "," \
-    KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384 "," \
+    KEX_ECDH_NISTP384_BIKE_L1_SHA384 "," \
+    KEX_ECDH_NISTP384_BIKE_L3_SHA384 "," \
     KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384 "," \
     KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384 "," \
     KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384 "," \
@@ -1014,16 +1005,10 @@ int ssh_kex_select_methods (ssh_session session)
       session->next_crypto->kex_type=SSH_KEX_CURVE25519_SHA256;
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_START
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_OQSDEFAULT_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_OQSDEFAULT_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE1_L1_CPA_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE1_L1_CPA_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE1_L3_CPA_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE1_L3_CPA_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE1_L1_FO_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE1_L1_FO_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE1_L3_FO_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE1_L3_FO_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L1_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_BIKE_L1_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L3_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_BIKE_L3_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_348864_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864F_SHA384) == 0){
@@ -1134,16 +1119,10 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_SNTRUP_857_SHA384;
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_END
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_HYBRID_START
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_OQSDEFAULT_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_OQSDEFAULT_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE_L1_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE_L1_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE_L3_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE_L3_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384) == 0){

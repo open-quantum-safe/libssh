@@ -1,19 +1,4 @@
 ##### OQS_TEMPLATE_FRAGMENT_COPY_AUTHORIZE_KT_START
-    # copy and authorize oqsdefault key pair
-    file(COPY keys/id_oqsdefault DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_oqsdefault.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_oqsdefault.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize rsa3072-oqsdefault key pair
-    file(COPY keys/id_rsa3072-oqsdefault DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_rsa3072-oqsdefault.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_rsa3072-oqsdefault.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize p256-oqsdefault key pair
-    file(COPY keys/id_p256-oqsdefault DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_p256-oqsdefault.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_p256-oqsdefault.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
     # copy and authorize dilithium2 key pair
     file(COPY keys/id_dilithium2 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(COPY keys/id_dilithium2.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
