@@ -341,8 +341,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
 #ifdef WITH_POST_QUANTUM_CRYPTO
     /* OQS-OpenSSH source: See keytypes array in sshkey.c:130 for this translation. */
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_START
-    case SSH_KEYTYPE_OQSDEFAULT:
-      return "ssh-oqsdefault";
     case SSH_KEYTYPE_DILITHIUM_2:
       return "ssh-dilithium2";
     case SSH_KEYTYPE_FALCON_512:
@@ -359,10 +357,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-sphincsshake256128frobust";
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_START
-    case SSH_KEYTYPE_RSA3072_OQSDEFAULT:
-      return "ssh-rsa3072-oqsdefault";
-    case SSH_KEYTYPE_P256_OQSDEFAULT:
-      return "ssh-p256-oqsdefault";
     case SSH_KEYTYPE_RSA3072_DILITHIUM_2:
       return "ssh-rsa3072-dilithium2";
     case SSH_KEYTYPE_P256_DILITHIUM_2:
@@ -433,9 +427,6 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_START
-    if (strcmp(name, "ssh-oqsdefault") == 0) {
-        return SSH_DIGEST_AUTO;
-    }
     if (strcmp(name, "ssh-dilithium2") == 0) {
         return SSH_DIGEST_AUTO;
     }
@@ -459,9 +450,6 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     }
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KEY_HASH_START
-    if (strcmp(name, "ssh-rsa3072-oqsdefault") == 0) {
-        return SSH_DIGEST_SHA256;
-    }
     if (strcmp(name, "ssh-rsa3072-dilithium2") == 0) {
         return SSH_DIGEST_SHA256;
     }
@@ -481,9 +469,6 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
         return SSH_DIGEST_SHA256;
     }
     if (strcmp(name, "ssh-rsa3072-sphincsshake256128frobust") == 0) {
-        return SSH_DIGEST_SHA256;
-    }
-    if (strcmp(name, "ssh-p256-oqsdefault") == 0) {
         return SSH_DIGEST_SHA256;
     }
     if (strcmp(name, "ssh-p256-dilithium2") == 0) {
@@ -619,7 +604,6 @@ enum ssh_digest_e ssh_key_type_to_hash(ssh_session session,
        return SSH_DIGEST_AUTO;
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KT_TO_HASH_START
     CASE_KEY_RSA_HYBRID:
-    case SSH_KEYTYPE_P256_OQSDEFAULT:
     case SSH_KEYTYPE_P256_DILITHIUM_2:
     case SSH_KEYTYPE_P256_FALCON_512:
     case SSH_KEYTYPE_P256_PICNIC_L1FULL:
@@ -754,9 +738,6 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
 #ifdef WITH_POST_QUANTUM_CRYPTO
     /* OQS-OpenSSH source: See keytypes array in sshkey.c:130 for this translation. */
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_STRING_START
-    if (strcmp(name, "ssh-oqsdefault") == 0) {
-        return SSH_KEYTYPE_OQSDEFAULT;
-    }
     if (strcmp(name, "ssh-dilithium2") == 0) {
         return SSH_KEYTYPE_DILITHIUM_2;
     }
@@ -780,12 +761,6 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
     }
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KT_STRING_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_STRING_START
-    if (strcmp(name, "ssh-rsa3072-oqsdefault") == 0) {
-        return SSH_KEYTYPE_RSA3072_OQSDEFAULT;
-    }
-    if (strcmp(name, "ssh-p256-oqsdefault") == 0) {
-        return SSH_KEYTYPE_P256_OQSDEFAULT;
-    }
     if (strcmp(name, "ssh-rsa3072-dilithium2") == 0) {
         return SSH_KEYTYPE_RSA3072_DILITHIUM_2;
     }
@@ -2956,7 +2931,6 @@ int pki_key_check_hash_compatible(ssh_key key,
     case SSH_KEYTYPE_SK_ECDSA:
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA256_OK_START
-    case SSH_KEYTYPE_P256_OQSDEFAULT:
     case SSH_KEYTYPE_P256_DILITHIUM_2:
     case SSH_KEYTYPE_P256_FALCON_512:
     case SSH_KEYTYPE_P256_PICNIC_L1FULL:

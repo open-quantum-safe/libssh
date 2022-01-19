@@ -4,9 +4,6 @@
 
 ##### OQS_TEMPLATE_FRAGMENT_GENERATE_ID_KEY_START
 for value in \
-       oqsdefault \
-       rsa3072-oqsdefault \
-       p256-oqsdefault \
        dilithium2 \
        rsa3072-dilithium2 \
        p256-dilithium2 \

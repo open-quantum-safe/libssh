@@ -19,9 +19,6 @@ enum pkd_hostkey_type_e {
     PKD_ECDSA,
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HOSTKEY_TYPES_START
-    PKD_OQSDEFAULT,
-    PKD_RSA3072_OQSDEFAULT,
-    PKD_P256_OQSDEFAULT,
     PKD_DILITHIUM_2,
     PKD_RSA3072_DILITHIUM_2,
     PKD_P256_DILITHIUM_2,
@@ -50,7 +47,6 @@ enum pkd_hostkey_type_e {
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_START
 
 #define IS_RSA_HYBRID(alg) ( \
-                             alg == PKD_RSA3072_OQSDEFAULT || \
                              alg == PKD_RSA3072_DILITHIUM_2 || \
                              alg == PKD_RSA3072_FALCON_512 || \
                              alg == PKD_RSA3072_PICNIC_L1FULL || \
@@ -60,7 +56,6 @@ enum pkd_hostkey_type_e {
                              alg == PKD_RSA3072_SPHINCS_SHAKE256_128F_ROBUST)
 
 #define IS_ECDSA_HYBRID(alg) ( \
-                               alg == PKD_P256_OQSDEFAULT || \
                                alg == PKD_P256_DILITHIUM_2 || \
                                alg == PKD_P256_FALCON_512 || \
                                alg == PKD_P256_PICNIC_L1FULL || \
@@ -74,7 +69,6 @@ enum pkd_hostkey_type_e {
 
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_START
 #define IS_OQS_KEY_TYPE(type) ( \
-                                (type) == PKD_OQSDEFAULT || \
                                 (type) == PKD_DILITHIUM_2 || \
                                 (type) == PKD_FALCON_512 || \
                                 (type) == PKD_PICNIC_L1FULL || \

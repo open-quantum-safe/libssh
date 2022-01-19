@@ -143,9 +143,6 @@ if (SSH_EXECUTABLE)
     if (WITH_POST_QUANTUM_CRYPTO AND HAVE_OQS_H AND OQS_ROOT_DIR)
 ##### OQS_TEMPLATE_FRAGMENT_SSH_ALGORITHMS_START
         set(PQ_SSH_ALGORITHMS
-            ssh-oqsdefault
-            ssh-rsa3072-oqsdefault
-            ssh-p256-oqsdefault
             ssh-dilithium2
             ssh-rsa3072-dilithium2
             ssh-p256-dilithium2

@@ -105,11 +105,8 @@ Available key exchange algorithms:
 The following key exchange algorithm strings are the hybrid algorithms we recommend using, that combine an established classical algorithm with a post-quantum algorithm. They can be provided to the "-o KexAlgorithms" option to both ssh and sshd. The "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org" option chooses a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_START -->
-* ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l1-cpa-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l3-cpa-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l1-fo-sha384@openquantumsafe.org
-* ecdh-nistp384-bike1-l3-fo-sha384@openquantumsafe.org
+* ecdh-nistp384-bike-l1-sha384@openquantumsafe.org
+* ecdh-nistp384-bike-l3-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-348864-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-348864f-sha384@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-460896-sha384@openquantumsafe.org
@@ -169,11 +166,8 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_KEXS_START -->
-* oqsdefault-sha384@openquantumsafe.org
-* bike1-l1-cpa-sha384@openquantumsafe.org
-* bike1-l3-cpa-sha384@openquantumsafe.org
-* bike1-l1-fo-sha384@openquantumsafe.org
-* bike1-l3-fo-sha384@openquantumsafe.org
+* bike-l1-sha384@openquantumsafe.org
+* bike-l3-sha384@openquantumsafe.org
 * classic-mceliece-348864-sha384@openquantumsafe.org
 * classic-mceliece-348864f-sha384@openquantumsafe.org
 * classic-mceliece-460896-sha384@openquantumsafe.org
@@ -237,8 +231,6 @@ Digital signature algorithms are used in SSH for host key authentication and use
 The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. The options ending in "-oqsdefault" will choose a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_SIGS_START -->
-* ssh-rsa3072-oqsdefault
-* ssh-p256-oqsdefault
 * ssh-rsa3072-dilithium2
 * ssh-p256-dilithium2
 * ssh-rsa3072-falcon512
@@ -258,7 +250,6 @@ The following digital signature algorithm strings are the hybrid algorithms we r
 The following digital signature algorithm strings are pure-PQ algorithms. They should only be used experimentally.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_SIGS_START -->
-* ssh-oqsdefault
 * ssh-dilithium2
 * ssh-falcon512
 * ssh-picnicl1full

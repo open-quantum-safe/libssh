@@ -2468,10 +2468,6 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     switch (keytype)
     {
 ///// OQS_TEMPLATE_FRAGMENT_GET_OQS_ALG_NAME_START
-    case SSH_KEYTYPE_OQSDEFAULT:
-    case SSH_KEYTYPE_RSA3072_OQSDEFAULT:
-    case SSH_KEYTYPE_P256_OQSDEFAULT:
-        return OQS_SIG_alg_default;
     case SSH_KEYTYPE_DILITHIUM_2:
     case SSH_KEYTYPE_RSA3072_DILITHIUM_2:
     case SSH_KEYTYPE_P256_DILITHIUM_2:

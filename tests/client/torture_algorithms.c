@@ -779,7 +779,7 @@ static void torture_algorithms_dh_gex_sha256(void **state)
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_OQS_FUNCS_START
-static void torture_algorithms_oqsdefault_sha384(void** state)
+static void torture_algorithms_bikel1_sha384(void** state)
 {
     struct torture_state* s = *state;
 
@@ -787,10 +787,10 @@ static void torture_algorithms_oqsdefault_sha384(void** state)
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_OQSDEFAULT_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_BIKE_L1_SHA384, NULL, NULL);
 }
 
-static void torture_algorithms_ecdh_nistp384_oqsdefault_sha384(void** state)
+static void torture_algorithms_ecdh_nistp384_bikel1_sha384(void** state)
 {
     struct torture_state* s = *state;
 
@@ -798,9 +798,9 @@ static void torture_algorithms_ecdh_nistp384_oqsdefault_sha384(void** state)
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_OQSDEFAULT_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE_L1_SHA384, NULL, NULL);
 }
-static void torture_algorithms_bike1l1cpa_sha384(void** state)
+static void torture_algorithms_bikel3_sha384(void** state)
 {
     struct torture_state* s = *state;
 
@@ -808,31 +808,10 @@ static void torture_algorithms_bike1l1cpa_sha384(void** state)
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_BIKE1_L1_CPA_SHA384, NULL, NULL);
-}
-
-static void torture_algorithms_ecdh_nistp384_bike1l1cpa_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE1_L1_CPA_SHA384, NULL, NULL);
-}
-static void torture_algorithms_bike1l3cpa_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_BIKE1_L3_CPA_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_BIKE_L3_SHA384, NULL, NULL);
 }
 
-static void torture_algorithms_ecdh_nistp384_bike1l3cpa_sha384(void** state)
+static void torture_algorithms_ecdh_nistp384_bikel3_sha384(void** state)
 {
     struct torture_state* s = *state;
 
@@ -840,49 +819,7 @@ static void torture_algorithms_ecdh_nistp384_bike1l3cpa_sha384(void** state)
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE1_L3_CPA_SHA384, NULL, NULL);
-}
-static void torture_algorithms_bike1l1fo_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_BIKE1_L1_FO_SHA384, NULL, NULL);
-}
-
-static void torture_algorithms_ecdh_nistp384_bike1l1fo_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE1_L1_FO_SHA384, NULL, NULL);
-}
-static void torture_algorithms_bike1l3fo_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_BIKE1_L3_FO_SHA384, NULL, NULL);
-}
-
-static void torture_algorithms_ecdh_nistp384_bike1l3fo_sha384(void** state)
-{
-    struct torture_state* s = *state;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE1_L3_FO_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_BIKE_L3_SHA384, NULL, NULL);
 }
 static void torture_algorithms_classicmceliece348864_sha384(void** state)
 {
@@ -2233,34 +2170,16 @@ int torture_run_tests(void) {
 #endif
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_OQS_CASES_START
-         cmocka_unit_test_setup_teardown(torture_algorithms_oqsdefault_sha384,
+         cmocka_unit_test_setup_teardown(torture_algorithms_bikel1_sha384,
                                          session_setup,
                                          session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_oqsdefault_sha384,
+         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bikel1_sha384,
                                          session_setup,
                                          session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_bike1l1cpa_sha384,
+         cmocka_unit_test_setup_teardown(torture_algorithms_bikel3_sha384,
                                          session_setup,
                                          session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bike1l1cpa_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_bike1l3cpa_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bike1l3cpa_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_bike1l1fo_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bike1l1fo_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_bike1l3fo_sha384,
-                                         session_setup,
-                                         session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bike1l3fo_sha384,
+         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_bikel3_sha384,
                                          session_setup,
                                          session_teardown),
          cmocka_unit_test_setup_teardown(torture_algorithms_classicmceliece348864_sha384,
