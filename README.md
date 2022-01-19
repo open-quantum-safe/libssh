@@ -5,7 +5,7 @@ OQS-libssh
 
 WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-master branch at commit ID d04c1be823318fe3f9ef4c1aa23e8d1333ac731d "disable rainbow (#105)".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v7.9 branch at commit ID f41bbe652c522db1bec388f82db369e4e5f0f405 "Merge pull request #114 from kevinmkane/kkane/liboqs-update".
 
 This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
@@ -74,7 +74,7 @@ These instructions assume you have completed the build above; in particular, tha
 ```
   git clone --branch OQS-v7.9 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
   cd openssh
-  git checkout d04c1be823318fe3f9ef4c1aa23e8d1333ac731d
+  git checkout f41bbe652c522db1bec388f82db369e4e5f0f405
 ```
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
