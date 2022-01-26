@@ -1,6 +1,6 @@
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-    {SSH_KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384, KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384, {{ variant['oqs_meth'] }}},
+{%- for kex in config['kexs'] %}
+    {%- for curve in kex['mix_with'] %}
+    {SSH_KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}, KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}, OQS_KEM_alg_{{ kex['name'] }}},
     {%- endfor %}
 {%- endfor %}
 

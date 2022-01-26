@@ -1,22 +1,19 @@
 
 #define PKDTESTS_KEX_OQS_PUREPQ(f, client, kexcmd) \
-{%- for kem in config['kems'] %}
-    {%- set outer_loop_last = loop.last %}
-    {%- for variant in kem['variants'] %}
-    f(client, rsa_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1full_{{ variant['name']|lower}}_sha384, kexcmd(KEX_{{ variant['name'] }}_SHA384), setup_picnic_l1full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
-    {%- endfor %}
+{%- for kex in config['kexs'] %}
+    f(client, rsa_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_rsa, teardown) \
+    f(client, ecdsa_256_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_256, teardown) \
+    f(client, picnic_l1_full_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_picnic_l1_full, teardown){%- if not loop.last %} \{% endif %}
 {%- endfor %}
 
 #define PKDTESTS_KEX_OQS_HYBRID(f, client, kexcmd) \
-{%- for kem in config['kems'] %}
+{%- for kex in config['kexs'] %}
     {%- set outer_loop_last = loop.last %}
-    {%- for variant in kem['variants'] %}
-    f(client, rsa_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1full_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_picnic_l1full, teardown) \
-    f(client, p256_picnic_l1full_ecdh_nistp384_{{ variant['name']|lower }}_sha384, kexcmd(KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384), setup_p256_picnic_l1full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
+    {%- for curve in kex['mix_with'] %}
+    f(client, rsa_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_rsa, teardown) \
+    f(client, ecdsa_256_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_256, teardown) \
+    f(client, picnic_l1_full_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_picnic_l1_full, teardown) \
+    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_nistp256_picnic_l1_full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
     {%- endfor %}
 {%- endfor %}
 
@@ -24,12 +21,9 @@
 #define PKDTESTS_OQSKEYAUTH(f, client, kexcmd) \
 {%- for sig in config['sigs'] %}
     {%- set outer_loop_last = loop.last %}
-    {%- for variant in sig['variants'] %}
-    {%- set variant_loop_last = loop.last %}
-    f(client, {{ variant['name']|lower }}_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_{{ variant['name']|lower }}, teardown) \
-        {%- for classical_alg in variant['mix_with'] %}
-    f(client, {{ classical_alg['name']|lower }}_{{ variant['name']|lower }}_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_{{ classical_alg['name']|lower }}_{{ variant['name']|lower }}, teardown){%- if not (outer_loop_last and variant_loop_last and loop.last) %} \{% endif %}
-        {%- endfor %}
+    f(client, {{ sig['name']|lower }}_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_{{ sig['name']|lower }}, teardown) \
+    {%- for classical_alg in sig['mix_with'] %}
+    f(client, {{ classical_alg['name']|lower }}_{{ sig['name']|lower }}_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_{{ classical_alg['name']|lower }}_{{ sig['name']|lower }}, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
     {%- endfor %}
 {%- endfor %}
 

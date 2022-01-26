@@ -1,16 +1,14 @@
 
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-static void torture_auth_pubkey_types_{{ variant['name']|lower|replace('_','') }}(void** state)
+static void torture_auth_pubkey_types_{{ sig['name']|lower|replace('_','') }}(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "{{ variant['name']|lower|replace('_','') }}");
+    torture_auth_pubkey_types_oqs_wrapper(state, "{{ sig['name']|replace('_','') }}");
 }
-        {%- for classical_alg in variant['mix_with'] %}
-static void torture_auth_pubkey_types_{{ classical_alg.name }}_{{ variant['name']|lower|replace('_','') }}(void** state)
+    {%- for classical_alg in sig['mix_with'] %}
+static void torture_auth_pubkey_types_{{ classical_alg['name'] }}_{{ sig['name']|lower|replace('_','') }}(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }}");
+    torture_auth_pubkey_types_oqs_wrapper(state, "{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}");
 }
-        {%- endfor -%}
     {%- endfor %}
 {%- endfor %}
 

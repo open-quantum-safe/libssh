@@ -7,7 +7,6 @@ import jinja2.ext
 import os
 import shutil
 import subprocess
-import sys
 import yaml
 
 # For list.append in Jinja templates
@@ -26,36 +25,41 @@ def populate(filename, config, delimiter):
     contents = file_get_contents(filename)
 
     for fragment in fragments:
-        identifier = os.path.splitext(os.path.basename(fragment))[0]
+        identifier_base = os.path.splitext(os.path.basename(fragment))[0]
 
         if filename == 'README.md':
-            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START -->'.format(delimiter, identifier.upper())
+            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START -->'.format(delimiter, identifier_base.upper())
+        elif filename == 'myproposal.h':
+            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START */ \\'.format(delimiter, identifier_base.upper())
         else:
-            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START'.format(delimiter, identifier.upper())
+            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START'.format(delimiter, identifier_base.upper())
 
-        identifier_end = '{} OQS_TEMPLATE_FRAGMENT_{}_END'.format(delimiter, identifier.upper())
+        if filename == 'myproposal.h':
+            identifier_end = '{} OQS_TEMPLATE_FRAGMENT_{}_END */'.format(delimiter, identifier_base.upper())
+        else:
+            identifier_end = '{} OQS_TEMPLATE_FRAGMENT_{}_END'.format(delimiter, identifier_base.upper())
 
         preamble = contents[:contents.find(identifier_start)]
         postamble = contents[contents.find(identifier_end):]
 
         contents = preamble + identifier_start + Jinja2.get_template(fragment).render({'config': config}) + postamble
+
     file_put_contents(filename, contents)
 
-def load_config(include_disabled_sigs=False):
+def load_config(include_disabled_algs=False):
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
-    if include_disabled_sigs:
-        return config
-    for sig in config['sigs']:
-        sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
-    config['sigs'] = [sig for sig in config['sigs'] if sig['variants']]
+    if not include_disabled_algs:
+        config['sigs'] = [sig for sig in config['sigs'] if 'enable' in sig.keys() and sig['enable']]
+
+        # enable if single KEXs are to be en/disabled:
+        #config['kexs'] = [kex for kex in config['kexs'] if 'enable' in kex.keys() and kex['enable']]
+
     return config
 
 config = load_config()
 
-# update build script
-
-# add kems
+# add kexs
 populate('include/libssh/crypto.h', config, '/////')
 populate('include/libssh/kex.h', config, '/////')
 populate('src/kex.c', config, '/////')
@@ -79,4 +83,6 @@ populate('tests/pkd/pkd_keyutil.c', config, '/////')
 populate('tests/pkd/pkd_keyutil.h', config, '/////')
 
 # update README.md
+config = load_config(include_disabled_algs=True)
 populate('README.md', config, '<!---')
+

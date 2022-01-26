@@ -1,6 +1,6 @@
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-#define KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384 HYBRID_ECDH_OQS_KEX_SUFFIX("ecdh-nistp384-{{ variant['name']|lower|replace('_','-') }}-sha384")
+{%- for kex in config['kexs'] %}
+    {%- for curve in kex['mix_with'] %}
+#define KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }} HYBRID_ECDH_OQS_KEX_SUFFIX("ecdh-{{ curve['name'] }}-{{ kex['name']|lower|replace('_','-') }}-{{ kex['hash'] }}")
     {%- endfor %}
 {%- endfor %}
 

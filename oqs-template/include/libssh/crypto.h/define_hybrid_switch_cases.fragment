@@ -1,12 +1,9 @@
 
 #define CASE_SSH_KEX_HYBRID \
-{%- set last_kem_loop = false -%}
-{%- for kem in config['kems'] %}
-    {%- if loop.last -%}
-        {%- set last_kem_loop = true -%}
-    {%- endif -%}
-    {%- for variant in kem['variants'] %}
-    case SSH_KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384{%- if not loop.last or not last_kem_loop %}: \{% endif %}
+{%- for kex in config['kexs'] %}
+    {%- set outer_loop_last = loop.last %}
+    {%- for curve in kex['mix_with'] %}
+    case SSH_KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}{%- if not (outer_loop_last and loop.last) %}: \{% endif %}
     {%- endfor %}
 {%- endfor %}
 

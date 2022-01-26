@@ -1,9 +1,7 @@
 
 #define IS_OQS_KEY_TYPE(type) ( \
-{%- for sig in config['sigs'] -%}
-    {% for variant in sig['variants'] %}
-                                (type) == SSH_KEYTYPE_{{ variant['name'] }} || \
-    {%- endfor -%}
-{% endfor %}
+{%- for sig in config['sigs'] %}
+                                (type) == SSH_KEYTYPE_{{ sig['name']|upper }} || \
+{%- endfor %}
                                 IS_HYBRID(type))
 

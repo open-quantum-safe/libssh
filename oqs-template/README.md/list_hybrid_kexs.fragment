@@ -1,6 +1,6 @@
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-* ecdh-nistp384-{{ variant['name']|lower|replace('_','-') }}-sha384@openquantumsafe.org
+{%- for kex in config['kexs'] %}
+    {%- for curve in kex['mix_with'] %}
+* ecdh-{{ curve['name'] }}-{{ kex['name']|lower|replace('_','-') }}-{{ kex['hash'] }}@openquantumsafe.org
     {%- endfor %}
 {%- endfor %}
 

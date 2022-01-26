@@ -18,7 +18,7 @@ WARNING: These algorithms and implementations are experimental. Standards for po
 
 ## Overview
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH v7.9, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v7.9 branch at commit ID f41bbe652c522db1bec388f82db369e4e5f0f405 "Merge pull request #114 from kevinmkane/kkane/liboqs-update".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v8 branch at commit ID 0c5eac6a3ba249f73bb953745cf109bdf281eafd "OQS-OpenSSH 2022-01 snapshot release".
 
 This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
@@ -87,9 +87,9 @@ These instructions assume you have completed the build above; in particular, tha
 1. Clone the openssh repository `OQS-v7.9` branch, and then snap to the particular commit above, which is the version known to interoperate with libssh. Newer versions of OQS-OpenSSH may work, but there is no guarantee. Do this outside of the libssh or liboqs repository clones.
 
 ```
-  git clone --branch OQS-v7.9 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
+  git clone --branch OQS-v8 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
   cd openssh
-  git checkout f41bbe652c522db1bec388f82db369e4e5f0f405
+  git checkout 0c5eac6a3ba249f73bb953745cf109bdf281eafd
 ```
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
@@ -243,7 +243,7 @@ The following key exchange algorithm strings are pure-PQ algorithms. They should
 
 Digital signature algorithms are used in SSH for host key authentication and user key authentication. These strings can be used with the -t argument to ssh-keygen from OQS-OpenSSH to generate a particular type of user authentication key pair. Currently, libssh as a server can only load one OQS-provided host key, in addition to the classical key types already supported, so presently it is not possible to offer multiple PQ/hybrid host keys. There is no such limitation on the number of user authentication keys or key types that can be authorized.
 
-The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. The options ending in "-oqsdefault" will choose a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
+The following digital signature algorithm strings are the hybrid algorithms we recommend using, that combine established classical algorithms with a post-quantum algorithm. Algorithms that are built by default are marked with an asterisk. The others are excluded by default due to long run times, but they can be enabled by editing `oqs-template/generate.yml`, adding the line `enable: true` to the algorithm's section,   running `python3 oqs-template/generate.py` to regenerate templated code, and then building as usual.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_SIGS_START -->
 * ssh-rsa3072-dilithium2

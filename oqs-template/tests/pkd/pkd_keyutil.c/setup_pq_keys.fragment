@@ -1,17 +1,15 @@
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-    if (access(LIBSSH_{{ variant['name']|upper }}_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t {{ variant['name']|upper|replace('_','') }} -q -N \"\" -f "
-                            LIBSSH_{{ variant['name']|upper }}_TESTKEY);
+    if (access(LIBSSH_{{ sig['name']|upper }}_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t {{ sig['name']|upper|replace('_','') }} -q -N \"\" -f "
+                            LIBSSH_{{ sig['name']|upper }}_TESTKEY);
     }
     assert_int_equal(rc, 0);
-        {%- for classical_alg in variant['mix_with'] %}
-    if (access(LIBSSH_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t {{ classical_alg['name']|upper }}_{{ variant['name']|upper|replace('_','') }} -q -N \"\" -f "
-                            LIBSSH_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}_TESTKEY);
+    {%- for classical_alg in sig['mix_with'] %}
+    if (access(LIBSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t {{ classical_alg['name']|upper }}_{{ sig['name']|upper|replace('_','') }} -q -N \"\" -f "
+                            LIBSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}_TESTKEY);
     }
     assert_int_equal(rc, 0);
-        {%- endfor %}
     {%- endfor %}
 {%- endfor %}
 

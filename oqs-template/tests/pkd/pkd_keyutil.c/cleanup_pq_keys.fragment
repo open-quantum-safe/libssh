@@ -1,9 +1,7 @@
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-    cleanup_key(LIBSSH_{{ variant['name']|upper }}_TESTKEY);
-        {%- for classical_alg in variant['mix_with'] %}
-    cleanup_key(LIBSSH_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}_TESTKEY);
-        {%- endfor %}
+    cleanup_key(LIBSSH_{{ sig['name']|upper }}_TESTKEY);
+    {%- for classical_alg in sig['mix_with'] %}
+    cleanup_key(LIBSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}_TESTKEY);
     {%- endfor %}
 {%- endfor %}
 

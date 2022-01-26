@@ -1,15 +1,6 @@
-{%- set with_p384 = [] -%}
-{%- for sig in config['sigs'] -%}
-    {%- for variant in sig['variants'] -%}
-        {%- for classical_alg in variant['mix_with'] -%}
-            {%- if classical_alg.name == 'p384' -%}
-                {%- do with_p384.append(variant) -%}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endfor -%}
-{%- endfor %}
-
-{%- for pq_alg in with_p384 %}
-    case SSH_KEYTYPE_P384_{{ pq_alg['name'] }}:
+{%- for sig in config['sigs'] if sig['level'] == 3 %}
+    {%- for classical_alg in sig['mix_with'] %}
+    case SSH_KEYTYPE_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}:
+    {%- endfor %}
 {%- endfor %}
 

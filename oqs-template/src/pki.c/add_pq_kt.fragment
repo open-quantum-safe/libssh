@@ -1,7 +1,5 @@
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-    case SSH_KEYTYPE_{{ variant['name'] }}:
-      return "ssh-{{ variant['name']|lower|replace('_','') }}";
-    {%- endfor %}
+    case SSH_KEYTYPE_{{ sig['name']|upper }}:
+      return "ssh-{{ sig['name']|replace('_','') }}";
 {%- endfor %}
 

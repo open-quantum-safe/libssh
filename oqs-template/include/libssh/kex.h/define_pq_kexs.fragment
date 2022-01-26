@@ -1,6 +1,4 @@
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-#define KEX_{{ variant['name'] }}_SHA384 PQ_OQS_KEX_SUFFIX("{{ variant['name']|lower|replace('_','-') }}-sha384")
-    {%- endfor %}
+{%- for kex in config['kexs'] %}
+#define KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }} PQ_OQS_KEX_SUFFIX("{{ kex['name']|lower|replace('_','-') }}-{{ kex['hash'] }}")
 {%- endfor %}
 

@@ -1,36 +1,24 @@
-{%- set with_rsa3072 = [] -%}
-{%- set with_p256 = [] -%}
-{%- set with_p384 = [] -%}
-{%- set with_p521 = [] -%}
+{%- set with_rsa = [] -%}
+{%- set with_ecdsa = [] -%}
+
 {%- for sig in config['sigs'] -%}
-    {%- for variant in sig['variants'] -%}
-        {%- for classical_alg in variant['mix_with'] -%}
-            {%- if classical_alg.name == 'rsa3072' -%}
-                {%- do with_rsa3072.append(variant) -%}
-            {%- elif classical_alg.name == 'p256' -%}
-                {%- do with_p256.append(variant) -%}
-            {%- elif classical_alg.name == 'p384' -%}
-                {%- do with_p384.append(variant) -%}
-            {%- elif classical_alg.name == 'p521' -%}
-                {%- do with_p521.append(variant) -%}
-            {%- endif -%}
-        {%- endfor -%}
+    {%- for classical_alg in sig['mix_with'] -%}
+        {%- if classical_alg['rsa'] -%}
+            {%- do with_rsa.append((sig, classical_alg)) -%}
+        {%- else -%}
+            {%- do with_ecdsa.append((sig, classical_alg)) -%}
+        {%- endif -%}
     {%- endfor -%}
 {%- endfor %}
 
+
 #define IS_RSA_HYBRID(alg) ( \
-{%- for pq_alg in with_rsa3072 %}
-                             alg == PKD_RSA3072_{{ pq_alg['name'] }}{%- if not loop.last %} || \{% else %}){% endif %}
+{%- for sig, classical_alg in with_rsa %}
+                             (alg) == PKD_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}{%- if not loop.last %} || \{%- else -%}){% endif %}
 {%- endfor %}
 
 #define IS_ECDSA_HYBRID(alg) ( \
-{%- for pq_alg in with_p256 %}
-                               alg == PKD_P256_{{ pq_alg['name'] }}{%- if not loop.last or with_p384 or with_p521 %} || \{% else %}){% endif %}
-{%- endfor -%}
-{%- for pq_alg in with_p384 %}
-                               alg == PKD_P384_{{ pq_alg['name'] }}{%- if not loop.last or with_p521 %} || \{% else %}){% endif %}
-{%- endfor %}
-{%- for pq_alg in with_p521 %}
-                               alg == PKD_P521_{{ pq_alg['name'] }}{%- if not loop.last %} || \{% else %}){% endif %}
+{%- for sig, classical_alg in with_ecdsa %}
+                               (alg) == PKD_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}{%- if not loop.last %} || \{%- else -%}){% endif %}
 {%- endfor %}
 

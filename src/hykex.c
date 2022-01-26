@@ -53,9 +53,8 @@ struct ssh_packet_callbacks_struct ssh_hykex_client_callbacks = {
 
 static int hykex_type_to_curve(enum ssh_key_exchange_e kex_type) {
     switch (kex_type) {
-    CASE_SSH_KEX_HYBRID:
-        /* All PQ hybrids currently use NIST P-384. */
-        return NID_secp384r1;
+///// OQS_TEMPLATE_FRAGMENT_HYKEX_TYPE_TO_CURVE_CASES_START
+///// OQS_TEMPLATE_FRAGMENT_HYKEX_TYPE_TO_CURVE_CASES_END
     default:
         /* Anything else is an invalid input. */
         return SSH_ERROR;

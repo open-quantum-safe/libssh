@@ -1,8 +1,6 @@
 
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_{{ variant['name'] }}_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_{{ variant['name'] }}_SHA384;
-    {%- endfor %}
+{%- for kex in config['kexs'] %}
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}) == 0){
+        session->next_crypto->kex_type=SSH_KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }};
 {%- endfor %}
 

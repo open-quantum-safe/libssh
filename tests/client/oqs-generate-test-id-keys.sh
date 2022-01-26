@@ -29,6 +29,6 @@ for value in \
 do	
 	if [ ! -f ../keys/id_${value} ]; then
 		echo "Generating keypair id_${value}."
-		ssh-keygen -t ${value/-/_} -q -N "" -f ../keys/id_${value} -C bob@bob.com || exit 1
+		ssh-keygen -t ${value//-/_} -q -N "" -f ../keys/id_${value} -C bob@bob.com || exit 1
 	fi
 done
