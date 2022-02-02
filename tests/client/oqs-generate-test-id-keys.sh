@@ -4,27 +4,28 @@
 
 ##### OQS_TEMPLATE_FRAGMENT_GENERATE_ID_KEY_START
 for value in \
-       dilithium2 \
-       rsa3072-dilithium2 \
-       p256-dilithium2 \
        falcon512 \
        rsa3072-falcon512 \
-       p256-falcon512 \
-       picnicl1full \
-       rsa3072-picnicl1full \
-       p256-picnicl1full \
-       picnic3l1 \
-       rsa3072-picnic3l1 \
-       p256-picnic3l1 \
-       sphincsharaka128frobust \
-       rsa3072-sphincsharaka128frobust \
-       p256-sphincsharaka128frobust \
-       sphincssha256128frobust \
-       rsa3072-sphincssha256128frobust \
-       p256-sphincssha256128frobust \
-       sphincsshake256128frobust \
-       rsa3072-sphincsshake256128frobust \
-       p256-sphincsshake256128frobust
+       ecdsa-nistp256-falcon512 \
+       falcon1024 \
+       ecdsa-nistp521-falcon1024 \
+       dilithium3 \
+       ecdsa-nistp384-dilithium3 \
+       dilithium2aes \
+       rsa3072-dilithium2aes \
+       ecdsa-nistp256-dilithium2aes \
+       dilithium5aes \
+       ecdsa-nistp521-dilithium5aes \
+       picnicL1full \
+       rsa3072-picnicL1full \
+       ecdsa-nistp256-picnicL1full \
+       picnicL3FS \
+       ecdsa-nistp384-picnicL3FS \
+       sphincsharaka128fsimple \
+       rsa3072-sphincsharaka128fsimple \
+       ecdsa-nistp256-sphincsharaka128fsimple \
+       sphincsharaka192frobust \
+       ecdsa-nistp384-sphincsharaka192frobust
 ##### OQS_TEMPLATE_FRAGMENT_GENERATE_ID_KEY_END
 do	
 	if [ ! -f ../keys/id_${value} ]; then

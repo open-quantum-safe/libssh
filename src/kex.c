@@ -125,30 +125,31 @@
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_START
 #define OQS_PUREPQ_HOSTKEYS \
-                            "ssh-dilithium2," \
                             "ssh-falcon512," \
-                            "ssh-picnicl1full," \
-                            "ssh-picnic3l1," \
-                            "ssh-sphincsharaka128frobust," \
-                            "ssh-sphincssha256128frobust," \
-                            "ssh-sphincsshake256128frobust,"
+                            "ssh-falcon1024," \
+                            "ssh-dilithium3," \
+                            "ssh-dilithium2aes," \
+                            "ssh-dilithium5aes," \
+                            "ssh-picnicL1full," \
+                            "ssh-picnicL3FS," \
+                            "ssh-sphincsharaka128fsimple," \
+                            "ssh-sphincsharaka192frobust,"
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_START
 #define OQS_HYBRID_HOSTKEYS \
-                           "ssh-rsa3072-dilithium2," \
-                           "ssh-p256-dilithium2," \
                            "ssh-rsa3072-falcon512," \
-                           "ssh-p256-falcon512," \
-                           "ssh-rsa3072-picnicl1full," \
-                           "ssh-p256-picnicl1full," \
-                           "ssh-rsa3072-picnic3l1," \
-                           "ssh-p256-picnic3l1," \
-                           "ssh-rsa3072-sphincsharaka128frobust," \
-                           "ssh-p256-sphincsharaka128frobust," \
-                           "ssh-rsa3072-sphincssha256128frobust," \
-                           "ssh-p256-sphincssha256128frobust," \
-                           "ssh-rsa3072-sphincsshake256128frobust," \
-                           "ssh-p256-sphincsshake256128frobust,"
+                           "ssh-ecdsa-nistp256-falcon512," \
+                           "ssh-ecdsa-nistp521-falcon1024," \
+                           "ssh-ecdsa-nistp384-dilithium3," \
+                           "ssh-rsa3072-dilithium2aes," \
+                           "ssh-ecdsa-nistp256-dilithium2aes," \
+                           "ssh-ecdsa-nistp521-dilithium5aes," \
+                           "ssh-rsa3072-picnicL1full," \
+                           "ssh-ecdsa-nistp256-picnicL1full," \
+                           "ssh-ecdsa-nistp384-picnicL3FS," \
+                           "ssh-rsa3072-sphincsharaka128fsimple," \
+                           "ssh-ecdsa-nistp256-sphincsharaka128fsimple," \
+                           "ssh-ecdsa-nistp384-sphincsharaka192frobust,"
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_END
 #define OQS_HOSTKEYS        OQS_PUREPQ_HOSTKEYS OQS_HYBRID_HOSTKEYS
 
@@ -201,122 +202,122 @@
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_KEXS_START
 #define PURE_PQ_KEY_EXCHANGE \
-    KEX_BIKE_L1_SHA384 "," \
-    KEX_BIKE_L3_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_348864_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_348864F_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_460896_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_460896F_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_6688128_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_6688128F_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_6960119_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_6960119F_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_8192128_SHA384 "," \
-    KEX_CLASSIC_MCELIECE_8192128F_SHA384 "," \
-    KEX_FRODO_640_AES_SHA384 "," \
-    KEX_FRODO_640_SHAKE_SHA384 "," \
-    KEX_FRODO_976_AES_SHA384 "," \
-    KEX_FRODO_976_SHAKE_SHA384 "," \
-    KEX_FRODO_1344_AES_SHA384 "," \
-    KEX_FRODO_1344_SHAKE_SHA384 "," \
-    KEX_KYBER_512_SHA384 "," \
-    KEX_KYBER_768_SHA384 "," \
-    KEX_KYBER_1024_SHA384 "," \
-    KEX_KYBER_512_90S_SHA384 "," \
-    KEX_KYBER_768_90S_SHA384 "," \
-    KEX_KYBER_1024_90S_SHA384 "," \
-    KEX_NTRU_HPS_2048_509_SHA384 "," \
-    KEX_NTRU_HPS_2048_677_SHA384 "," \
-    KEX_NTRU_HRSS_701_SHA384 "," \
-    KEX_NTRU_HPS_4096_821_SHA384 "," \
-    KEX_SABER_LIGHTSABER_SHA384 "," \
+    KEX_FRODOKEM_640_AES_SHA256 "," \
+    KEX_FRODOKEM_976_AES_SHA384 "," \
+    KEX_FRODOKEM_1344_AES_SHA512 "," \
+    KEX_FRODOKEM_640_SHAKE_SHA256 "," \
+    KEX_FRODOKEM_976_SHAKE_SHA384 "," \
+    KEX_FRODOKEM_1344_SHAKE_SHA512 "," \
+    KEX_SIDH_P434_SHA256 "," \
+    KEX_SIDH_P434_COMPRESSED_SHA256 "," \
+    KEX_SIDH_P610_SHA256 "," \
+    KEX_SIDH_P610_COMPRESSED_SHA256 "," \
+    KEX_SIDH_P751_SHA256 "," \
+    KEX_SIDH_P751_COMPRESSED_SHA256 "," \
+    KEX_SIKE_P434_SHA256 "," \
+    KEX_SIKE_P434_COMPRESSED_SHA256 "," \
+    KEX_SIKE_P610_SHA256 "," \
+    KEX_SIKE_P610_COMPRESSED_SHA256 "," \
+    KEX_SIKE_P751_SHA256 "," \
+    KEX_SIKE_P751_COMPRESSED_SHA256 "," \
+    KEX_SABER_LIGHTSABER_SHA256 "," \
     KEX_SABER_SABER_SHA384 "," \
-    KEX_SABER_FIRESABER_SHA384 "," \
-    KEX_SIDH_p434_SHA384 "," \
-    KEX_SIDH_p503_SHA384 "," \
-    KEX_SIDH_p610_SHA384 "," \
-    KEX_SIDH_p751_SHA384 "," \
-    KEX_SIDH_P434_COMPRESSED_SHA384 "," \
-    KEX_SIDH_P503_COMPRESSED_SHA384 "," \
-    KEX_SIDH_P610_COMPRESSED_SHA384 "," \
-    KEX_SIDH_P751_COMPRESSED_SHA384 "," \
-    KEX_SIKE_P434_SHA384 "," \
-    KEX_SIKE_P503_SHA384 "," \
-    KEX_SIKE_P610_SHA384 "," \
-    KEX_SIKE_P751_SHA384 "," \
-    KEX_SIKE_P434_COMPRESSED_SHA384 "," \
-    KEX_SIKE_P503_COMPRESSED_SHA384 "," \
-    KEX_SIKE_P610_COMPRESSED_SHA384 "," \
-    KEX_SIKE_P751_COMPRESSED_SHA384 "," \
-    KEX_HQC_128_SHA384 "," \
+    KEX_SABER_FIRESABER_SHA512 "," \
+    KEX_KYBER_512_SHA256 "," \
+    KEX_KYBER_768_SHA384 "," \
+    KEX_KYBER_1024_SHA512 "," \
+    KEX_KYBER_512_90S_SHA256 "," \
+    KEX_KYBER_768_90S_SHA384 "," \
+    KEX_KYBER_1024_90S_SHA512 "," \
+    KEX_BIKE_L1_SHA512 "," \
+    KEX_BIKE_L3_SHA512 "," \
+    KEX_NTRU_HPS2048509_SHA512 "," \
+    KEX_NTRU_HPS2048677_SHA512 "," \
+    KEX_NTRU_HPS4096821_SHA512 "," \
+    KEX_NTRU_HPS40961229_SHA512 "," \
+    KEX_NTRU_HRSS701_SHA512 "," \
+    KEX_NTRU_HRSS1373_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_348864_SHA256 "," \
+    KEX_CLASSIC_MCELIECE_348864F_SHA256 "," \
+    KEX_CLASSIC_MCELIECE_460896_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_460896F_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_6688128_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_6688128F_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_6960119_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_6960119F_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_8192128_SHA512 "," \
+    KEX_CLASSIC_MCELIECE_8192128F_SHA512 "," \
+    KEX_HQC_128_SHA256 "," \
     KEX_HQC_192_SHA384 "," \
-    KEX_HQC_256_SHA384 "," \
-    KEX_NTRULPR_653_SHA384 "," \
-    KEX_NTRULPR_761_SHA384 "," \
-    KEX_NTRULPR_857_SHA384 "," \
-    KEX_SNTRUP_653_SHA384 "," \
-    KEX_SNTRUP_761_SHA384 "," \
-    KEX_SNTRUP_857_SHA384 ","
+    KEX_HQC_256_SHA512 "," \
+    KEX_NTRUPRIME_NTRULPR653_SHA256 "," \
+    KEX_NTRUPRIME_SNTRUP653_SHA256 "," \
+    KEX_NTRUPRIME_NTRULPR761_SHA384 "," \
+    KEX_NTRUPRIME_SNTRUP761_SHA384 "," \
+    KEX_NTRUPRIME_NTRULPR857_SHA384 "," \
+    KEX_NTRUPRIME_SNTRUP857_SHA384 "," \
+    KEX_NTRUPRIME_NTRULPR1277_SHA512 "," \
+    KEX_NTRUPRIME_SNTRUP1277_SHA512 ","
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_KEXS_END
 
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_KEXS_START
 #define HYBRID_ECDH_KEY_EXCHANGE \
-    KEX_ECDH_NISTP384_BIKE_L1_SHA384 "," \
-    KEX_ECDH_NISTP384_BIKE_L3_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384 "," \
-    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_640_AES_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_976_AES_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384 "," \
-    KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_512_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_768_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_1024_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_512_90S_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_768_90S_SHA384 "," \
-    KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384 "," \
-    KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384 "," \
+    KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256 "," \
+    KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384 "," \
+    KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512 "," \
+    KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256 "," \
+    KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384 "," \
+    KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512 "," \
+    KEX_ECDH_NISTP256_SIDH_P434_SHA256 "," \
+    KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP384_SIDH_P610_SHA256 "," \
+    KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP521_SIDH_P751_SHA256 "," \
+    KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP256_SIKE_P434_SHA256 "," \
+    KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP384_SIKE_P610_SHA256 "," \
+    KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP521_SIKE_P751_SHA256 "," \
+    KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256 "," \
+    KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256 "," \
     KEX_ECDH_NISTP384_SABER_SABER_SHA384 "," \
-    KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_p434_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_p503_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_p610_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_p751_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P434_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P503_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P610_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P751_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384 "," \
-    KEX_ECDH_NISTP384_HQC_128_SHA384 "," \
+    KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512 "," \
+    KEX_ECDH_NISTP256_KYBER_512_SHA256 "," \
+    KEX_ECDH_NISTP384_KYBER_768_SHA384 "," \
+    KEX_ECDH_NISTP521_KYBER_1024_SHA512 "," \
+    KEX_ECDH_NISTP256_KYBER_512_90S_SHA256 "," \
+    KEX_ECDH_NISTP384_KYBER_768_90S_SHA384 "," \
+    KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512 "," \
+    KEX_ECDH_NISTP256_BIKE_L1_SHA512 "," \
+    KEX_ECDH_NISTP384_BIKE_L3_SHA512 "," \
+    KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512 "," \
+    KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512 "," \
+    KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512 "," \
+    KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512 "," \
+    KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512 "," \
+    KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512 "," \
+    KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256 "," \
+    KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256 "," \
+    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512 "," \
+    KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512 "," \
+    KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512 "," \
+    KEX_ECDH_NISTP256_HQC_128_SHA256 "," \
     KEX_ECDH_NISTP384_HQC_192_SHA384 "," \
-    KEX_ECDH_NISTP384_HQC_256_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRULPR_653_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRULPR_761_SHA384 "," \
-    KEX_ECDH_NISTP384_NTRULPR_857_SHA384 "," \
-    KEX_ECDH_NISTP384_SNTRUP_653_SHA384 "," \
-    KEX_ECDH_NISTP384_SNTRUP_761_SHA384 "," \
-    KEX_ECDH_NISTP384_SNTRUP_857_SHA384 ","
+    KEX_ECDH_NISTP521_HQC_256_SHA512 "," \
+    KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256 "," \
+    KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256 "," \
+    KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384 "," \
+    KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384 "," \
+    KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384 "," \
+    KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384 "," \
+    KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512 "," \
+    KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512 ","
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_KEXS_END
 
 #define POST_QUANTUM_KEY_EXCHANGE \
@@ -1005,232 +1006,232 @@ int ssh_kex_select_methods (ssh_session session)
       session->next_crypto->kex_type=SSH_KEX_CURVE25519_SHA256;
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_START
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L1_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE_L1_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L3_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_BIKE_L3_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_348864_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_348864F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_460896_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_460896_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_460896F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_460896F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6688128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6688128_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6688128F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6688128F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6960119_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6960119_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6960119F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6960119F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_8192128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_8192128_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_8192128F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_8192128F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_640_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_640_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_640_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_640_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_976_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_976_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_976_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_976_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_1344_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_1344_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODO_1344_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_FRODO_1344_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_512_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_512_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_768_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_768_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_1024_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_1024_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_512_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_512_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_768_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_768_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_1024_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_KYBER_1024_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS_2048_509_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS_2048_509_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS_2048_677_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS_2048_677_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HRSS_701_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRU_HRSS_701_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS_4096_821_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS_4096_821_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_LIGHTSABER_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SABER_LIGHTSABER_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_640_AES_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_640_AES_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_976_AES_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_976_AES_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_1344_AES_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_1344_AES_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_640_SHAKE_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_640_SHAKE_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_976_SHAKE_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_976_SHAKE_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_1344_SHAKE_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_FRODOKEM_1344_SHAKE_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P434_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P434_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P434_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P434_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P610_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P610_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P610_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P610_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P751_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P751_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P751_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIDH_P751_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_LIGHTSABER_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SABER_LIGHTSABER_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_SABER_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_SABER_SABER_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_FIRESABER_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SABER_FIRESABER_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_p434_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_p434_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_p503_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_p503_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_p610_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_p610_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_p751_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_p751_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P434_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P434_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P503_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P503_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P610_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P610_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P751_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P751_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P503_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P503_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P503_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P503_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_HQC_128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_HQC_128_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_FIRESABER_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_SABER_FIRESABER_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_512_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_512_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_768_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_768_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_1024_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_1024_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_512_90S_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_512_90S_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_768_90S_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_768_90S_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_KYBER_1024_90S_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_KYBER_1024_90S_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L1_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_BIKE_L1_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_BIKE_L3_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_BIKE_L3_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS2048509_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS2048509_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS2048677_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS2048677_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS4096821_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS4096821_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HPS40961229_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HPS40961229_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HRSS701_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HRSS701_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRU_HRSS1373_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRU_HRSS1373_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_348864_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_348864F_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_348864F_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_460896_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_460896_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_460896F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_460896F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6688128_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6688128_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6688128F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6688128F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6960119_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6960119_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_6960119F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_6960119F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_8192128_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_8192128_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_CLASSIC_MCELIECE_8192128F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_CLASSIC_MCELIECE_8192128F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_HQC_128_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_HQC_128_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_HQC_192_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_HQC_192_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_HQC_256_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_HQC_256_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRULPR_653_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRULPR_653_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRULPR_761_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRULPR_761_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRULPR_857_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_NTRULPR_857_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SNTRUP_653_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SNTRUP_653_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SNTRUP_761_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SNTRUP_761_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SNTRUP_857_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SNTRUP_857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_HQC_256_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_HQC_256_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_NTRULPR653_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_NTRULPR653_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_SNTRUP653_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_SNTRUP653_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_NTRULPR761_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_NTRULPR761_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_SNTRUP761_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_SNTRUP761_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_NTRULPR857_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_NTRULPR857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_SNTRUP857_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_SNTRUP857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_NTRULPR1277_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_NTRULPR1277_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_NTRUPRIME_SNTRUP1277_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_NTRUPRIME_SNTRUP1277_SHA512;
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_PQ_END
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_HYBRID_START
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE_L1_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE_L1_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE_L3_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE_L3_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_348864F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6688128F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_6960119F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_8192128F_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_640_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_640_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_640_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_976_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_976_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_976_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_1344_AES_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODO_1344_SHAKE_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_512_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_512_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_768_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_768_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_1024_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_1024_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_512_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_512_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_768_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_768_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_1024_90S_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HPS_2048_509_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HPS_2048_677_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HRSS_701_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HPS_4096_821_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SABER_LIGHTSABER_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIDH_P434_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIDH_P434_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P610_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P610_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIDH_P751_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIDH_P751_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIKE_P434_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIKE_P434_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIKE_P751_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIKE_P751_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SABER_SABER_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SABER_SABER_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SABER_FIRESABER_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_p434_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_p434_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_p503_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_p503_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_p610_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_p610_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_p751_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_p751_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P434_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P503_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P751_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P434_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P434_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P503_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P503_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P751_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P751_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P434_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P503_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P751_COMPRESSED_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_HQC_128_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_HQC_128_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_KYBER_512_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_KYBER_512_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_768_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_768_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_KYBER_1024_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_KYBER_1024_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_KYBER_512_90S_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_KYBER_512_90S_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_KYBER_768_90S_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_KYBER_768_90S_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_BIKE_L1_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_BIKE_L1_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_BIKE_L3_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_BIKE_L3_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_HQC_128_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_HQC_128_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_HQC_192_SHA384) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_HQC_192_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_HQC_256_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_HQC_256_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRULPR_653_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRULPR_653_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRULPR_761_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRULPR_761_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRULPR_857_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRULPR_857_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SNTRUP_653_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SNTRUP_653_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SNTRUP_761_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SNTRUP_761_SHA384;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SNTRUP_857_SHA384) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SNTRUP_857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_HQC_256_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_HQC_256_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512;
+    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512) == 0){
+        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512;
 ///// OQS_TEMPLATE_FRAGMENT_KEX_SELECT_METHODS_HYBRID_END
 #endif /* WITH_POST_QUANTUM_CRYPTO */
     }
