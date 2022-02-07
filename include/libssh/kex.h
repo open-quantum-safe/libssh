@@ -27,12 +27,12 @@
 #ifdef WITH_POST_QUANTUM_CRYPTO
 #include <oqs/oqs.h>
 
-/* These must match their counterparts in OQS-OpenSSH's kex.h. */
-#define HYBRID_ECDH_OQS_NAMESPACE_SUFFIX "@openquantumsafe.org"
-#define HYBRID_ECDH_OQS_KEX_SUFFIX(X) X HYBRID_ECDH_OQS_NAMESPACE_SUFFIX
-
-#define PQ_OQS_NAMESPACE_SUFFIX "@openquantumsafe.org"
-#define PQ_OQS_KEX_SUFFIX(X) X PQ_OQS_NAMESPACE_SUFFIX
+/* These must match their counterparts in OQS-OpenSSH's kex.h.
+ * OpenSSH v7 appended "@openquantumsafe.org" to the kex algorithm names, and these macros were used to easily append that.
+ * OpenSSH v8 removed this suffix, so these macros are now the identity, but we retain them in code in case this changes again in the future.
+ */
+#define HYBRID_ECDH_OQS_KEX_SUFFIX(X) X
+#define PQ_OQS_KEX_SUFFIX(X) X
 
 /* These strings must match their counterparts in OQS-OpenSSH's kex.c.*/
 
