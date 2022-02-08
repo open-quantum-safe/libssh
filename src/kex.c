@@ -1660,6 +1660,10 @@ int ssh_make_sessionid(ssh_session session)
 #ifdef WITH_GEX
     case SSH_KEX_DH_GEX_SHA256:
 #endif /* WITH_GEX */
+#ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA256_CASES_START
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA256_CASES_END
+#endif /* WITH_POST_QUANTUM_CRYPTO */
         session->next_crypto->digest_len = SHA256_DIGEST_LENGTH;
         session->next_crypto->digest_type = SSH_KDF_SHA256;
         session->next_crypto->secret_hash = malloc(session->next_crypto->digest_len);
@@ -1671,6 +1675,10 @@ int ssh_make_sessionid(ssh_session session)
                                      session->next_crypto->secret_hash);
         break;
     case SSH_KEX_ECDH_SHA2_NISTP384:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA384_CASES_START
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA384_CASES_END
+#endif /* WITH_POST_QUANTUM_CRYPTO */
         session->next_crypto->digest_len = SHA384_DIGEST_LENGTH;
         session->next_crypto->digest_type = SSH_KDF_SHA384;
         session->next_crypto->secret_hash = malloc(session->next_crypto->digest_len);
@@ -1684,6 +1692,10 @@ int ssh_make_sessionid(ssh_session session)
     case SSH_KEX_DH_GROUP16_SHA512:
     case SSH_KEX_DH_GROUP18_SHA512:
     case SSH_KEX_ECDH_SHA2_NISTP521:
+#ifdef WITH_POST_QUANTUM_CRYPTO
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA512_CASES_START
+///// OQS_TEMPLATE_FRAGMENT_MAKE_SESSIONID_SHA512_CASES_END
+#endif /* WITH_POST_QUANTUM_CRYPTO */
         session->next_crypto->digest_len = SHA512_DIGEST_LENGTH;
         session->next_crypto->digest_type = SSH_KDF_SHA512;
         session->next_crypto->secret_hash = malloc(session->next_crypto->digest_len);
@@ -1695,21 +1707,6 @@ int ssh_make_sessionid(ssh_session session)
                ssh_buffer_get_len(buf),
                session->next_crypto->secret_hash);
         break;
-#ifdef WITH_POST_QUANTUM_CRYPTO
-    CASE_SSH_KEX_POST_QUANTUM:
-        /* At the time of this writing, all OQS-supported PQ and hybrid kex's use SHA384. */
-        session->next_crypto->digest_len = SHA384_DIGEST_LENGTH;
-        session->next_crypto->digest_type = SSH_KDF_SHA384;
-        session->next_crypto->secret_hash = malloc(session->next_crypto->digest_len);
-        if (session->next_crypto->secret_hash == NULL) {
-            ssh_set_error_oom(session);
-            goto error;
-        }
-        sha384(ssh_buffer_get(buf), ssh_buffer_get_len(buf),
-                                     session->next_crypto->secret_hash);
-        break;
-#endif
-
     }
     /* During the first kex, secret hash and session ID are equal. However, after
      * a key re-exchange, a new secret hash is calculated. This hash will not replace
