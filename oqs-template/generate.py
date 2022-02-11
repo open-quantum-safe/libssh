@@ -62,6 +62,7 @@ config = load_config()
 # add kexs
 populate('include/libssh/crypto.h', config, '/////')
 populate('include/libssh/kex.h', config, '/////')
+populate('src/hykex.c', config, '/////')
 populate('src/kex.c', config, '/////')
 populate('src/oqs-utils.c', config, '/////')
 

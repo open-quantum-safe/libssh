@@ -1565,6 +1565,7 @@ int ssh_make_sessionid(ssh_session session)
 #endif
 #ifdef WITH_POST_QUANTUM_CRYPTO
     CASE_SSH_KEX_PURE_PQ:
+    CASE_SSH_KEX_HYBRID:
         /* Order is always client message and then server message. Pack them in the right order. 
          * OpenSSH reference: pq_oqs_hash in kexpqoqs.c
          */
@@ -1577,29 +1578,6 @@ int ssh_make_sessionid(ssh_session session)
             rc = ssh_buffer_pack(buf,
                                  "SS",
                                  session->next_crypto->oqs_remote_msg,
-                                 session->next_crypto->oqs_local_msg);
-        }
-        if (rc != SSH_OK) {
-            goto error;
-        }
-        break;
-    CASE_SSH_KEX_HYBRID:
-        /* Order is always client ECDH public key, client OQS message, server ECDH public key, server OQS message. Pack them in the right order.
-         * OpenSSH reference: hybrid_ecdh_oqs_hash in kexhyecdhoqs.c 
-         */
-        if (session->client) {
-            rc = ssh_buffer_pack(buf,
-                                 "SSSS",
-                                 session->next_crypto->ecdh_client_pubkey,
-                                 session->next_crypto->oqs_local_msg,
-                                 session->next_crypto->ecdh_server_pubkey,
-                                 session->next_crypto->oqs_remote_msg);
-        } else {
-            rc = ssh_buffer_pack(buf,
-                                 "SSSS",
-                                 session->next_crypto->ecdh_client_pubkey,
-                                 session->next_crypto->oqs_remote_msg,
-                                 session->next_crypto->ecdh_server_pubkey,
                                  session->next_crypto->oqs_local_msg);
         }
         if (rc != SSH_OK) {
