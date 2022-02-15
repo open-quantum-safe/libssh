@@ -2561,9 +2561,11 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
     }
 
     ktype = ssh_string_get_char(ktypestr);
-    if (strcmp("ssh-oqs", ktype) != 0) {
+    if (ssh_key_type_from_name(ktype) != pubkey->type) {
         SSH_LOG(SSH_LOG_TRACE,
-                "ktype was not ssh-oqs");
+                "ktype was %s; expected %s",
+                ktype,
+                ssh_key_type_to_char(pubkey->type));
         rc = SSH_ERROR;
         goto out;
     }
@@ -2660,7 +2662,7 @@ int pki_oqs_sign_data(const ssh_key privkey,
 
     ssh_buffer_set_secure(b);
 
-    rc = ssh_buffer_pack(b, "sS", "ssh-oqs", sig_str);
+    rc = ssh_buffer_pack(b, "sS", ssh_key_type_to_char(privkey->type), sig_str);
     if (rc < 0) {
         SSH_LOG(SSH_LOG_TRACE,
                 "Failed to ssh_buffer_pack: %d",

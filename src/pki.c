@@ -2660,6 +2660,7 @@ int ssh_pki_export_signature_blob(const ssh_signature sig,
     switch (sig->type) {
     CASE_KEY_HYBRID:
         /* Hybrid signature is "sig_classical_len|sig_classical|sig_pq_len|sig_pq" where each _len is an unsigned 4-byte big-endian int. */
+        // OQS-TODO: don't include the lengths in the concatenation (this is 7.9 behavior, but new spec do away with encoded sizes)
         if (sig_classical == NULL) {
             /* Sanity check. This shouldn't happen, though, as failures in the classical signature should cause an early exit. */
             return SSH_ERROR;
@@ -2741,6 +2742,7 @@ int ssh_pki_import_signature_blob(const ssh_string sig_blob,
         const unsigned char *sig_data = NULL;
         size_t sig_len = ssh_string_len(sig_blob);
         /* Hybrid signature is "sig_classical_len|sig_classical|sig_pq_len|sig_pq" where each _len is an unsigned 4-byte big-endian int */
+        // OQS-TODO: don't include the lengths in the concatenation (this is 7.9 behavior, but new spec do away with encoded sizes)
         if (sig_len < sizeof(sig_classical_len))
         {
             SSH_LOG(SSH_LOG_TRACE,
