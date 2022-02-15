@@ -1,5 +1,5 @@
 {% for sig in config['sigs'] %}
-    if (strcmp(name, "ssh-{{ sig['name']|lower|replace('_','') }}") == 0) {
+    if (strcmp(name, "ssh-{{ sig['name']|replace('_','') }}") == 0) {
         return SSH_DIGEST_AUTO;
     }
 {%- endfor %}

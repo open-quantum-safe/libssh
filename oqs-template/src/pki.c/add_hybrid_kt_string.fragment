@@ -1,7 +1,7 @@
 
 {%- for sig in config['sigs'] %}
     {%- for classical_alg in sig['mix_with'] %}
-    if (strcmp(name, "ssh-{{ classical_alg['name'] }}-{{ sig['name']|lower|replace('_','') }}") == 0) {
+    if (strcmp(name, "ssh-{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}") == 0) {
         return SSH_KEYTYPE_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }};
     }
     {%- endfor %}

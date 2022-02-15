@@ -1,6 +1,6 @@
 {%- for sig in config['sigs'] %}
     {%- for classical_alg in sig['mix_with'] %}
-    if (strcmp(name, "ssh-{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|lower|replace('_','') }}") == 0) {
+    if (strcmp(name, "ssh-{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}") == 0) {
         {%- if sig['level'] == 1 %}
         return SSH_DIGEST_SHA256;
         {%- elif sig['level'] == 3 %}
