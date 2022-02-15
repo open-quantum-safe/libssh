@@ -444,10 +444,10 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     if (strcmp(name, "ssh-dilithium5aes") == 0) {
         return SSH_DIGEST_AUTO;
     }
-    if (strcmp(name, "ssh-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-picnicL1full") == 0) {
         return SSH_DIGEST_AUTO;
     }
-    if (strcmp(name, "ssh-picnicl3fs") == 0) {
+    if (strcmp(name, "ssh-picnicL3FS") == 0) {
         return SSH_DIGEST_AUTO;
     }
     if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
@@ -479,13 +479,13 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     if (strcmp(name, "ssh-ecdsa-nistp521-dilithium5aes") == 0) {
         return SSH_DIGEST_SHA512;
     }
-    if (strcmp(name, "ssh-rsa3072-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-rsa3072-picnicL1full") == 0) {
         return SSH_DIGEST_SHA256;
     }
-    if (strcmp(name, "ssh-ecdsa-nistp256-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp256-picnicL1full") == 0) {
         return SSH_DIGEST_SHA256;
     }
-    if (strcmp(name, "ssh-ecdsa-nistp384-picnicl3fs") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp384-picnicL3FS") == 0) {
         return SSH_DIGEST_SHA384;
     }
     if (strcmp(name, "ssh-rsa3072-sphincsharaka128fsimple") == 0) {
@@ -764,10 +764,10 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
     if (strcmp(name, "ssh-dilithium5aes") == 0) {
         return SSH_KEYTYPE_DILITHIUM_5_AES;
     }
-    if (strcmp(name, "ssh-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-picnicL1full") == 0) {
         return SSH_KEYTYPE_PICNIC_L1_FULL;
     }
-    if (strcmp(name, "ssh-picnicl3fs") == 0) {
+    if (strcmp(name, "ssh-picnicL3FS") == 0) {
         return SSH_KEYTYPE_PICNIC_L3_FS;
     }
     if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
@@ -781,40 +781,40 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
     if (strcmp(name, "ssh-rsa3072-falcon512") == 0) {
         return SSH_KEYTYPE_RSA3072_FALCON_512;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp256-falcon512") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp256-falcon512") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp521-falcon1024") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp521-falcon1024") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP521_FALCON_1024;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp384-dilithium3") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp384-dilithium3") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3;
     }
     if (strcmp(name, "ssh-rsa3072-dilithium2aes") == 0) {
         return SSH_KEYTYPE_RSA3072_DILITHIUM_2_AES;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp256-dilithium2aes") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp256-dilithium2aes") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp521-dilithium5aes") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp521-dilithium5aes") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES;
     }
-    if (strcmp(name, "ssh-rsa3072-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-rsa3072-picnicL1full") == 0) {
         return SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp256-picnicl1full") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp256-picnicL1full") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp384-picnicl3fs") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp384-picnicL3FS") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS;
     }
     if (strcmp(name, "ssh-rsa3072-sphincsharaka128fsimple") == 0) {
         return SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp256-sphincsharaka128fsimple") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp256-sphincsharaka128fsimple") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE;
     }
-    if (strcmp(name, "ssh-ecdsa_nistp384-sphincsharaka192frobust") == 0) {
+    if (strcmp(name, "ssh-ecdsa-nistp384-sphincsharaka192frobust") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST;
     }
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_KT_STRING_END
