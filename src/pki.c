@@ -429,23 +429,31 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
 
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_START
-if (strcmp(name, "ssh-falcon512") == 0) {
+    if (strcmp(name, "ssh-falcon512") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-falcon1024") == 0) {
+    }
+    if (strcmp(name, "ssh-falcon1024") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-dilithium3") == 0) {
+    }
+    if (strcmp(name, "ssh-dilithium3") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-dilithium2aes") == 0) {
+    }
+    if (strcmp(name, "ssh-dilithium2aes") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-dilithium5aes") == 0) {
+    }
+    if (strcmp(name, "ssh-dilithium5aes") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-picnicl1full") == 0) {
+    }
+    if (strcmp(name, "ssh-picnicl1full") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-picnicl3fs") == 0) {
+    }
+    if (strcmp(name, "ssh-picnicl3fs") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
+    }
+    if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
         return SSH_DIGEST_AUTO;
-    }if (strcmp(name, "ssh-sphincsharaka192frobust") == 0) {
+    }
+    if (strcmp(name, "ssh-sphincsharaka192frobust") == 0) {
         return SSH_DIGEST_AUTO;
     }
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_KEY_HASH_END
