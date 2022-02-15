@@ -2509,6 +2509,18 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     }
 }
 
+static enum ssh_keytypes_e pki_pq_key_type_from_hybrid_key_type(enum ssh_keytypes_e type)
+{
+    switch (type)
+    {
+///// OQS_TEMPLATE_FRAGMENT_PQ_KT_FROM_HYBRID_KT_START
+///// OQS_TEMPLATE_FRAGMENT_PQ_KT_FROM_HYBRID_KT_END
+    default:
+        /* Return already pure-PQ key types unchanged. */
+        return type;
+    }
+}
+
 int pki_parse_oqs_signature_from_blob(ssh_signature sig,
                                       const ssh_key pubkey,
                                       const ssh_string pq_sig_blob,
@@ -2561,11 +2573,11 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
     }
 
     ktype = ssh_string_get_char(ktypestr);
-    if (ssh_key_type_from_name(ktype) != pubkey->type) {
+    if (ssh_key_type_from_name(ktype) != pki_pq_key_type_from_hybrid_key_type(pubkey->type)) {
         SSH_LOG(SSH_LOG_TRACE,
                 "ktype was %s; expected %s",
                 ktype,
-                ssh_key_type_to_char(pubkey->type));
+                ssh_key_type_to_char(pki_pq_key_type_from_hybrid_key_type(pubkey->type)));
         rc = SSH_ERROR;
         goto out;
     }
@@ -2662,7 +2674,7 @@ int pki_oqs_sign_data(const ssh_key privkey,
 
     ssh_buffer_set_secure(b);
 
-    rc = ssh_buffer_pack(b, "sS", ssh_key_type_to_char(privkey->type), sig_str);
+    rc = ssh_buffer_pack(b, "sS", ssh_key_type_to_char(pki_pq_key_type_from_hybrid_key_type(privkey->type)), sig_str);
     if (rc < 0) {
         SSH_LOG(SSH_LOG_TRACE,
                 "Failed to ssh_buffer_pack: %d",
