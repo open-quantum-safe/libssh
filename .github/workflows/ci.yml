@@ -27,7 +27,7 @@ jobs:
       with:
         path: oqs-scripts/tmp/openssh
         repository: open-quantum-safe/openssh
-        ref: 0c5eac6a3ba249f73bb953745cf109bdf281eafd
+        ref: e9b0f6f8896039824f78a43623cd14b67f24e2ce
 
     - name: Build liboqs
       run: ./oqs-scripts/build_liboqs.sh

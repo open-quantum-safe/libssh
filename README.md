@@ -18,7 +18,9 @@ WARNING: These algorithms and implementations are experimental. Standards for po
 
 ## Overview
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v8 branch at commit ID 0c5eac6a3ba249f73bb953745cf109bdf281eafd "OQS-OpenSSH 2022-01 snapshot release".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v8 branch at commit ID e9b0f6f8896039824f78a43623cd14b67f24e2ce "Use mpint representation for shared_secret when deriving keys in pure-PQ key exchange, and some other bug fixes; fixes #119 (#120)".
+
+This implementation tracks libssh's `master` branch that contains the current development version. At this time, this library is based on libssh's commit ID 76b7e0e9b54bed74f3d9be75583e56960405847d "cpack: Do not package .cache directory used by clangd".
 
 This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
@@ -89,7 +91,7 @@ These instructions assume you have completed the build above; in particular, tha
 ```
   git clone --branch OQS-v8 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
   cd openssh
-  git checkout 0c5eac6a3ba249f73bb953745cf109bdf281eafd
+  git checkout e9b0f6f8896039824f78a43623cd14b67f24e2ce
 ```
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:
