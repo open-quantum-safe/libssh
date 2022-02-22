@@ -7,6 +7,7 @@
 #include "libssh/session.h"
 #include "libssh/config_parser.h"
 #include "match.c"
+#include "config.c"
 
 extern LIBSSH_THREAD int ssh_log_level;
 
@@ -38,6 +39,7 @@ extern LIBSSH_THREAD int ssh_log_level;
 #define LIBSSH_TEST_PUBKEYTYPES "libssh_test_PubkeyAcceptedKeyTypes.tmp"
 #define LIBSSH_TEST_NONEWLINEEND "libssh_test_NoNewLineEnd.tmp"
 #define LIBSSH_TEST_NONEWLINEONELINE "libssh_test_NoNewLineOneline.tmp"
+#define LIBSSH_TEST_RECURSIVE_INCLUDE "libssh_test_recursive_include.tmp"
 
 #define LIBSSH_TESTCONFIG_STRING1 \
     "User "USERNAME"\nInclude "LIBSSH_TESTCONFIG2"\n\n"
@@ -183,6 +185,9 @@ extern LIBSSH_THREAD int ssh_log_level;
 #define LIBSSH_TEST_NONEWLINEONELINE_STRING \
     "ConnectTimeout 30"
 
+#define LIBSSH_TEST_RECURSIVE_INCLUDE_STRING \
+    "Include " LIBSSH_TEST_RECURSIVE_INCLUDE
+
 /**
  * @brief helper function loading configuration from either file or string
  */
@@ -306,12 +311,16 @@ static int teardown_config_files(void **state)
 static int setup(void **state)
 {
     ssh_session session = NULL;
+    char *wd = NULL;
     int verbosity;
 
     session = ssh_new();
 
     verbosity = torture_libssh_verbosity();
     ssh_options_set(session, SSH_OPTIONS_LOG_VERBOSITY, &verbosity);
+    wd = torture_get_current_working_dir();
+    ssh_options_set(session, SSH_OPTIONS_SSH_DIR, wd);
+    free(wd);
 
     *state = session;
 
@@ -418,6 +427,22 @@ static void torture_config_include_string(void **state)
 }
 
 /**
+ * @brief tests ssh_config_parse_file with recursive Include directives from file
+ */
+static void torture_config_include_recursive_file(void **state)
+{
+    _parse_config(*state, LIBSSH_TEST_RECURSIVE_INCLUDE, NULL, SSH_OK);
+}
+
+/**
+ * @brief tests ssh_config_parse_string with Include directives from string
+ */
+static void torture_config_include_recursive_string(void **state)
+{
+    _parse_config(*state, NULL, LIBSSH_TEST_RECURSIVE_INCLUDE_STRING, SSH_OK);
+}
+
+/**
  * @brief tests ssh_config_parse_file with multiple Port settings.
  */
 static void torture_config_double_ports_file(void **state)
@@ -487,12 +512,14 @@ static void torture_config_new(void ** state,
     assert_string_equal(session->opts.bindaddr, BIND_ADDRESS);
 #ifdef WITH_ZLIB
     assert_string_equal(session->opts.wanted_methods[SSH_COMP_C_S],
-                        "zlib@openssh.com,zlib");
+                        "zlib@openssh.com,zlib,none");
     assert_string_equal(session->opts.wanted_methods[SSH_COMP_S_C],
-                        "zlib@openssh.com,zlib");
+                        "zlib@openssh.com,zlib,none");
 #else
-    assert_null(session->opts.wanted_methods[SSH_COMP_C_S]);
-    assert_null(session->opts.wanted_methods[SSH_COMP_S_C]);
+    assert_string_equal(session->opts.wanted_methods[SSH_COMP_C_S],
+                        "none");
+    assert_string_equal(session->opts.wanted_methods[SSH_COMP_S_C],
+                        "none");
 #endif /* WITH_ZLIB */
     assert_int_equal(session->opts.StrictHostKeyChecking, 0);
     assert_int_equal(session->opts.gss_delegate_creds, 1);
@@ -1637,6 +1664,36 @@ static void torture_config_identity(void **state)
     assert_string_equal(id, "id_rsa_one");
 }
 
+/* Make absolute path for config include
+ */
+static void torture_config_make_absolute(void **state)
+{
+    ssh_session session = *state;
+    char *result = NULL;
+
+    /* Absolute path already -- should not change in any case */
+    result = ssh_config_make_absolute(session, "/etc/ssh/ssh_config.d/*.conf", 1);
+    assert_string_equal(result, "/etc/ssh/ssh_config.d/*.conf");
+    free(result);
+    result = ssh_config_make_absolute(session, "/etc/ssh/ssh_config.d/*.conf", 0);
+    assert_string_equal(result, "/etc/ssh/ssh_config.d/*.conf");
+    free(result);
+
+    /* Global is relative to /etc/ssh/ */
+    result = ssh_config_make_absolute(session, "ssh_config.d/test.conf", 1);
+    assert_string_equal(result, "/etc/ssh/ssh_config.d/test.conf");
+    free(result);
+    result = ssh_config_make_absolute(session, "./ssh_config.d/test.conf", 1);
+    assert_string_equal(result, "/etc/ssh/./ssh_config.d/test.conf");
+    free(result);
+
+    /* User config is relative to sshdir -- here faked to /tmp/ssh/ */
+    ssh_options_set(session, SSH_OPTIONS_SSH_DIR, "/tmp/ssh");
+    result = ssh_config_make_absolute(session, "my_config", 0);
+    assert_string_equal(result, "/tmp/ssh/my_config");
+    free(result);
+}
+
 
 int torture_run_tests(void)
 {
@@ -1645,6 +1702,10 @@ int torture_run_tests(void)
         cmocka_unit_test_setup_teardown(torture_config_include_file,
                                         setup, teardown),
         cmocka_unit_test_setup_teardown(torture_config_include_string,
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(torture_config_include_recursive_file,
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(torture_config_include_recursive_string,
                                         setup, teardown),
         cmocka_unit_test_setup_teardown(torture_config_double_ports_file,
                                         setup, teardown),
@@ -1697,6 +1758,8 @@ int torture_run_tests(void)
         cmocka_unit_test_setup_teardown(torture_config_match_pattern,
                                         setup, teardown),
         cmocka_unit_test_setup_teardown(torture_config_identity,
+                                        setup, teardown),
+        cmocka_unit_test_setup_teardown(torture_config_make_absolute,
                                         setup, teardown),
     };
 

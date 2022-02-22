@@ -20,7 +20,7 @@ WARNING: These algorithms and implementations are experimental. Standards for po
 
 This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v8 branch at commit ID e9b0f6f8896039824f78a43623cd14b67f24e2ce "Use mpint representation for shared_secret when deriving keys in pure-PQ key exchange, and some other bug fixes; fixes #119 (#120)".
 
-This implementation tracks libssh's `master` branch that contains the current development version. At this time, this library is based on libssh's commit ID 76b7e0e9b54bed74f3d9be75583e56960405847d "cpack: Do not package .cache directory used by clangd".
+This implementation tracks libssh's `master` branch that contains the current development version. At this time, this library is based on libssh's commit ID 4975487c18090e24ff97208022a605a15351e773 "config: Include files with relative paths", which was committed on 2022-02-10.
 
 This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
