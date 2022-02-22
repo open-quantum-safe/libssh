@@ -191,7 +191,7 @@ static struct ssh_config_match_keyword_table_s ssh_config_match_keyword_table[] 
 };
 
 static int ssh_config_parse_line(ssh_session session, const char *line,
-    unsigned int count, int *parsing);
+    unsigned int count, int *parsing, unsigned int depth, bool global);
 
 static enum ssh_config_opcode_e ssh_config_get_opcode(char *keyword) {
   int i;
@@ -205,15 +205,25 @@ static enum ssh_config_opcode_e ssh_config_get_opcode(char *keyword) {
   return SOC_UNKNOWN;
 }
 
+#define LIBSSH_CONF_MAX_DEPTH 16
 static void
 local_parse_file(ssh_session session,
                  const char *filename,
-                 int *parsing)
+                 int *parsing,
+                 unsigned int depth,
+                 bool global)
 {
     FILE *f;
     char line[MAX_LINE_SIZE] = {0};
     unsigned int count = 0;
     int rv;
+
+    if (depth > LIBSSH_CONF_MAX_DEPTH) {
+        ssh_set_error(session, SSH_FATAL,
+                      "ERROR - Too many levels of configuration includes "
+                      "when processing file '%s'", filename);
+        return;
+    }
 
     f = fopen(filename, "r");
     if (f == NULL) {
@@ -225,7 +235,7 @@ local_parse_file(ssh_session session,
     SSH_LOG(SSH_LOG_PACKET, "Reading additional configuration data from %s", filename);
     while (fgets(line, sizeof(line), f)) {
         count++;
-        rv = ssh_config_parse_line(session, line, count, parsing);
+        rv = ssh_config_parse_line(session, line, count, parsing, depth, global);
         if (rv < 0) {
             fclose(f);
             return;
@@ -239,7 +249,9 @@ local_parse_file(ssh_session session,
 #if defined(HAVE_GLOB) && defined(HAVE_GLOB_GL_FLAGS_MEMBER)
 static void local_parse_glob(ssh_session session,
                              const char *fileglob,
-                             int *parsing)
+                             int *parsing,
+                             unsigned int depth,
+                             bool global)
 {
     glob_t globbuf = {
         .gl_flags = 0,
@@ -259,7 +271,7 @@ static void local_parse_glob(ssh_session session,
     }
 
     for (i = 0; i < globbuf.gl_pathc; i++) {
-        local_parse_file(session, globbuf.gl_pathv[i], parsing);
+        local_parse_file(session, globbuf.gl_pathv[i], parsing, depth, global);
     }
 
     globfree(&globbuf);
@@ -509,11 +521,59 @@ out:
     return rv;
 }
 
+static char *
+ssh_config_make_absolute(ssh_session session,
+                         const char *path,
+                         bool global)
+{
+    size_t outlen = 0;
+    char *out = NULL;
+    int rv;
+
+    /* Looks like absolute path */
+    if (path[0] == '/') {
+        return strdup(path);
+    }
+
+    /* relative path */
+    if (global) {
+        /* Parsing global config */
+        outlen = strlen(path) + strlen("/etc/ssh/") + 1;
+        out = malloc(outlen);
+        if (out == NULL) {
+            ssh_set_error_oom(session);
+            return NULL;
+        }
+        rv = snprintf(out, outlen, "/etc/ssh/%s", path);
+        if (rv < 1) {
+            free(out);
+            return NULL;
+        }
+        return out;
+    }
+
+    /* Parsing user config relative to home directory (generally ~/.ssh) */
+    outlen = strlen(path) + strlen(session->opts.sshdir) + 1 + 1;
+    out = malloc(outlen);
+    if (out == NULL) {
+        ssh_set_error_oom(session);
+        return NULL;
+    }
+    rv = snprintf(out, outlen, "%s/%s", session->opts.sshdir, path);
+    if (rv < 1) {
+        free(out);
+        return NULL;
+    }
+    return out;
+}
+
 static int
 ssh_config_parse_line(ssh_session session,
                       const char *line,
                       unsigned int count,
-                      int *parsing)
+                      int *parsing,
+                      unsigned int depth,
+                      bool global)
 {
   enum ssh_config_opcode_e opcode;
   const char *p = NULL, *p2 = NULL;
@@ -572,11 +632,19 @@ ssh_config_parse_line(ssh_session session,
 
       p = ssh_config_get_str_tok(&s, NULL);
       if (p && *parsing) {
+        char *path = ssh_config_make_absolute(session, p, global);
+        if (path == NULL) {
+          SSH_LOG(SSH_LOG_WARN, "line %d: Failed to allocate memory "
+                  "for the include path expansion", count);
+          SAFE_FREE(x);
+          return -1;
+        }
 #if defined(HAVE_GLOB) && defined(HAVE_GLOB_GL_FLAGS_MEMBER)
-        local_parse_glob(session, p, parsing);
+        local_parse_glob(session, path, parsing, depth + 1, global);
 #else
-        local_parse_file(session, p, parsing);
+        local_parse_file(session, path, parsing, depth + 1, global);
 #endif /* HAVE_GLOB */
+        free(path);
       }
       break;
 
@@ -1152,10 +1220,16 @@ int ssh_config_parse_file(ssh_session session, const char *filename)
     unsigned int count = 0;
     FILE *f;
     int parsing, rv;
+    bool global = 0;
 
     f = fopen(filename, "r");
     if (f == NULL) {
         return 0;
+    }
+
+    rv = strcmp(filename, GLOBAL_CLIENT_CONFIG);
+    if (rv == 0) {
+        global = true;
     }
 
     SSH_LOG(SSH_LOG_PACKET, "Reading configuration data from %s", filename);
@@ -1163,7 +1237,7 @@ int ssh_config_parse_file(ssh_session session, const char *filename)
     parsing = 1;
     while (fgets(line, sizeof(line), f)) {
         count++;
-        rv = ssh_config_parse_line(session, line, count, &parsing);
+        rv = ssh_config_parse_line(session, line, count, &parsing, 0, global);
         if (rv < 0) {
             fclose(f);
             return -1;
@@ -1215,7 +1289,7 @@ int ssh_config_parse_string(ssh_session session, const char *input)
         memcpy(line, line_start, line_len);
         line[line_len] = '\0';
         SSH_LOG(SSH_LOG_DEBUG, "Line %u: %s", line_num, line);
-        rv = ssh_config_parse_line(session, line, line_num, &parsing);
+        rv = ssh_config_parse_line(session, line, line_num, &parsing, 0, false);
         if (rv < 0) {
             return SSH_ERROR;
         }

@@ -1,11 +1,12 @@
 ---
 variables:
   BUILD_IMAGES_PROJECT: libssh/build-images
-  FEDORA_BUILD: buildenv-fedora
-  UBUNTU_BUILD: buildenv-ubuntu
   CENTOS7_BUILD: buildenv-centos7
-  TUMBLEWEED_BUILD: buildenv-tumbleweed
+  COVERITY_BUILD: buildenv-coverity
+  FEDORA_BUILD: buildenv-fedora
   MINGW_BUILD: buildenv-mingw
+  TUMBLEWEED_BUILD: buildenv-tumbleweed
+  UBUNTU_BUILD: buildenv-ubuntu
 
 stages:
   - build
@@ -469,7 +470,7 @@ visualstudio/x86:
 
 coverity:
   stage: analysis
-  image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$FEDORA_BUILD
+  image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$COVERITY_BUILD
   script:
     - mkdir obj && cd obj
     - wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_SCAN_TOKEN&project=$COVERITY_SCAN_PROJECT_NAME" -O /tmp/coverity_tool.tgz
