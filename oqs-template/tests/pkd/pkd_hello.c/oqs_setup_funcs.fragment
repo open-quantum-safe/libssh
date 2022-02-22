@@ -1,22 +1,20 @@
 
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-static int torture_pkd_setup_{{ variant['name']|lower }}(void** state) {
+static int torture_pkd_setup_{{ sig['name']|lower }}(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_{{ variant['name']|upper }}, LIBSSH_{{ variant['name']|upper}}_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_{{ sig['name']|upper }}, LIBSSH_{{ sig['name']|upper}}_TESTKEY);
 
     return 0;
 }
 
-        {%- for classical_alg in variant['mix_with'] %}
-static int torture_pkd_setup_{{ classical_alg.name }}_{{ variant['name']|lower }}(void** state) {
+    {%- for classical_alg in sig['mix_with'] %}
+static int torture_pkd_setup_{{ classical_alg.name }}_{{ sig['name']|lower }}(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_{{ classical_alg.name|upper }}_{{ variant['name']|upper }}, LIBSSH_{{ classical_alg.name|upper }}_{{ variant['name']|upper}}_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}, LIBSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper}}_TESTKEY);
 
     return 0;
 }
 
-        {%- endfor -%}
     {%- endfor %}
 {%- endfor %}
 

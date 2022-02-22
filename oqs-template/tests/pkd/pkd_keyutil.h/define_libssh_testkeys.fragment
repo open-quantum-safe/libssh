@@ -1,9 +1,7 @@
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-#define LIBSSH_{{ variant['name']|upper }}_TESTKEY "libssh_testkey.id_{{ variant['name']|lower }}"
-        {%- for classical_alg in variant['mix_with'] %}
-#define LIBSSH_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}_TESTKEY "libssh_testkey.id_{{ classical_alg['name']|lower }}_{{ variant['name']|lower }}"
-        {%- endfor %}
+#define LIBSSH_{{ sig['name']|upper }}_TESTKEY "libssh_testkey.id_{{ sig['name']|lower }}"
+    {%- for classical_alg in sig['mix_with'] %}
+#define LIBSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}_TESTKEY "libssh_testkey.id_{{ classical_alg['name']|lower }}_{{ sig['name']|lower }}"
     {%- endfor %}
 {%- endfor %}
 

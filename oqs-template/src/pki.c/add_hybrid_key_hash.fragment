@@ -1,40 +1,14 @@
-{%- set with_rsa3072 = [] -%}
-{%- set with_p256 = [] -%}
-{%- set with_p384 = [] -%}
-{%- set with_p521 = [] -%}
-{%- for sig in config['sigs'] -%}
-    {%- for variant in sig['variants'] -%}
-        {%- for classical_alg in variant['mix_with'] -%}
-            {%- if classical_alg.name == 'rsa3072' -%}
-                {%- do with_rsa3072.append(variant) -%}
-            {%- elif classical_alg.name == 'p256' -%}
-                {%- do with_p256.append(variant) -%}
-            {%- elif classical_alg.name == 'p384' -%}
-                {%- do with_p384.append(variant) -%}
-            {%- elif classical_alg.name == 'p521' -%}
-                {%- do with_p521.append(variant) -%}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endfor -%}
-{%- endfor %}
-{%- for pq_alg in with_rsa3072 %}
-    if (strcmp(name, "ssh-rsa3072-{{ pq_alg['name']|lower|replace('_','') }}") == 0) {
+{%- for sig in config['sigs'] %}
+    {%- for classical_alg in sig['mix_with'] %}
+    if (strcmp(name, "ssh-{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}") == 0) {
+        {%- if sig['level'] == 1 %}
         return SSH_DIGEST_SHA256;
-    }
-{%- endfor %}
-{%- for pq_alg in with_p256 %}
-    if (strcmp(name, "ssh-p256-{{ pq_alg['name']|lower|replace('_','') }}") == 0) {
-        return SSH_DIGEST_SHA256;
-    }
-{%- endfor %}
-{%- for pq_alg in with_p384 %}
-    if (strcmp(name, "ssh-p384-{{ pq_alg['name']|lower|replace('_','') }}") == 0) {
+        {%- elif sig['level'] == 3 %}
         return SSH_DIGEST_SHA384;
-    }
-{%- endfor %}
-{%- for pq_alg in with_p521 %}
-    if (strcmp(name, "ssh-p521-{{ pq_alg['name']|lower|replace('_','') }}") == 0) {
+        {%- elif sig['level'] == 5 %}
         return SSH_DIGEST_SHA512;
+        {%- endif %}
     }
+    {%- endfor %}
 {%- endfor %}
 

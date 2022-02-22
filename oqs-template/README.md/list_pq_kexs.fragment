@@ -1,7 +1,5 @@
 
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-* {{ variant['name']|lower|replace('_','-') }}-sha384@openquantumsafe.org
-    {%- endfor %}
+{%- for kex in config['kexs'] %}
+* {{ kex['name']|lower|replace('_','-') }}-{{ kex['hash']|lower }}@openquantumsafe.org
 {%- endfor %}
 

@@ -1,10 +1,10 @@
 
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-         cmocka_unit_test_setup_teardown(torture_algorithms_{{ variant['name']|lower|replace('_','') }}_sha384,
+{%- for kex in config['kexs'] %}
+         cmocka_unit_test_setup_teardown(torture_algorithms_{{ kex['name']|lower|replace('_','') }}_{{ kex['hash'] }},
                                          session_setup,
                                          session_teardown),
-         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_nistp384_{{ variant['name']|lower|replace('_','') }}_sha384,
+    {%- for curve in kex['mix_with'] %}
+         cmocka_unit_test_setup_teardown(torture_algorithms_ecdh_{{ curve['name'] }}_{{ kex['name']|lower|replace('_','') }}_{{ kex['hash'] }},
                                          session_setup,
                                          session_teardown),
     {%- endfor %}

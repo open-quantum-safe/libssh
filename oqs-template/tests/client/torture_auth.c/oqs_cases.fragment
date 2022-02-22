@@ -1,14 +1,12 @@
 
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_{{ variant['name']|lower|replace('_','') }},
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_{{ sig['name']|lower|replace('_','') }},
                                         session_setup,
                                         session_teardown),
-        {%- for classical_alg in variant['mix_with'] %}
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_{{ classical_alg.name }}_{{ variant['name']|lower|replace('_','') }},
+    {%- for classical_alg in sig['mix_with'] %}
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_{{ classical_alg['name'] }}_{{ sig['name']|lower|replace('_','') }},
                                         session_setup,
                                         session_teardown),
-        {%- endfor -%}
     {%- endfor %}
 {%- endfor %}
 

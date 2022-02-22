@@ -1,16 +1,14 @@
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-#define CLIENT_ID_FILE OPENSSH_{{ variant['name']|upper }}_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_{{ variant['name']|lower }}, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_{{ sig['name']|upper }}_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_{{ sig['name']|lower }}, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 
-        {%- for classical_alg in variant['mix_with'] %}
+    {%- for classical_alg in sig['mix_with'] %}
 
-#define CLIENT_ID_FILE OPENSSH_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_{{ classical_alg['name']|lower }}_{{ variant['name']|lower }}, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_{{ classical_alg['name']|lower }}_{{ sig['name']|lower }}, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 
-        {%- endfor %}
     {%- endfor %}
 {%- endfor %}
 

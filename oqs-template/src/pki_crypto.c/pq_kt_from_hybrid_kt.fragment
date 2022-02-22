@@ -1,0 +1,8 @@
+
+{%- for sig in config['sigs'] %}
+    {%- for classical_alg in sig['mix_with'] %}
+    case SSH_KEYTYPE_{{ classical_alg['name']|upper }}_{{ sig['name']|upper }}:
+        return SSH_KEYTYPE_{{ sig['name']|upper }};
+    {%- endfor %}
+{%- endfor %}
+

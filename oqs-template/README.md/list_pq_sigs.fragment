@@ -1,7 +1,5 @@
 
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-* ssh-{{ variant['name']|lower|replace('_','') }}
-    {%- endfor %}
+* ssh-{{ sig['name']|lower|replace('_','') }} {%- if sig['enable'] -%} \* {%- endif -%}
 {%- endfor %}
 

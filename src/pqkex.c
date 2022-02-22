@@ -166,9 +166,6 @@ static SSH_PACKET_CALLBACK(ssh_packet_client_pqkex_reply) {
 
     session->next_crypto->oqs_shared_secret_len = session->next_crypto->oqs_kem->length_shared_secret;
 
-    /* PQ data not needed after calling decaps. */
-    ssh_oqs_kex_free(session);
-
     bignum_bin2bn(shared_secret, session->next_crypto->oqs_shared_secret_len, &session->next_crypto->shared_secret);
     if (session->next_crypto->shared_secret == NULL) {
         ssh_set_error_oom(session);
@@ -205,6 +202,8 @@ exit:
         explicit_bzero(shared_secret, session->next_crypto->oqs_kem->length_shared_secret);
         SAFE_FREE(shared_secret);
     }
+
+    ssh_oqs_kex_free(session);
 
     if (rc != SSH_PACKET_USED) {
         session->session_state = SSH_SESSION_STATE_ERROR;

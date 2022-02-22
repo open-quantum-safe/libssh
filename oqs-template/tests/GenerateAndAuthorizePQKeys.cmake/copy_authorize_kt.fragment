@@ -1,18 +1,16 @@
 
 {%- for sig in config['sigs'] %}
-    {%- for variant in sig['variants'] %}
-    # copy and authorize {{ variant['name']|lower|replace('_','') }} key pair
-    file(COPY keys/id_{{ variant['name']|lower|replace('_','') }} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_{{ variant['name']|lower|replace('_','') }}.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_{{ variant['name']|lower|replace('_','') }}.pub CONTENTS)
+    # copy and authorize {{ sig['name']|replace('_','') }} key pair
+    file(COPY keys/id_{{ sig['name']|replace('_','') }} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_{{ sig['name']|replace('_','') }}.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_{{ sig['name']|replace('_','') }}.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-        {%- for classical_alg in variant['mix_with'] %}
-    # copy and authorize {{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }} key pair
-    file(COPY keys/id_{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }}.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_{{ classical_alg.name }}-{{ variant['name']|lower|replace('_','') }}.pub CONTENTS)
+    {%- for classical_alg in sig['mix_with'] %}
+    # copy and authorize {{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }} key pair
+    file(COPY keys/id_{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_{{ classical_alg['name']|replace('_','-') }}-{{ sig['name']|replace('_','') }}.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-        {%- endfor -%}
     {%- endfor %}
 {%- endfor %}
 

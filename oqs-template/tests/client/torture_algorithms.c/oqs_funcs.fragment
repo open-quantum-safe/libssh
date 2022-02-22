@@ -1,7 +1,6 @@
 
-{%- for kem in config['kems'] %}
-    {%- for variant in kem['variants'] %}
-static void torture_algorithms_{{ variant['name']|lower|replace('_','') }}_sha384(void** state)
+{%- for kex in config['kexs'] %}
+static void torture_algorithms_{{ kex['name']|lower|replace('_','') }}_{{ kex['hash'] }}(void** state)
 {
     struct torture_state* s = *state;
 
@@ -9,10 +8,11 @@ static void torture_algorithms_{{ variant['name']|lower|replace('_','') }}_sha38
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_{{ variant['name'] }}_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}, NULL, NULL);
 }
 
-static void torture_algorithms_ecdh_nistp384_{{ variant['name']|lower|replace('_','') }}_sha384(void** state)
+    {%- for curve in kex['mix_with'] %}
+static void torture_algorithms_ecdh_{{ curve['name'] }}_{{ kex['name']|lower|replace('_','') }}_{{ kex['hash'] }}(void** state)
 {
     struct torture_state* s = *state;
 
@@ -20,7 +20,7 @@ static void torture_algorithms_ecdh_nistp384_{{ variant['name']|lower|replace('_
         skip();
     }
 
-    test_algorithm(s->ssh.session, KEX_ECDH_NISTP384_{{ variant['name'] }}_SHA384, NULL, NULL);
+    test_algorithm(s->ssh.session, KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}, NULL, NULL);
 }
 
     {%- endfor %}

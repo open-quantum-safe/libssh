@@ -2468,37 +2468,82 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     switch (keytype)
     {
 ///// OQS_TEMPLATE_FRAGMENT_GET_OQS_ALG_NAME_START
-    case SSH_KEYTYPE_DILITHIUM_2:
-    case SSH_KEYTYPE_RSA3072_DILITHIUM_2:
-    case SSH_KEYTYPE_P256_DILITHIUM_2:
-        return OQS_SIG_alg_dilithium_2;
     case SSH_KEYTYPE_FALCON_512:
     case SSH_KEYTYPE_RSA3072_FALCON_512:
-    case SSH_KEYTYPE_P256_FALCON_512:
         return OQS_SIG_alg_falcon_512;
-    case SSH_KEYTYPE_PICNIC_L1FULL:
-    case SSH_KEYTYPE_RSA3072_PICNIC_L1FULL:
-    case SSH_KEYTYPE_P256_PICNIC_L1FULL:
+    case SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512:
+        return OQS_SIG_alg_falcon_512;
+    case SSH_KEYTYPE_FALCON_1024:
+    case SSH_KEYTYPE_ECDSA_NISTP521_FALCON_1024:
+        return OQS_SIG_alg_falcon_1024;
+    case SSH_KEYTYPE_DILITHIUM_3:
+    case SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3:
+        return OQS_SIG_alg_dilithium_3;
+    case SSH_KEYTYPE_DILITHIUM_2_AES:
+    case SSH_KEYTYPE_RSA3072_DILITHIUM_2_AES:
+        return OQS_SIG_alg_dilithium_2_aes;
+    case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES:
+        return OQS_SIG_alg_dilithium_2_aes;
+    case SSH_KEYTYPE_DILITHIUM_5_AES:
+    case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES:
+        return OQS_SIG_alg_dilithium_5_aes;
+    case SSH_KEYTYPE_PICNIC_L1_FULL:
+    case SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL:
         return OQS_SIG_alg_picnic_L1_full;
-    case SSH_KEYTYPE_PICNIC3_L1:
-    case SSH_KEYTYPE_RSA3072_PICNIC3_L1:
-    case SSH_KEYTYPE_P256_PICNIC3_L1:
-        return OQS_SIG_alg_picnic3_L1;
-    case SSH_KEYTYPE_SPHINCS_HARAKA_128F_ROBUST:
-    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_ROBUST:
-    case SSH_KEYTYPE_P256_SPHINCS_HARAKA_128F_ROBUST:
-        return OQS_SIG_alg_sphincs_haraka_128f_robust;
-    case SSH_KEYTYPE_SPHINCS_SHA256_128F_ROBUST:
-    case SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_ROBUST:
-    case SSH_KEYTYPE_P256_SPHINCS_SHA256_128F_ROBUST:
-        return OQS_SIG_alg_sphincs_sha256_128f_robust;
-    case SSH_KEYTYPE_SPHINCS_SHAKE256_128F_ROBUST:
-    case SSH_KEYTYPE_RSA3072_SPHINCS_SHAKE256_128F_ROBUST:
-    case SSH_KEYTYPE_P256_SPHINCS_SHAKE256_128F_ROBUST:
-        return OQS_SIG_alg_sphincs_shake256_128f_robust;
+    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
+        return OQS_SIG_alg_picnic_L1_full;
+    case SSH_KEYTYPE_PICNIC_L3_FS:
+    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
+        return OQS_SIG_alg_picnic_L3_FS;
+    case SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE:
+    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE:
+        return OQS_SIG_alg_sphincs_haraka_128f_simple;
+    case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:
+        return OQS_SIG_alg_sphincs_haraka_128f_simple;
+    case SSH_KEYTYPE_SPHINCS_HARAKA_192F_ROBUST:
+    case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST:
+        return OQS_SIG_alg_sphincs_haraka_192f_robust;
 ///// OQS_TEMPLATE_FRAGMENT_GET_OQS_ALG_NAME_END
     default:
         return NULL;
+    }
+}
+
+static enum ssh_keytypes_e pki_pq_key_type_from_hybrid_key_type(enum ssh_keytypes_e type)
+{
+    switch (type)
+    {
+///// OQS_TEMPLATE_FRAGMENT_PQ_KT_FROM_HYBRID_KT_START
+    case SSH_KEYTYPE_RSA3072_FALCON_512:
+        return SSH_KEYTYPE_FALCON_512;
+    case SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512:
+        return SSH_KEYTYPE_FALCON_512;
+    case SSH_KEYTYPE_ECDSA_NISTP521_FALCON_1024:
+        return SSH_KEYTYPE_FALCON_1024;
+    case SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3:
+        return SSH_KEYTYPE_DILITHIUM_3;
+    case SSH_KEYTYPE_RSA3072_DILITHIUM_2_AES:
+        return SSH_KEYTYPE_DILITHIUM_2_AES;
+    case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES:
+        return SSH_KEYTYPE_DILITHIUM_2_AES;
+    case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES:
+        return SSH_KEYTYPE_DILITHIUM_5_AES;
+    case SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL:
+        return SSH_KEYTYPE_PICNIC_L1_FULL;
+    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
+        return SSH_KEYTYPE_PICNIC_L1_FULL;
+    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
+        return SSH_KEYTYPE_PICNIC_L3_FS;
+    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE:
+        return SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE;
+    case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:
+        return SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE;
+    case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST:
+        return SSH_KEYTYPE_SPHINCS_HARAKA_192F_ROBUST;
+///// OQS_TEMPLATE_FRAGMENT_PQ_KT_FROM_HYBRID_KT_END
+    default:
+        /* Return already pure-PQ key types unchanged. */
+        return type;
     }
 }
 
@@ -2554,9 +2599,11 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
     }
 
     ktype = ssh_string_get_char(ktypestr);
-    if (strcmp("ssh-oqs", ktype) != 0) {
+    if (ssh_key_type_from_name(ktype) != pki_pq_key_type_from_hybrid_key_type(pubkey->type)) {
         SSH_LOG(SSH_LOG_TRACE,
-                "ktype was not ssh-oqs");
+                "ktype was %s; expected %s",
+                ktype,
+                ssh_key_type_to_char(pki_pq_key_type_from_hybrid_key_type(pubkey->type)));
         rc = SSH_ERROR;
         goto out;
     }
@@ -2653,7 +2700,7 @@ int pki_oqs_sign_data(const ssh_key privkey,
 
     ssh_buffer_set_secure(b);
 
-    rc = ssh_buffer_pack(b, "sS", "ssh-oqs", sig_str);
+    rc = ssh_buffer_pack(b, "sS", ssh_key_type_to_char(pki_pq_key_type_from_hybrid_key_type(privkey->type)), sig_str);
     if (rc < 0) {
         SSH_LOG(SSH_LOG_TRACE,
                 "Failed to ssh_buffer_pack: %d",

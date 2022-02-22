@@ -1049,91 +1049,7 @@ static void torture_auth_pubkey_types_oqs_wrapper(void **state, const char *algn
     SSH_KEY_FREE(privkey);
 }
 
-static void torture_auth_pubkey_types_oqs_nonblocking_wrapper(void **state, const char *algname)
-{
-    struct torture_state *s = *state;
-    ssh_session session = s->ssh.session;
-    char bob_ssh_key[1024];
-    char ssh_algname[128];
-    ssh_key privkey = NULL;
-    struct passwd *pwd;
-    int rc;
-    int out_len;
-
-    if (ssh_fips_mode()) {
-        skip();
-    }
-
-    pwd = getpwnam("bob");
-    assert_non_null(pwd);
-
-    out_len = snprintf(bob_ssh_key,
-                       sizeof(bob_ssh_key),
-                       "%s/.ssh/id_%s",
-                       pwd->pw_dir,
-                       algname);
-    assert_in_range(out_len, 0, sizeof(bob_ssh_key) - 1);
-
-    rc = ssh_options_set(session, SSH_OPTIONS_USER, TORTURE_SSH_USER_ALICE);
-    assert_ssh_return_code(session, rc);
-
-    rc = ssh_connect(session);
-    assert_ssh_return_code(session, rc);
-
-    ssh_set_blocking(session, 0);
-    do {
-      rc = ssh_userauth_none(session, NULL);
-    } while (rc == SSH_AUTH_AGAIN);
-
-    /* This request should return a SSH_REQUEST_DENIED error */
-    if (rc == SSH_ERROR) {
-        assert_int_equal(ssh_get_error_code(session), SSH_REQUEST_DENIED);
-    }
-
-    rc = ssh_userauth_list(session, NULL);
-    assert_true(rc & SSH_AUTH_METHOD_PUBLICKEY);
-
-    /* Import the OQS private key */
-    rc = ssh_pki_import_privkey_file(bob_ssh_key, NULL, NULL, NULL, &privkey);
-    assert_int_equal(rc, SSH_OK);
-
-    /* Enable only RSA keys -- authentication should fail */
-    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
-                         "ssh-rsa");
-    assert_ssh_return_code(session, rc);
-
-    do {
-        rc = ssh_userauth_publickey(session, NULL, privkey);
-    } while (rc == SSH_AUTH_AGAIN);
-    assert_int_equal(rc, SSH_AUTH_DENIED);
-
-    /* Verify we can use also OQS key to authenticate */
-    out_len = snprintf(ssh_algname, sizeof(ssh_algname), "ssh-%s", algname);
-    assert_in_range(out_len, 0, sizeof(ssh_algname) - 1);
-    
-    rc = ssh_options_set(session, SSH_OPTIONS_PUBLICKEY_ACCEPTED_TYPES,
-                         ssh_algname);
-    assert_ssh_return_code(session, rc);
-
-    do {
-        rc = ssh_userauth_publickey(session, NULL, privkey);
-    } while (rc == SSH_AUTH_AGAIN);
-    assert_int_equal(rc, SSH_AUTH_SUCCESS);
-}
-
 ///// OQS_TEMPLATE_FRAGMENT_OQS_FUNCS_START
-static void torture_auth_pubkey_types_dilithium2(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "dilithium2");
-}
-static void torture_auth_pubkey_types_rsa3072_dilithium2(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-dilithium2");
-}
-static void torture_auth_pubkey_types_p256_dilithium2(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-dilithium2");
-}
 static void torture_auth_pubkey_types_falcon512(void** state)
 {
     torture_auth_pubkey_types_oqs_wrapper(state, "falcon512");
@@ -1142,69 +1058,85 @@ static void torture_auth_pubkey_types_rsa3072_falcon512(void** state)
 {
     torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-falcon512");
 }
-static void torture_auth_pubkey_types_p256_falcon512(void** state)
+static void torture_auth_pubkey_types_ecdsa_nistp256_falcon512(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-falcon512");
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp256-falcon512");
+}
+static void torture_auth_pubkey_types_falcon1024(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "falcon1024");
+}
+static void torture_auth_pubkey_types_ecdsa_nistp521_falcon1024(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp521-falcon1024");
+}
+static void torture_auth_pubkey_types_dilithium3(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "dilithium3");
+}
+static void torture_auth_pubkey_types_ecdsa_nistp384_dilithium3(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp384-dilithium3");
+}
+static void torture_auth_pubkey_types_dilithium2aes(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "dilithium2aes");
+}
+static void torture_auth_pubkey_types_rsa3072_dilithium2aes(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-dilithium2aes");
+}
+static void torture_auth_pubkey_types_ecdsa_nistp256_dilithium2aes(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp256-dilithium2aes");
+}
+static void torture_auth_pubkey_types_dilithium5aes(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "dilithium5aes");
+}
+static void torture_auth_pubkey_types_ecdsa_nistp521_dilithium5aes(void** state)
+{
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp521-dilithium5aes");
 }
 static void torture_auth_pubkey_types_picnicl1full(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "picnicl1full");
+    torture_auth_pubkey_types_oqs_wrapper(state, "picnicL1full");
 }
 static void torture_auth_pubkey_types_rsa3072_picnicl1full(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-picnicl1full");
+    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-picnicL1full");
 }
-static void torture_auth_pubkey_types_p256_picnicl1full(void** state)
+static void torture_auth_pubkey_types_ecdsa_nistp256_picnicl1full(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-picnicl1full");
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp256-picnicL1full");
 }
-static void torture_auth_pubkey_types_picnic3l1(void** state)
+static void torture_auth_pubkey_types_picnicl3fs(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "picnic3l1");
+    torture_auth_pubkey_types_oqs_wrapper(state, "picnicL3FS");
 }
-static void torture_auth_pubkey_types_rsa3072_picnic3l1(void** state)
+static void torture_auth_pubkey_types_ecdsa_nistp384_picnicl3fs(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-picnic3l1");
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp384-picnicL3FS");
 }
-static void torture_auth_pubkey_types_p256_picnic3l1(void** state)
+static void torture_auth_pubkey_types_sphincsharaka128fsimple(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-picnic3l1");
+    torture_auth_pubkey_types_oqs_wrapper(state, "sphincsharaka128fsimple");
 }
-static void torture_auth_pubkey_types_sphincsharaka128frobust(void** state)
+static void torture_auth_pubkey_types_rsa3072_sphincsharaka128fsimple(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "sphincsharaka128frobust");
+    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-sphincsharaka128fsimple");
 }
-static void torture_auth_pubkey_types_rsa3072_sphincsharaka128frobust(void** state)
+static void torture_auth_pubkey_types_ecdsa_nistp256_sphincsharaka128fsimple(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-sphincsharaka128frobust");
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp256-sphincsharaka128fsimple");
 }
-static void torture_auth_pubkey_types_p256_sphincsharaka128frobust(void** state)
+static void torture_auth_pubkey_types_sphincsharaka192frobust(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-sphincsharaka128frobust");
+    torture_auth_pubkey_types_oqs_wrapper(state, "sphincsharaka192frobust");
 }
-static void torture_auth_pubkey_types_sphincssha256128frobust(void** state)
+static void torture_auth_pubkey_types_ecdsa_nistp384_sphincsharaka192frobust(void** state)
 {
-    torture_auth_pubkey_types_oqs_wrapper(state, "sphincssha256128frobust");
-}
-static void torture_auth_pubkey_types_rsa3072_sphincssha256128frobust(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-sphincssha256128frobust");
-}
-static void torture_auth_pubkey_types_p256_sphincssha256128frobust(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-sphincssha256128frobust");
-}
-static void torture_auth_pubkey_types_sphincsshake256128frobust(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "sphincsshake256128frobust");
-}
-static void torture_auth_pubkey_types_rsa3072_sphincsshake256128frobust(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-sphincsshake256128frobust");
-}
-static void torture_auth_pubkey_types_p256_sphincsshake256128frobust(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "p256-sphincsshake256128frobust");
+    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp384-sphincsharaka192frobust");
 }
 ///// OQS_TEMPLATE_FRAGMENT_OQS_FUNCS_END
 #endif /* WITH_POST_QUANTUM_CRYPTO */
@@ -1274,22 +1206,40 @@ int torture_run_tests(void) {
                                         session_teardown),
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_OQS_CASES_START
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_dilithium2,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_dilithium2,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_dilithium2,
-                                        session_setup,
-                                        session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_falcon512,
                                         session_setup,
                                         session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_falcon512,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_falcon512,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp256_falcon512,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_falcon1024,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp521_falcon1024,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_dilithium3,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp384_dilithium3,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_dilithium2aes,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_dilithium2aes,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp256_dilithium2aes,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_dilithium5aes,
+                                        session_setup,
+                                        session_teardown),
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp521_dilithium5aes,
                                         session_setup,
                                         session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_picnicl1full,
@@ -1298,43 +1248,28 @@ int torture_run_tests(void) {
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_picnicl1full,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_picnicl1full,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp256_picnicl1full,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_picnic3l1,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_picnicl3fs,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_picnic3l1,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp384_picnicl3fs,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_picnic3l1,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincsharaka128fsimple,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincsharaka128frobust,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_sphincsharaka128fsimple,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_sphincsharaka128frobust,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp256_sphincsharaka128fsimple,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_sphincsharaka128frobust,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincsharaka192frobust,
                                         session_setup,
                                         session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincssha256128frobust,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_sphincssha256128frobust,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_sphincssha256128frobust,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincsshake256128frobust,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_sphincsshake256128frobust,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_p256_sphincsshake256128frobust,
+        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp384_sphincsharaka192frobust,
                                         session_setup,
                                         session_teardown),
 ///// OQS_TEMPLATE_FRAGMENT_OQS_CASES_END

@@ -1,0 +1,8 @@
+
+{%- for kex in config['kexs'] %}
+    {%- for curve in kex['mix_with'] %}
+    case SSH_KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}:
+        return {{ curve['openssl_nid'] }};
+    {%- endfor %}
+{%- endfor %}
+
