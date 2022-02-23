@@ -18,11 +18,14 @@ WARNING: These algorithms and implementations are experimental. Standards for po
 
 ## Overview
 
-This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated. At this time, this library interoperates with the OQS-v8 branch at commit ID e9b0f6f8896039824f78a43623cd14b67f24e2ce "Use mpint representation for shared_secret when deriving keys in pure-PQ key exchange, and some other bug fixes; fixes #119 (#120)".
+This implementation is designed to interoperate with the OQS project's fork of OpenSSH v8, available at https://github.com/open-quantum-safe/openssh. As the protocol is not yet standardized and may change without any allowance for backwards-compatibility, future changes to OQS-OpenSSH may break interoperability until this library can be updated.
+
+The build instructions here always use the latest development versions of liboqs and OQS-OpenSSH, but it is possible changes in those dependencies may cause libssh's build to break, before we have a chance to update it. If that happens, the following commit IDs are known to work with this build, and can manually be snapped to by providing them to `git checkout` after cloning the repositories in the instructions below.
+
+* liboqs: commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1"
+* OQS-OpenSSH: commit ID e9b0f6f8896039824f78a43623cd14b67f24e2ce "Use mpint representation for shared_secret when deriving keys in pure-PQ key exchange, and some other bug fixes; fixes #119 (#120)".
 
 This implementation tracks libssh's `master` branch that contains the current development version. At this time, this library is based on libssh's commit ID 4975487c18090e24ff97208022a605a15351e773 "config: Include files with relative paths", which was committed on 2022-02-10.
-
-This implementation also relies on the algorithm implementations in the OQS's project liboqs in development. At this time, this library depends on the liboqs main branch at tag 0.7.1 (commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1". liboqs can also change without regard to backwards compatibility, and so this library or OQS-OpenSSH may fail to build with future versions until they are updated.
 
 This support can only be built if OpenSSL is used as the cryptographic library for libssh, due to liboqs's reliance on OpenSSL for some symmetric cryptographic primitives. libgcrypt and mbedTLS are not supported.
 
@@ -32,8 +35,6 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 
 ```
     git clone --branch main --single-branch --depth 1 https://github.com/open-quantum-safe/liboqs.git
-    cd liboqs
-    git checkout 0.7.1
 ```
 
 2. Install necessary dependencies. In particular, you will need CMake, Ninja, gcc, and libssl-dev to build. On Ubuntu:
@@ -50,7 +51,7 @@ If you want to build client as well as server tests for libssh (-DCLIENT_TESTING
  
 3. Choose an appropriate installation location for OQS's libraries and include files. Example choices are `/usr/local` or `/usr/local/oqs` for a system-wide installation, or `${HOME}/oqs` or `${HOME}/build/oqs` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OQS_ROOT_DIR}`. 
 
-4. Build and install liboqs.
+4. Build and install liboqs. Change directory into the repository for liboqs cloned above, and execute these steps:
 
 ```
   mkdir build && cd build
@@ -63,7 +64,7 @@ If you want to build client as well as server tests for libssh (-DCLIENT_TESTING
 
    Failing to do this step BEFORE running CMake in step 6 will cause tests to fail en masse, as it will not call the PQ-enabled OpenSSH client.
   
-6. Configure and build libssh with the post-quantum cryptography turned on. We follow the regular instructions for libssh (see `INSTALL`), but we add two new configuration directives for cmake: `WITH_POST_QUANTUM_CRYPTO` and `OQS_ROOT_DIR`. Set `WITH_POST_QUANTUM_CRYPTO` to `ON` to enable the algorithms, and set `OQS_ROOT_DIR` to be the value of `${OQS_ROOT_DIR}` you chose above. Without the `WITH_POST_QUANTUM_CRYPTO` setting, PQC is not included. For example, from your libssh repository root:
+6. Configure and build libssh with the post-quantum cryptography turned on. We follow the regular instructions for libssh (see `INSTALL`), but we add two new configuration directives for cmake: `WITH_POST_QUANTUM_CRYPTO` and `OQS_ROOT_DIR`. Set `WITH_POST_QUANTUM_CRYPTO` to `ON` to enable the algorithms, and set `OQS_ROOT_DIR` to be the value of `${OQS_ROOT_DIR}` you chose above. Without the `WITH_POST_QUANTUM_CRYPTO` setting, PQC is not included. Change directory back into the repository for libssh, and execute these steps:
 
 ```
   mkdir build && cd build
@@ -71,7 +72,9 @@ If you want to build client as well as server tests for libssh (-DCLIENT_TESTING
   make -j
 ```
 
-If you want to build the tests for libssh in client mode as well as server mode, add `-DCLIENT_TESTING=ON` to the `cmake` command line above. See Known Issues at the bottom of this document concerning the client tests.
+If you want to build the tests for libssh in client mode as well as server mode, add `-DCLIENT_TESTING=ON` to the `cmake` command line above. See Known Issues at the bottom of this document concerning the client tests. 
+
+The above steps will create the `build` directory underneath the libssh repository, but you can place it anywhere. If you place it elsewhere, replace the `..` argument at the end of the call to cmake with the full path to the libssh repository.
 
 ### Preserving client and server authentication keys for runs of the `pkd_hello` suite
 
@@ -90,8 +93,6 @@ These instructions assume you have completed the build above; in particular, tha
 
 ```
   git clone --branch OQS-v8 --single-branch --depth 1 https://github.com/open-quantum-safe/openssh.git
-  cd openssh
-  git checkout e9b0f6f8896039824f78a43623cd14b67f24e2ce
 ```
   
 2. Install necessary dependencies. In particular, beyond what libssh and liboqs require, OpenSSH requires autoconf, automake, libtool, and zlib1g-dev. On Ubuntu:

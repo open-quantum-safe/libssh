@@ -20,14 +20,14 @@ jobs:
       with:
         path: oqs-scripts/tmp/liboqs
         repository: open-quantum-safe/liboqs
-        ref: 0.7.1
+        ref: main
 
     - name: Clone OQS-OpenSSH
       uses: actions/checkout@v2
       with:
         path: oqs-scripts/tmp/openssh
         repository: open-quantum-safe/openssh
-        ref: e9b0f6f8896039824f78a43623cd14b67f24e2ce
+        ref: OQS-v8
 
     - name: Build liboqs
       run: ./oqs-scripts/build_liboqs.sh
