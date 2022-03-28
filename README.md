@@ -1,3 +1,5 @@
+[![CI](https://github.com/open-quantum-safe/libssh/actions/workflows/ci.yml/badge.svg)](https://github.com/open-quantum-safe/libssh/actions/workflows/ci.yml)
+
 OQS-libssh
 ==================================
 
