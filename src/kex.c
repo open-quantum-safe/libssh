@@ -208,18 +208,6 @@
     KEX_FRODOKEM_640_SHAKE_SHA256 "," \
     KEX_FRODOKEM_976_SHAKE_SHA384 "," \
     KEX_FRODOKEM_1344_SHAKE_SHA512 "," \
-    KEX_SIDH_P434_SHA256 "," \
-    KEX_SIDH_P434_COMPRESSED_SHA256 "," \
-    KEX_SIDH_P610_SHA256 "," \
-    KEX_SIDH_P610_COMPRESSED_SHA256 "," \
-    KEX_SIDH_P751_SHA256 "," \
-    KEX_SIDH_P751_COMPRESSED_SHA256 "," \
-    KEX_SIKE_P434_SHA256 "," \
-    KEX_SIKE_P434_COMPRESSED_SHA256 "," \
-    KEX_SIKE_P610_SHA256 "," \
-    KEX_SIKE_P610_COMPRESSED_SHA256 "," \
-    KEX_SIKE_P751_SHA256 "," \
-    KEX_SIKE_P751_COMPRESSED_SHA256 "," \
     KEX_SABER_LIGHTSABER_SHA256 "," \
     KEX_SABER_SABER_SHA384 "," \
     KEX_SABER_FIRESABER_SHA512 "," \
@@ -268,18 +256,6 @@
     KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256 "," \
     KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384 "," \
     KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512 "," \
-    KEX_ECDH_NISTP256_SIDH_P434_SHA256 "," \
-    KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256 "," \
-    KEX_ECDH_NISTP384_SIDH_P610_SHA256 "," \
-    KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256 "," \
-    KEX_ECDH_NISTP521_SIDH_P751_SHA256 "," \
-    KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256 "," \
-    KEX_ECDH_NISTP256_SIKE_P434_SHA256 "," \
-    KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256 "," \
-    KEX_ECDH_NISTP384_SIKE_P610_SHA256 "," \
-    KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256 "," \
-    KEX_ECDH_NISTP521_SIKE_P751_SHA256 "," \
-    KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256 "," \
     KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256 "," \
     KEX_ECDH_NISTP384_SABER_SABER_SHA384 "," \
     KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512 "," \
@@ -1018,30 +994,6 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_FRODOKEM_976_SHAKE_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_FRODOKEM_1344_SHAKE_SHA512) == 0){
         session->next_crypto->kex_type=SSH_KEX_FRODOKEM_1344_SHAKE_SHA512;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P434_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P434_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P434_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P434_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P610_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P610_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P610_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P610_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P751_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P751_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIDH_P751_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIDH_P751_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P434_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P434_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P610_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P610_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SIKE_P751_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_SIKE_P751_COMPRESSED_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_LIGHTSABER_SHA256) == 0){
         session->next_crypto->kex_type=SSH_KEX_SABER_LIGHTSABER_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_SABER_SABER_SHA384) == 0){
@@ -1132,30 +1084,6 @@ int ssh_kex_select_methods (ssh_session session)
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIDH_P434_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIDH_P434_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P610_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P610_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIDH_P751_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIDH_P751_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIKE_P434_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIKE_P434_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIKE_P751_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIKE_P751_SHA256;
-    } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256) == 0){
-        session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256) == 0){
         session->next_crypto->kex_type=SSH_KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256;
     } else if (strcmp(session->next_crypto->kex_methods[SSH_KEX], KEX_ECDH_NISTP384_SABER_SABER_SHA384) == 0){
@@ -1644,30 +1572,6 @@ int ssh_make_sessionid(ssh_session session)
     case SSH_KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256:
     case SSH_KEX_FRODOKEM_640_SHAKE_SHA256:
     case SSH_KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256:
-    case SSH_KEX_SIDH_P434_SHA256:
-    case SSH_KEX_ECDH_NISTP256_SIDH_P434_SHA256:
-    case SSH_KEX_SIDH_P434_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP256_SIDH_P434_COMPRESSED_SHA256:
-    case SSH_KEX_SIDH_P610_SHA256:
-    case SSH_KEX_ECDH_NISTP384_SIDH_P610_SHA256:
-    case SSH_KEX_SIDH_P610_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP384_SIDH_P610_COMPRESSED_SHA256:
-    case SSH_KEX_SIDH_P751_SHA256:
-    case SSH_KEX_ECDH_NISTP521_SIDH_P751_SHA256:
-    case SSH_KEX_SIDH_P751_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP521_SIDH_P751_COMPRESSED_SHA256:
-    case SSH_KEX_SIKE_P434_SHA256:
-    case SSH_KEX_ECDH_NISTP256_SIKE_P434_SHA256:
-    case SSH_KEX_SIKE_P434_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP256_SIKE_P434_COMPRESSED_SHA256:
-    case SSH_KEX_SIKE_P610_SHA256:
-    case SSH_KEX_ECDH_NISTP384_SIKE_P610_SHA256:
-    case SSH_KEX_SIKE_P610_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP384_SIKE_P610_COMPRESSED_SHA256:
-    case SSH_KEX_SIKE_P751_SHA256:
-    case SSH_KEX_ECDH_NISTP521_SIKE_P751_SHA256:
-    case SSH_KEX_SIKE_P751_COMPRESSED_SHA256:
-    case SSH_KEX_ECDH_NISTP521_SIKE_P751_COMPRESSED_SHA256:
     case SSH_KEX_SABER_LIGHTSABER_SHA256:
     case SSH_KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256:
     case SSH_KEX_KYBER_512_SHA256:
