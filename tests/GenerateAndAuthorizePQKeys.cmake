@@ -59,31 +59,6 @@
     file(COPY keys/id_ecdsa-nistp521-dilithium5aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(READ keys/id_ecdsa-nistp521-dilithium5aes.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize picnicL1full key pair
-    file(COPY keys/id_picnicL1full DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_picnicL1full.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_picnicL1full.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize rsa3072-picnicL1full key pair
-    file(COPY keys/id_rsa3072-picnicL1full DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_rsa3072-picnicL1full.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_rsa3072-picnicL1full.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize ecdsa-nistp256-picnicL1full key pair
-    file(COPY keys/id_ecdsa-nistp256-picnicL1full DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_ecdsa-nistp256-picnicL1full.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_ecdsa-nistp256-picnicL1full.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize picnicL3FS key pair
-    file(COPY keys/id_picnicL3FS DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_picnicL3FS.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_picnicL3FS.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize ecdsa-nistp384-picnicL3FS key pair
-    file(COPY keys/id_ecdsa-nistp384-picnicL3FS DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_ecdsa-nistp384-picnicL3FS.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_ecdsa-nistp384-picnicL3FS.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
     # copy and authorize sphincsharaka128fsimple key pair
     file(COPY keys/id_sphincsharaka128fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(COPY keys/id_sphincsharaka128fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)

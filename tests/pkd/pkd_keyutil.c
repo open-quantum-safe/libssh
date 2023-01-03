@@ -135,31 +135,6 @@ void setup_post_quantum_keys() {
                             LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
     }
     assert_int_equal(rc, 0);
-    if (access(LIBSSH_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t PICNICL1FULL -q -N \"\" -f "
-                            LIBSSH_PICNIC_L1_FULL_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_RSA3072_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNICL1FULL -q -N \"\" -f "
-                            LIBSSH_RSA3072_PICNIC_L1_FULL_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_PICNICL1FULL -q -N \"\" -f "
-                            LIBSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_PICNIC_L3_FS_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t PICNICL3FS -q -N \"\" -f "
-                            LIBSSH_PICNIC_L3_FS_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_PICNICL3FS -q -N \"\" -f "
-                            LIBSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
     if (access(LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY, F_OK) != 0) {
         rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA128FSIMPLE -q -N \"\" -f "
                             LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
@@ -224,11 +199,6 @@ void cleanup_post_quantum_keys() {
     cleanup_key(LIBSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
     cleanup_key(LIBSSH_DILITHIUM_5_AES_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
-    cleanup_key(LIBSSH_PICNIC_L1_FULL_TESTKEY);
-    cleanup_key(LIBSSH_RSA3072_PICNIC_L1_FULL_TESTKEY);
-    cleanup_key(LIBSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY);
-    cleanup_key(LIBSSH_PICNIC_L3_FS_TESTKEY);
-    cleanup_key(LIBSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY);
     cleanup_key(LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
     cleanup_key(LIBSSH_RSA3072_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
@@ -398,31 +368,6 @@ void setup_openssh_client_keys() {
                                 OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
         }
         assert_int_equal(rc, 0);
-        if (access(OPENSSH_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t PICNICL1FULL -q -N \"\" -f "
-                                OPENSSH_PICNIC_L1_FULL_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_RSA3072_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_PICNICL1FULL -q -N \"\" -f "
-                                OPENSSH_RSA3072_PICNIC_L1_FULL_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_PICNICL1FULL -q -N \"\" -f "
-                                OPENSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_PICNIC_L3_FS_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t PICNICL3FS -q -N \"\" -f "
-                                OPENSSH_PICNIC_L3_FS_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_PICNICL3FS -q -N \"\" -f "
-                                OPENSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
         if (access(OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY, F_OK) != 0) {
             rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA128FSIMPLE -q -N \"\" -f "
                                 OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
@@ -482,11 +427,6 @@ void cleanup_openssh_client_keys() {
         cleanup_key(OPENSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
         cleanup_key(OPENSSH_DILITHIUM_5_AES_TESTKEY);
         cleanup_key(OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
-        cleanup_key(OPENSSH_PICNIC_L1_FULL_TESTKEY);
-        cleanup_key(OPENSSH_RSA3072_PICNIC_L1_FULL_TESTKEY);
-        cleanup_key(OPENSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY);
-        cleanup_key(OPENSSH_PICNIC_L3_FS_TESTKEY);
-        cleanup_key(OPENSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY);
         cleanup_key(OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
         cleanup_key(OPENSSH_RSA3072_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
         cleanup_key(OPENSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);

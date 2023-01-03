@@ -1102,26 +1102,6 @@ static void torture_auth_pubkey_types_ecdsa_nistp521_dilithium5aes(void** state)
 {
     torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp521-dilithium5aes");
 }
-static void torture_auth_pubkey_types_picnicl1full(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "picnicL1full");
-}
-static void torture_auth_pubkey_types_rsa3072_picnicl1full(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "rsa3072-picnicL1full");
-}
-static void torture_auth_pubkey_types_ecdsa_nistp256_picnicl1full(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp256-picnicL1full");
-}
-static void torture_auth_pubkey_types_picnicl3fs(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "picnicL3FS");
-}
-static void torture_auth_pubkey_types_ecdsa_nistp384_picnicl3fs(void** state)
-{
-    torture_auth_pubkey_types_oqs_wrapper(state, "ecdsa-nistp384-picnicL3FS");
-}
 static void torture_auth_pubkey_types_sphincsharaka128fsimple(void** state)
 {
     torture_auth_pubkey_types_oqs_wrapper(state, "sphincsharaka128fsimple");
@@ -1244,21 +1224,6 @@ int torture_run_tests(void) {
                                         session_setup,
                                         session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp521_dilithium5aes,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_picnicl1full,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_rsa3072_picnicl1full,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp256_picnicl1full,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_picnicl3fs,
-                                        session_setup,
-                                        session_teardown),
-        cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_ecdsa_nistp384_picnicl3fs,
                                         session_setup,
                                         session_teardown),
         cmocka_unit_test_setup_teardown(torture_auth_pubkey_types_sphincsharaka128fsimple,

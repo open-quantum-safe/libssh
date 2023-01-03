@@ -31,11 +31,6 @@ enum pkd_hostkey_type_e {
     PKD_ECDSA_NISTP256_DILITHIUM_2_AES,
     PKD_DILITHIUM_5_AES,
     PKD_ECDSA_NISTP521_DILITHIUM_5_AES,
-    PKD_PICNIC_L1_FULL,
-    PKD_RSA3072_PICNIC_L1_FULL,
-    PKD_ECDSA_NISTP256_PICNIC_L1_FULL,
-    PKD_PICNIC_L3_FS,
-    PKD_ECDSA_NISTP384_PICNIC_L3_FS,
     PKD_SPHINCS_HARAKA_128F_SIMPLE,
     PKD_RSA3072_SPHINCS_HARAKA_128F_SIMPLE,
     PKD_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE,
@@ -51,7 +46,6 @@ enum pkd_hostkey_type_e {
 #define IS_RSA_HYBRID(alg) ( \
                              (alg) == PKD_RSA3072_FALCON_512 || \
                              (alg) == PKD_RSA3072_DILITHIUM_2_AES || \
-                             (alg) == PKD_RSA3072_PICNIC_L1_FULL || \
                              (alg) == PKD_RSA3072_SPHINCS_HARAKA_128F_SIMPLE)
 
 #define IS_ECDSA_HYBRID(alg) ( \
@@ -60,8 +54,6 @@ enum pkd_hostkey_type_e {
                                (alg) == PKD_ECDSA_NISTP384_DILITHIUM_3 || \
                                (alg) == PKD_ECDSA_NISTP256_DILITHIUM_2_AES || \
                                (alg) == PKD_ECDSA_NISTP521_DILITHIUM_5_AES || \
-                               (alg) == PKD_ECDSA_NISTP256_PICNIC_L1_FULL || \
-                               (alg) == PKD_ECDSA_NISTP384_PICNIC_L3_FS || \
                                (alg) == PKD_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE || \
                                (alg) == PKD_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST)
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_END
@@ -75,8 +67,6 @@ enum pkd_hostkey_type_e {
                                 (type) == PKD_DILITHIUM_3 || \
                                 (type) == PKD_DILITHIUM_2_AES || \
                                 (type) == PKD_DILITHIUM_5_AES || \
-                                (type) == PKD_PICNIC_L1_FULL || \
-                                (type) == PKD_PICNIC_L3_FS || \
                                 (type) == PKD_SPHINCS_HARAKA_128F_SIMPLE || \
                                 (type) == PKD_SPHINCS_HARAKA_192F_ROBUST || \
                                 IS_HYBRID(type))
