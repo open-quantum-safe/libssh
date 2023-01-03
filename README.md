@@ -24,8 +24,8 @@ This implementation is designed to interoperate with the OQS project's fork of O
 
 The build instructions here always use the latest development versions of liboqs and OQS-OpenSSH, but it is possible changes in those dependencies may cause libssh's build to break, before we have a chance to update it. If that happens, the following commit IDs are known to work with this build, and can manually be snapped to by providing them to `git checkout` after cloning the repositories in the instructions below.
 
-* liboqs: commit ID a39d08e00a852adc191112090ece924c874caaac "liboqs 0.7.1"
-* OQS-OpenSSH: commit ID e9b0f6f8896039824f78a43623cd14b67f24e2ce "Use mpint representation for shared_secret when deriving keys in pure-PQ key exchange, and some other bug fixes; fixes #119 (#120)".
+* liboqs: commit ID 2e42595804242d1e24e04f0f770a348c0c22313b "Add ntruprime (#1328)"
+* OQS-OpenSSH: commit ID 54d09519a75c3fedd7d47400f55d7642e05cbae8 "Removed NTRU. (#130)"
 
 This implementation tracks libssh's `master` branch that contains the current development version. At this time, this library is based on libssh's commit ID 4975487c18090e24ff97208022a605a15351e773 "config: Include files with relative paths", which was committed on 2022-02-10.
 

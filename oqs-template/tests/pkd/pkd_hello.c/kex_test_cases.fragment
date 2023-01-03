@@ -3,7 +3,8 @@
 {%- for kex in config['kexs'] %}
     f(client, rsa_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_rsa, teardown) \
     f(client, ecdsa_256_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_picnic_l1_full, teardown){%- if not loop.last %} \{% endif %}
+    f(client, falcon_512_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_falcon_512, teardown) \
+    f(client, dilithium_3_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_dilithium_3, teardown){%- if not loop.last %} \{% endif %}
 {%- endfor %}
 
 #define PKDTESTS_KEX_OQS_HYBRID(f, client, kexcmd) \
@@ -12,8 +13,10 @@
     {%- for curve in kex['mix_with'] %}
     f(client, rsa_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_nistp256_picnic_l1_full, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
+    f(client, falcon_512_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_{{ curve['name'] }}_{{ kex['name']|lower }}_{{ kex['hash'] }}, kexcmd(KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }}), setup_ecdsa_nistp384_dilithium_3, teardown){%- if not (outer_loop_last and loop.last) %} \{% endif %}
     {%- endfor %}
 {%- endfor %}
 
