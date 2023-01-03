@@ -351,10 +351,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-dilithium2aes";
     case SSH_KEYTYPE_DILITHIUM_5_AES:
       return "ssh-dilithium5aes";
-    case SSH_KEYTYPE_PICNIC_L1_FULL:
-      return "ssh-picnicL1full";
-    case SSH_KEYTYPE_PICNIC_L3_FS:
-      return "ssh-picnicL3FS";
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE:
       return "ssh-sphincsharaka128fsimple";
     case SSH_KEYTYPE_SPHINCS_HARAKA_192F_ROBUST:
@@ -375,12 +371,6 @@ const char *ssh_key_type_to_char(enum ssh_keytypes_e type) {
       return "ssh-ecdsa-nistp256-dilithium2aes";
     case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES:
       return "ssh-ecdsa-nistp521-dilithium5aes";
-    case SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL:
-      return "ssh-rsa3072-picnicL1full";
-    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
-      return "ssh-ecdsa-nistp256-picnicL1full";
-    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
-      return "ssh-ecdsa-nistp384-picnicL3FS";
     case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE:
       return "ssh-rsa3072-sphincsharaka128fsimple";
     case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:
@@ -444,12 +434,6 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     if (strcmp(name, "ssh-dilithium5aes") == 0) {
         return SSH_DIGEST_AUTO;
     }
-    if (strcmp(name, "ssh-picnicL1full") == 0) {
-        return SSH_DIGEST_AUTO;
-    }
-    if (strcmp(name, "ssh-picnicL3FS") == 0) {
-        return SSH_DIGEST_AUTO;
-    }
     if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
         return SSH_DIGEST_AUTO;
     }
@@ -478,15 +462,6 @@ enum ssh_digest_e ssh_key_hash_from_name(const char *name)
     }
     if (strcmp(name, "ssh-ecdsa-nistp521-dilithium5aes") == 0) {
         return SSH_DIGEST_SHA512;
-    }
-    if (strcmp(name, "ssh-rsa3072-picnicL1full") == 0) {
-        return SSH_DIGEST_SHA256;
-    }
-    if (strcmp(name, "ssh-ecdsa-nistp256-picnicL1full") == 0) {
-        return SSH_DIGEST_SHA256;
-    }
-    if (strcmp(name, "ssh-ecdsa-nistp384-picnicL3FS") == 0) {
-        return SSH_DIGEST_SHA384;
     }
     if (strcmp(name, "ssh-rsa3072-sphincsharaka128fsimple") == 0) {
         return SSH_DIGEST_SHA256;
@@ -611,12 +586,10 @@ enum ssh_digest_e ssh_key_type_to_hash(ssh_session session,
     CASE_KEY_RSA_HYBRID:
     case SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512:
     case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES:
-    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
     case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:
 
         return SSH_DIGEST_SHA256;
     case SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3:
-    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
     case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST:
 
         return SSH_DIGEST_SHA384;
@@ -764,12 +737,6 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
     if (strcmp(name, "ssh-dilithium5aes") == 0) {
         return SSH_KEYTYPE_DILITHIUM_5_AES;
     }
-    if (strcmp(name, "ssh-picnicL1full") == 0) {
-        return SSH_KEYTYPE_PICNIC_L1_FULL;
-    }
-    if (strcmp(name, "ssh-picnicL3FS") == 0) {
-        return SSH_KEYTYPE_PICNIC_L3_FS;
-    }
     if (strcmp(name, "ssh-sphincsharaka128fsimple") == 0) {
         return SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE;
     }
@@ -798,15 +765,6 @@ enum ssh_keytypes_e ssh_key_type_from_name(const char *name) {
     }
     if (strcmp(name, "ssh-ecdsa-nistp521-dilithium5aes") == 0) {
         return SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES;
-    }
-    if (strcmp(name, "ssh-rsa3072-picnicL1full") == 0) {
-        return SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL;
-    }
-    if (strcmp(name, "ssh-ecdsa-nistp256-picnicL1full") == 0) {
-        return SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL;
-    }
-    if (strcmp(name, "ssh-ecdsa-nistp384-picnicL3FS") == 0) {
-        return SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS;
     }
     if (strcmp(name, "ssh-rsa3072-sphincsharaka128fsimple") == 0) {
         return SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE;
@@ -2949,7 +2907,6 @@ int pki_key_check_hash_compatible(ssh_key key,
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA256_OK_START
     case SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512:
     case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES:
-    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
     case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA256_OK_END
 #endif
@@ -2962,7 +2919,6 @@ int pki_key_check_hash_compatible(ssh_key key,
 #ifdef WITH_POST_QUANTUM_CRYPTO
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA384_OK_START
     case SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3:
-    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
     case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST:
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SHA384_OK_END
 #endif

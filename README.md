@@ -131,9 +131,6 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 * ecdh-nistp256-frodokem-640-shake-sha256@openquantumsafe.org
 * ecdh-nistp384-frodokem-976-shake-sha384@openquantumsafe.org
 * ecdh-nistp521-frodokem-1344-shake-sha512@openquantumsafe.org
-* ecdh-nistp256-saber-lightsaber-sha256@openquantumsafe.org
-* ecdh-nistp384-saber-saber-sha384@openquantumsafe.org
-* ecdh-nistp521-saber-firesaber-sha512@openquantumsafe.org
 * ecdh-nistp256-kyber-512-sha256@openquantumsafe.org
 * ecdh-nistp384-kyber-768-sha384@openquantumsafe.org
 * ecdh-nistp521-kyber-1024-sha512@openquantumsafe.org
@@ -142,12 +139,6 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 * ecdh-nistp521-kyber-1024-90s-sha512@openquantumsafe.org
 * ecdh-nistp256-bike-l1-sha512@openquantumsafe.org
 * ecdh-nistp384-bike-l3-sha512@openquantumsafe.org
-* ecdh-nistp256-ntru-hps2048509-sha512@openquantumsafe.org
-* ecdh-nistp384-ntru-hps2048677-sha512@openquantumsafe.org
-* ecdh-nistp521-ntru-hps4096821-sha512@openquantumsafe.org
-* ecdh-nistp521-ntru-hps40961229-sha512@openquantumsafe.org
-* ecdh-nistp384-ntru-hrss701-sha512@openquantumsafe.org
-* ecdh-nistp521-ntru-hrss1373-sha512@openquantumsafe.org
 * ecdh-nistp256-classic-mceliece-348864-sha256@openquantumsafe.org
 * ecdh-nistp256-classic-mceliece-348864f-sha256@openquantumsafe.org
 * ecdh-nistp384-classic-mceliece-460896-sha512@openquantumsafe.org
@@ -161,14 +152,6 @@ The following key exchange algorithm strings are the hybrid algorithms we recomm
 * ecdh-nistp256-hqc-128-sha256@openquantumsafe.org
 * ecdh-nistp384-hqc-192-sha384@openquantumsafe.org
 * ecdh-nistp521-hqc-256-sha512@openquantumsafe.org
-* ecdh-nistp256-ntruprime-ntrulpr653-sha256@openquantumsafe.org
-* ecdh-nistp256-ntruprime-sntrup653-sha256@openquantumsafe.org
-* ecdh-nistp384-ntruprime-ntrulpr761-sha384@openquantumsafe.org
-* ecdh-nistp384-ntruprime-sntrup761-sha384@openquantumsafe.org
-* ecdh-nistp384-ntruprime-ntrulpr857-sha384@openquantumsafe.org
-* ecdh-nistp384-ntruprime-sntrup857-sha384@openquantumsafe.org
-* ecdh-nistp521-ntruprime-ntrulpr1277-sha512@openquantumsafe.org
-* ecdh-nistp521-ntruprime-sntrup1277-sha512@openquantumsafe.org
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_END -->
 
 The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
@@ -180,9 +163,6 @@ The following key exchange algorithm strings are pure-PQ algorithms. They should
 * frodokem-640-shake-sha256@openquantumsafe.org
 * frodokem-976-shake-sha384@openquantumsafe.org
 * frodokem-1344-shake-sha512@openquantumsafe.org
-* saber-lightsaber-sha256@openquantumsafe.org
-* saber-saber-sha384@openquantumsafe.org
-* saber-firesaber-sha512@openquantumsafe.org
 * kyber-512-sha256@openquantumsafe.org
 * kyber-768-sha384@openquantumsafe.org
 * kyber-1024-sha512@openquantumsafe.org
@@ -191,12 +171,6 @@ The following key exchange algorithm strings are pure-PQ algorithms. They should
 * kyber-1024-90s-sha512@openquantumsafe.org
 * bike-l1-sha512@openquantumsafe.org
 * bike-l3-sha512@openquantumsafe.org
-* ntru-hps2048509-sha512@openquantumsafe.org
-* ntru-hps2048677-sha512@openquantumsafe.org
-* ntru-hps4096821-sha512@openquantumsafe.org
-* ntru-hps40961229-sha512@openquantumsafe.org
-* ntru-hrss701-sha512@openquantumsafe.org
-* ntru-hrss1373-sha512@openquantumsafe.org
 * classic-mceliece-348864-sha256@openquantumsafe.org
 * classic-mceliece-348864f-sha256@openquantumsafe.org
 * classic-mceliece-460896-sha512@openquantumsafe.org
@@ -210,14 +184,6 @@ The following key exchange algorithm strings are pure-PQ algorithms. They should
 * hqc-128-sha256@openquantumsafe.org
 * hqc-192-sha384@openquantumsafe.org
 * hqc-256-sha512@openquantumsafe.org
-* ntruprime-ntrulpr653-sha256@openquantumsafe.org
-* ntruprime-sntrup653-sha256@openquantumsafe.org
-* ntruprime-ntrulpr761-sha384@openquantumsafe.org
-* ntruprime-sntrup761-sha384@openquantumsafe.org
-* ntruprime-ntrulpr857-sha384@openquantumsafe.org
-* ntruprime-sntrup857-sha384@openquantumsafe.org
-* ntruprime-ntrulpr1277-sha512@openquantumsafe.org
-* ntruprime-sntrup1277-sha512@openquantumsafe.org
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_PQ_KEXS_END -->
 
 ## Digital Signature Algorithms
@@ -238,24 +204,6 @@ The following digital signature algorithm strings are the hybrid algorithms we r
 * ssh-ecdsa-nistp256-dilithium2aes\*
 * ssh-ecdsa-nistp384-dilithium3aes
 * ssh-ecdsa-nistp521-dilithium5aes\*
-* ssh-rsa3072-picnicL1FS
-* ssh-ecdsa-nistp256-picnicL1FS
-* ssh-rsa3072-picnicL1UR
-* ssh-ecdsa-nistp256-picnicL1UR
-* ssh-rsa3072-picnicL1full\*
-* ssh-ecdsa-nistp256-picnicL1full\*
-* ssh-ecdsa-nistp384-picnicL3FS\*
-* ssh-ecdsa-nistp384-picnicL3UR
-* ssh-ecdsa-nistp384-picnicL3full
-* ssh-ecdsa-nistp521-picnicL5FS
-* ssh-ecdsa-nistp521-picnicL5UR
-* ssh-ecdsa-nistp521-picnicL5full
-* ssh-ecdsa-nistp384-rainbowIIIclassic
-* ssh-ecdsa-nistp384-rainbowIIIcircumzenithal
-* ssh-ecdsa-nistp384-rainbowIIIcompressed
-* ssh-ecdsa-nistp521-rainbowVclassic
-* ssh-ecdsa-nistp521-rainbowVcircumzenithal
-* ssh-ecdsa-nistp521-rainbowVcompressed
 * ssh-rsa3072-sphincsharaka128frobust
 * ssh-ecdsa-nistp256-sphincsharaka128frobust
 * ssh-rsa3072-sphincsharaka128fsimple\*
@@ -317,21 +265,6 @@ The following digital signature algorithm strings are pure-PQ algorithms. They s
 * ssh-dilithium2aes\*
 * ssh-dilithium3aes
 * ssh-dilithium5aes\*
-* ssh-picnicl1fs
-* ssh-picnicl1ur
-* ssh-picnicl1full\*
-* ssh-picnicl3fs\*
-* ssh-picnicl3ur
-* ssh-picnicl3full
-* ssh-picnicl5fs
-* ssh-picnicl5ur
-* ssh-picnicl5full
-* ssh-rainbowiiiclassic
-* ssh-rainbowiiicircumzenithal
-* ssh-rainbowiiicompressed
-* ssh-rainbowvclassic
-* ssh-rainbowvcircumzenithal
-* ssh-rainbowvcompressed
 * ssh-sphincsharaka128frobust
 * ssh-sphincsharaka128fsimple\*
 * ssh-sphincsharaka128srobust

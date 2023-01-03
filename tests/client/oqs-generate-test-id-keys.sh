@@ -16,11 +16,6 @@ for value in \
        ecdsa-nistp256-dilithium2aes \
        dilithium5aes \
        ecdsa-nistp521-dilithium5aes \
-       picnicL1full \
-       rsa3072-picnicL1full \
-       ecdsa-nistp256-picnicL1full \
-       picnicL3FS \
-       ecdsa-nistp384-picnicL3FS \
        sphincsharaka128fsimple \
        rsa3072-sphincsharaka128fsimple \
        ecdsa-nistp256-sphincsharaka128fsimple \
