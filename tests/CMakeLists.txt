@@ -155,11 +155,6 @@ if (SSH_EXECUTABLE)
             ssh-ecdsa-nistp256-dilithium2aes
             ssh-dilithium5aes
             ssh-ecdsa-nistp521-dilithium5aes
-            ssh-picnicL1full
-            ssh-rsa3072-picnicL1full
-            ssh-ecdsa-nistp256-picnicL1full
-            ssh-picnicL3FS
-            ssh-ecdsa-nistp384-picnicL3FS
             ssh-sphincsharaka128fsimple
             ssh-rsa3072-sphincsharaka128fsimple
             ssh-ecdsa-nistp256-sphincsharaka128fsimple

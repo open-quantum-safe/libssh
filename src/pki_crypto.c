@@ -2487,14 +2487,6 @@ const char* pki_get_oqs_alg_name(enum ssh_keytypes_e keytype)
     case SSH_KEYTYPE_DILITHIUM_5_AES:
     case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES:
         return OQS_SIG_alg_dilithium_5_aes;
-    case SSH_KEYTYPE_PICNIC_L1_FULL:
-    case SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL:
-        return OQS_SIG_alg_picnic_L1_full;
-    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
-        return OQS_SIG_alg_picnic_L1_full;
-    case SSH_KEYTYPE_PICNIC_L3_FS:
-    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
-        return OQS_SIG_alg_picnic_L3_FS;
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE:
     case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE:
         return OQS_SIG_alg_sphincs_haraka_128f_simple;
@@ -2528,12 +2520,6 @@ static enum ssh_keytypes_e pki_pq_key_type_from_hybrid_key_type(enum ssh_keytype
         return SSH_KEYTYPE_DILITHIUM_2_AES;
     case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES:
         return SSH_KEYTYPE_DILITHIUM_5_AES;
-    case SSH_KEYTYPE_RSA3072_PICNIC_L1_FULL:
-        return SSH_KEYTYPE_PICNIC_L1_FULL;
-    case SSH_KEYTYPE_ECDSA_NISTP256_PICNIC_L1_FULL:
-        return SSH_KEYTYPE_PICNIC_L1_FULL;
-    case SSH_KEYTYPE_ECDSA_NISTP384_PICNIC_L3_FS:
-        return SSH_KEYTYPE_PICNIC_L3_FS;
     case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE:
         return SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE;
     case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE:

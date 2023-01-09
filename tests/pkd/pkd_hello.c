@@ -286,36 +286,6 @@ static int torture_pkd_setup_ecdsa_nistp521_dilithium_5_aes(void** state) {
 
     return 0;
 }
-static int torture_pkd_setup_picnic_l1_full(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_PICNIC_L1_FULL, LIBSSH_PICNIC_L1_FULL_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_rsa3072_picnic_l1_full(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_RSA3072_PICNIC_L1_FULL, LIBSSH_RSA3072_PICNIC_L1_FULL_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_ecdsa_nistp256_picnic_l1_full(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP256_PICNIC_L1_FULL, LIBSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_picnic_l3_fs(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_PICNIC_L3_FS, LIBSSH_PICNIC_L3_FS_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_ecdsa_nistp384_picnic_l3_fs(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP384_PICNIC_L3_FS, LIBSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY);
-
-    return 0;
-}
 static int torture_pkd_setup_sphincs_haraka_128f_simple(void** state) {
     setup_post_quantum_keys();
     *state = (void *) torture_pkd_setup(PKD_SPHINCS_HARAKA_128F_SIMPLE, LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
@@ -537,314 +507,276 @@ static int torture_pkd_setup_ecdsa_nistp384_sphincs_haraka_192f_robust(void** st
 #define PKDTESTS_KEX_OQS_PUREPQ(f, client, kexcmd) \
     f(client, rsa_frodokem_640_aes_sha256, kexcmd(KEX_FRODOKEM_640_AES_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_640_aes_sha256, kexcmd(KEX_FRODOKEM_640_AES_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_640_aes_sha256, kexcmd(KEX_FRODOKEM_640_AES_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_640_aes_sha256, kexcmd(KEX_FRODOKEM_640_AES_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_640_aes_sha256, kexcmd(KEX_FRODOKEM_640_AES_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_frodokem_976_aes_sha384, kexcmd(KEX_FRODOKEM_976_AES_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_976_aes_sha384, kexcmd(KEX_FRODOKEM_976_AES_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_976_aes_sha384, kexcmd(KEX_FRODOKEM_976_AES_SHA384), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_976_aes_sha384, kexcmd(KEX_FRODOKEM_976_AES_SHA384), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_976_aes_sha384, kexcmd(KEX_FRODOKEM_976_AES_SHA384), setup_dilithium_3, teardown) \
     f(client, rsa_frodokem_1344_aes_sha512, kexcmd(KEX_FRODOKEM_1344_AES_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_1344_aes_sha512, kexcmd(KEX_FRODOKEM_1344_AES_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_1344_aes_sha512, kexcmd(KEX_FRODOKEM_1344_AES_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_1344_aes_sha512, kexcmd(KEX_FRODOKEM_1344_AES_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_1344_aes_sha512, kexcmd(KEX_FRODOKEM_1344_AES_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_frodokem_640_shake_sha256, kexcmd(KEX_FRODOKEM_640_SHAKE_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_640_shake_sha256, kexcmd(KEX_FRODOKEM_640_SHAKE_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_640_shake_sha256, kexcmd(KEX_FRODOKEM_640_SHAKE_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_640_shake_sha256, kexcmd(KEX_FRODOKEM_640_SHAKE_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_640_shake_sha256, kexcmd(KEX_FRODOKEM_640_SHAKE_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_frodokem_976_shake_sha384, kexcmd(KEX_FRODOKEM_976_SHAKE_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_976_shake_sha384, kexcmd(KEX_FRODOKEM_976_SHAKE_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_976_shake_sha384, kexcmd(KEX_FRODOKEM_976_SHAKE_SHA384), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_976_shake_sha384, kexcmd(KEX_FRODOKEM_976_SHAKE_SHA384), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_976_shake_sha384, kexcmd(KEX_FRODOKEM_976_SHAKE_SHA384), setup_dilithium_3, teardown) \
     f(client, rsa_frodokem_1344_shake_sha512, kexcmd(KEX_FRODOKEM_1344_SHAKE_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_frodokem_1344_shake_sha512, kexcmd(KEX_FRODOKEM_1344_SHAKE_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_frodokem_1344_shake_sha512, kexcmd(KEX_FRODOKEM_1344_SHAKE_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_saber_lightsaber_sha256, kexcmd(KEX_SABER_LIGHTSABER_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_saber_lightsaber_sha256, kexcmd(KEX_SABER_LIGHTSABER_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_saber_lightsaber_sha256, kexcmd(KEX_SABER_LIGHTSABER_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, rsa_saber_saber_sha384, kexcmd(KEX_SABER_SABER_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_saber_saber_sha384, kexcmd(KEX_SABER_SABER_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_saber_saber_sha384, kexcmd(KEX_SABER_SABER_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, rsa_saber_firesaber_sha512, kexcmd(KEX_SABER_FIRESABER_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_saber_firesaber_sha512, kexcmd(KEX_SABER_FIRESABER_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_saber_firesaber_sha512, kexcmd(KEX_SABER_FIRESABER_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_frodokem_1344_shake_sha512, kexcmd(KEX_FRODOKEM_1344_SHAKE_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_frodokem_1344_shake_sha512, kexcmd(KEX_FRODOKEM_1344_SHAKE_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_512_sha256, kexcmd(KEX_KYBER_512_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_512_sha256, kexcmd(KEX_KYBER_512_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_512_sha256, kexcmd(KEX_KYBER_512_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_512_sha256, kexcmd(KEX_KYBER_512_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_512_sha256, kexcmd(KEX_KYBER_512_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_768_sha384, kexcmd(KEX_KYBER_768_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_768_sha384, kexcmd(KEX_KYBER_768_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_768_sha384, kexcmd(KEX_KYBER_768_SHA384), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_768_sha384, kexcmd(KEX_KYBER_768_SHA384), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_768_sha384, kexcmd(KEX_KYBER_768_SHA384), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_1024_sha512, kexcmd(KEX_KYBER_1024_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_1024_sha512, kexcmd(KEX_KYBER_1024_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_1024_sha512, kexcmd(KEX_KYBER_1024_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_1024_sha512, kexcmd(KEX_KYBER_1024_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_1024_sha512, kexcmd(KEX_KYBER_1024_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_512_90s_sha256, kexcmd(KEX_KYBER_512_90S_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_512_90s_sha256, kexcmd(KEX_KYBER_512_90S_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_512_90s_sha256, kexcmd(KEX_KYBER_512_90S_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_512_90s_sha256, kexcmd(KEX_KYBER_512_90S_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_512_90s_sha256, kexcmd(KEX_KYBER_512_90S_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_768_90s_sha384, kexcmd(KEX_KYBER_768_90S_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_768_90s_sha384, kexcmd(KEX_KYBER_768_90S_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_768_90s_sha384, kexcmd(KEX_KYBER_768_90S_SHA384), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_768_90s_sha384, kexcmd(KEX_KYBER_768_90S_SHA384), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_768_90s_sha384, kexcmd(KEX_KYBER_768_90S_SHA384), setup_dilithium_3, teardown) \
     f(client, rsa_kyber_1024_90s_sha512, kexcmd(KEX_KYBER_1024_90S_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_kyber_1024_90s_sha512, kexcmd(KEX_KYBER_1024_90S_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_kyber_1024_90s_sha512, kexcmd(KEX_KYBER_1024_90S_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_kyber_1024_90s_sha512, kexcmd(KEX_KYBER_1024_90S_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_kyber_1024_90s_sha512, kexcmd(KEX_KYBER_1024_90S_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_bike_l1_sha512, kexcmd(KEX_BIKE_L1_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_bike_l1_sha512, kexcmd(KEX_BIKE_L1_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_bike_l1_sha512, kexcmd(KEX_BIKE_L1_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_bike_l1_sha512, kexcmd(KEX_BIKE_L1_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_bike_l1_sha512, kexcmd(KEX_BIKE_L1_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_bike_l3_sha512, kexcmd(KEX_BIKE_L3_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_bike_l3_sha512, kexcmd(KEX_BIKE_L3_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_bike_l3_sha512, kexcmd(KEX_BIKE_L3_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hps2048509_sha512, kexcmd(KEX_NTRU_HPS2048509_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hps2048509_sha512, kexcmd(KEX_NTRU_HPS2048509_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hps2048509_sha512, kexcmd(KEX_NTRU_HPS2048509_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hps2048677_sha512, kexcmd(KEX_NTRU_HPS2048677_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hps2048677_sha512, kexcmd(KEX_NTRU_HPS2048677_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hps2048677_sha512, kexcmd(KEX_NTRU_HPS2048677_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hps4096821_sha512, kexcmd(KEX_NTRU_HPS4096821_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hps4096821_sha512, kexcmd(KEX_NTRU_HPS4096821_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hps4096821_sha512, kexcmd(KEX_NTRU_HPS4096821_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hps40961229_sha512, kexcmd(KEX_NTRU_HPS40961229_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hps40961229_sha512, kexcmd(KEX_NTRU_HPS40961229_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hps40961229_sha512, kexcmd(KEX_NTRU_HPS40961229_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hrss701_sha512, kexcmd(KEX_NTRU_HRSS701_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hrss701_sha512, kexcmd(KEX_NTRU_HRSS701_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hrss701_sha512, kexcmd(KEX_NTRU_HRSS701_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntru_hrss1373_sha512, kexcmd(KEX_NTRU_HRSS1373_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntru_hrss1373_sha512, kexcmd(KEX_NTRU_HRSS1373_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntru_hrss1373_sha512, kexcmd(KEX_NTRU_HRSS1373_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_bike_l3_sha512, kexcmd(KEX_BIKE_L3_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_bike_l3_sha512, kexcmd(KEX_BIKE_L3_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_348864_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_348864_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_348864_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_348864_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_348864_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_348864f_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_348864f_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_348864f_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_348864f_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_348864f_sha256, kexcmd(KEX_CLASSIC_MCELIECE_348864F_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_460896_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_460896_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_460896_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_460896_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_460896_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_460896f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_460896f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_460896f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_460896f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_460896f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_460896F_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_6688128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_6688128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_6688128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_6688128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_6688128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_6688128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_6688128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_6688128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_6688128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_6688128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6688128F_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_6960119_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_6960119_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_6960119_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_6960119_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_6960119_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_6960119f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_6960119f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_6960119f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_6960119f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_6960119f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_6960119F_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_8192128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_8192128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_8192128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_8192128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_8192128_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_classic_mceliece_8192128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_classic_mceliece_8192128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_classic_mceliece_8192128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA512), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_classic_mceliece_8192128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_classic_mceliece_8192128f_sha512, kexcmd(KEX_CLASSIC_MCELIECE_8192128F_SHA512), setup_dilithium_3, teardown) \
     f(client, rsa_hqc_128_sha256, kexcmd(KEX_HQC_128_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_hqc_128_sha256, kexcmd(KEX_HQC_128_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_hqc_128_sha256, kexcmd(KEX_HQC_128_SHA256), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_hqc_128_sha256, kexcmd(KEX_HQC_128_SHA256), setup_falcon_512, teardown) \
+    f(client, dilithium_3_hqc_128_sha256, kexcmd(KEX_HQC_128_SHA256), setup_dilithium_3, teardown) \
     f(client, rsa_hqc_192_sha384, kexcmd(KEX_HQC_192_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_hqc_192_sha384, kexcmd(KEX_HQC_192_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_hqc_192_sha384, kexcmd(KEX_HQC_192_SHA384), setup_picnic_l1_full, teardown) \
+    f(client, falcon_512_hqc_192_sha384, kexcmd(KEX_HQC_192_SHA384), setup_falcon_512, teardown) \
+    f(client, dilithium_3_hqc_192_sha384, kexcmd(KEX_HQC_192_SHA384), setup_dilithium_3, teardown) \
     f(client, rsa_hqc_256_sha512, kexcmd(KEX_HQC_256_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_hqc_256_sha512, kexcmd(KEX_HQC_256_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_hqc_256_sha512, kexcmd(KEX_HQC_256_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_ntrulpr653_sha256, kexcmd(KEX_NTRUPRIME_NTRULPR653_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_ntrulpr653_sha256, kexcmd(KEX_NTRUPRIME_NTRULPR653_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_ntrulpr653_sha256, kexcmd(KEX_NTRUPRIME_NTRULPR653_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_sntrup653_sha256, kexcmd(KEX_NTRUPRIME_SNTRUP653_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_sntrup653_sha256, kexcmd(KEX_NTRUPRIME_SNTRUP653_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_sntrup653_sha256, kexcmd(KEX_NTRUPRIME_SNTRUP653_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_ntrulpr761_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR761_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_ntrulpr761_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR761_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_ntrulpr761_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR761_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_sntrup761_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP761_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_sntrup761_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP761_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_sntrup761_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP761_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_ntrulpr857_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR857_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_ntrulpr857_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR857_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_ntrulpr857_sha384, kexcmd(KEX_NTRUPRIME_NTRULPR857_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_sntrup857_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP857_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_sntrup857_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP857_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_sntrup857_sha384, kexcmd(KEX_NTRUPRIME_SNTRUP857_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_NTRUPRIME_NTRULPR1277_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_NTRUPRIME_NTRULPR1277_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_NTRUPRIME_NTRULPR1277_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, rsa_ntruprime_sntrup1277_sha512, kexcmd(KEX_NTRUPRIME_SNTRUP1277_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ntruprime_sntrup1277_sha512, kexcmd(KEX_NTRUPRIME_SNTRUP1277_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ntruprime_sntrup1277_sha512, kexcmd(KEX_NTRUPRIME_SNTRUP1277_SHA512), setup_picnic_l1_full, teardown)
+    f(client, falcon_512_hqc_256_sha512, kexcmd(KEX_HQC_256_SHA512), setup_falcon_512, teardown) \
+    f(client, dilithium_3_hqc_256_sha512, kexcmd(KEX_HQC_256_SHA512), setup_dilithium_3, teardown)
 
 #define PKDTESTS_KEX_OQS_HYBRID(f, client, kexcmd) \
     f(client, rsa_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_frodokem_640_aes_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_AES_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_frodokem_976_aes_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_AES_SHA384), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_frodokem_1344_aes_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_AES_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_frodokem_640_shake_sha256, kexcmd(KEX_ECDH_NISTP256_FRODOKEM_640_SHAKE_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_frodokem_976_shake_sha384, kexcmd(KEX_ECDH_NISTP384_FRODOKEM_976_SHAKE_SHA384), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp256_saber_lightsaber_sha256, kexcmd(KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp256_saber_lightsaber_sha256, kexcmd(KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_saber_lightsaber_sha256, kexcmd(KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_saber_lightsaber_sha256, kexcmd(KEX_ECDH_NISTP256_SABER_LIGHTSABER_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_saber_saber_sha384, kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_saber_saber_sha384, kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_saber_saber_sha384, kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_saber_saber_sha384, kexcmd(KEX_ECDH_NISTP384_SABER_SABER_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_saber_firesaber_sha512, kexcmd(KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_saber_firesaber_sha512, kexcmd(KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_saber_firesaber_sha512, kexcmd(KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_saber_firesaber_sha512, kexcmd(KEX_ECDH_NISTP521_SABER_FIRESABER_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_frodokem_1344_shake_sha512, kexcmd(KEX_ECDH_NISTP521_FRODOKEM_1344_SHAKE_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_kyber_512_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_kyber_768_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_SHA384), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_kyber_1024_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_kyber_512_90s_sha256, kexcmd(KEX_ECDH_NISTP256_KYBER_512_90S_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_kyber_768_90s_sha384, kexcmd(KEX_ECDH_NISTP384_KYBER_768_90S_SHA384), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_kyber_1024_90s_sha512, kexcmd(KEX_ECDH_NISTP521_KYBER_1024_90S_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_bike_l1_sha512, kexcmd(KEX_ECDH_NISTP256_BIKE_L1_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp256_ntru_hps2048509_sha512, kexcmd(KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp256_ntru_hps2048509_sha512, kexcmd(KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_ntru_hps2048509_sha512, kexcmd(KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_ntru_hps2048509_sha512, kexcmd(KEX_ECDH_NISTP256_NTRU_HPS2048509_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntru_hps2048677_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntru_hps2048677_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntru_hps2048677_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntru_hps2048677_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HPS2048677_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_ntru_hps4096821_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_ntru_hps4096821_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_ntru_hps4096821_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_ntru_hps4096821_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS4096821_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_ntru_hps40961229_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_ntru_hps40961229_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_ntru_hps40961229_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_ntru_hps40961229_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HPS40961229_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntru_hrss701_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntru_hrss701_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntru_hrss701_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntru_hrss701_sha512, kexcmd(KEX_ECDH_NISTP384_NTRU_HRSS701_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_ntru_hrss1373_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_ntru_hrss1373_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_ntru_hrss1373_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_ntru_hrss1373_sha512, kexcmd(KEX_ECDH_NISTP521_NTRU_HRSS1373_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_bike_l3_sha512, kexcmd(KEX_ECDH_NISTP384_BIKE_L3_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_classic_mceliece_348864_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_classic_mceliece_348864f_sha256, kexcmd(KEX_ECDH_NISTP256_CLASSIC_MCELIECE_348864F_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_classic_mceliece_460896_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_classic_mceliece_460896f_sha512, kexcmd(KEX_ECDH_NISTP384_CLASSIC_MCELIECE_460896F_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_6688128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_6688128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6688128F_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_6960119_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_6960119f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_6960119F_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_8192128_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_classic_mceliece_8192128f_sha512, kexcmd(KEX_ECDH_NISTP521_CLASSIC_MCELIECE_8192128F_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp256_hqc_128_sha256, kexcmd(KEX_ECDH_NISTP256_HQC_128_SHA256), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
+    f(client, falcon_512_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp384_hqc_192_sha384, kexcmd(KEX_ECDH_NISTP384_HQC_192_SHA384), setup_ecdsa_nistp384_dilithium_3, teardown) \
     f(client, rsa_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_rsa, teardown) \
     f(client, ecdsa_256_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp256_ntruprime_ntrulpr653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp256_ntruprime_ntrulpr653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_ntruprime_ntrulpr653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_ntruprime_ntrulpr653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_NTRULPR653_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp256_ntruprime_sntrup653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp256_ntruprime_sntrup653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp256_ntruprime_sntrup653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp256_ntruprime_sntrup653_sha256, kexcmd(KEX_ECDH_NISTP256_NTRUPRIME_SNTRUP653_SHA256), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntruprime_ntrulpr761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntruprime_ntrulpr761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntruprime_ntrulpr761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntruprime_ntrulpr761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR761_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntruprime_sntrup761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntruprime_sntrup761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntruprime_sntrup761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntruprime_sntrup761_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP761_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntruprime_ntrulpr857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntruprime_ntrulpr857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntruprime_ntrulpr857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntruprime_ntrulpr857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_NTRULPR857_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp384_ntruprime_sntrup857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp384_ntruprime_sntrup857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp384_ntruprime_sntrup857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp384_ntruprime_sntrup857_sha384, kexcmd(KEX_ECDH_NISTP384_NTRUPRIME_SNTRUP857_SHA384), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_ntruprime_ntrulpr1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_NTRULPR1277_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, rsa_ecdh_nistp521_ntruprime_sntrup1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512), setup_rsa, teardown) \
-    f(client, ecdsa_256_ecdh_nistp521_ntruprime_sntrup1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512), setup_ecdsa_256, teardown) \
-    f(client, picnic_l1_full_ecdh_nistp521_ntruprime_sntrup1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512), setup_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_nistp521_ntruprime_sntrup1277_sha512, kexcmd(KEX_ECDH_NISTP521_NTRUPRIME_SNTRUP1277_SHA512), setup_ecdsa_nistp256_picnic_l1_full, teardown)
+    f(client, falcon_512_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_falcon_512, teardown) \
+    f(client, ecdsa_nistp256_falcon_512_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_ecdsa_nistp256_falcon_512, teardown) \
+    f(client, dilithium_3_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_dilithium_3, teardown) \
+    f(client, ecdsa_nistp384_dilithium_3_ecdh_nistp521_hqc_256_sha512, kexcmd(KEX_ECDH_NISTP521_HQC_256_SHA512), setup_ecdsa_nistp384_dilithium_3, teardown)
 
 /* Classical key exchange is used for testing the digital signature algorithms. */
 #define PKDTESTS_OQSKEYAUTH(f, client, kexcmd) \
@@ -860,11 +792,6 @@ static int torture_pkd_setup_ecdsa_nistp384_sphincs_haraka_192f_robust(void** st
     f(client, ecdsa_nistp256_dilithium_2_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_dilithium_2_aes, teardown) \
     f(client, dilithium_5_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_5_aes, teardown) \
     f(client, ecdsa_nistp521_dilithium_5_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp521_dilithium_5_aes, teardown) \
-    f(client, picnic_l1_full_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_picnic_l1_full, teardown) \
-    f(client, rsa3072_picnic_l1_full_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_picnic_l1_full, teardown) \
-    f(client, ecdsa_nistp256_picnic_l1_full_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_picnic_l1_full, teardown) \
-    f(client, picnic_l3_fs_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_picnic_l3_fs, teardown) \
-    f(client, ecdsa_nistp384_picnic_l3_fs_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp384_picnic_l3_fs, teardown) \
     f(client, sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_haraka_128f_simple, teardown) \
     f(client, rsa3072_sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_sphincs_haraka_128f_simple, teardown) \
     f(client, ecdsa_nistp256_sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_sphincs_haraka_128f_simple, teardown) \
@@ -1233,24 +1160,6 @@ PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
 #define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
-#define CLIENT_ID_FILE OPENSSH_PICNIC_L1_FULL_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_picnic_l1_full, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-
-#define CLIENT_ID_FILE OPENSSH_RSA3072_PICNIC_L1_FULL_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_picnic_l1_full, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-
-#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP256_PICNIC_L1_FULL_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp256_picnic_l1_full, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-#define CLIENT_ID_FILE OPENSSH_PICNIC_L3_FS_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_picnic_l3_fs, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-
-#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP384_PICNIC_L3_FS_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp384_picnic_l3_fs, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
 #define CLIENT_ID_FILE OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
@@ -1362,11 +1271,6 @@ struct {
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_dilithium_2_aes, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_picnic_l1_full, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_picnic_l1_full, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_picnic_l1_full, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_picnic_l3_fs, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp384_picnic_l3_fs, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
@@ -1482,11 +1386,6 @@ static int pkd_run_tests(void) {
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_dilithium_2_aes, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_picnic_l1_full, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_picnic_l1_full, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_picnic_l1_full, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_picnic_l3_fs, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp384_picnic_l3_fs, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
