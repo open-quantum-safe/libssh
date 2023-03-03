@@ -24,6 +24,21 @@
     file(COPY keys/id_ecdsa-nistp521-falcon1024.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(READ keys/id_ecdsa-nistp521-falcon1024.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize dilithium2 key pair
+    file(COPY keys/id_dilithium2 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_dilithium2.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_dilithium2.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize rsa3072-dilithium2 key pair
+    file(COPY keys/id_rsa3072-dilithium2 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_rsa3072-dilithium2.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_rsa3072-dilithium2.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize ecdsa-nistp256-dilithium2 key pair
+    file(COPY keys/id_ecdsa-nistp256-dilithium2 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_ecdsa-nistp256-dilithium2.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_ecdsa-nistp256-dilithium2.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
     # copy and authorize dilithium3 key pair
     file(COPY keys/id_dilithium3 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(COPY keys/id_dilithium3.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
@@ -34,30 +49,15 @@
     file(COPY keys/id_ecdsa-nistp384-dilithium3.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(READ keys/id_ecdsa-nistp384-dilithium3.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize dilithium2aes key pair
-    file(COPY keys/id_dilithium2aes DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_dilithium2aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_dilithium2aes.pub CONTENTS)
+    # copy and authorize dilithium5 key pair
+    file(COPY keys/id_dilithium5 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_dilithium5.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_dilithium5.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize rsa3072-dilithium2aes key pair
-    file(COPY keys/id_rsa3072-dilithium2aes DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_rsa3072-dilithium2aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_rsa3072-dilithium2aes.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize ecdsa-nistp256-dilithium2aes key pair
-    file(COPY keys/id_ecdsa-nistp256-dilithium2aes DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_ecdsa-nistp256-dilithium2aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_ecdsa-nistp256-dilithium2aes.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize dilithium5aes key pair
-    file(COPY keys/id_dilithium5aes DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_dilithium5aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_dilithium5aes.pub CONTENTS)
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize ecdsa-nistp521-dilithium5aes key pair
-    file(COPY keys/id_ecdsa-nistp521-dilithium5aes DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_ecdsa-nistp521-dilithium5aes.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_ecdsa-nistp521-dilithium5aes.pub CONTENTS)
+    # copy and authorize ecdsa-nistp521-dilithium5 key pair
+    file(COPY keys/id_ecdsa-nistp521-dilithium5 DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_ecdsa-nistp521-dilithium5.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_ecdsa-nistp521-dilithium5.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
     # copy and authorize sphincsharaka128fsimple key pair
     file(COPY keys/id_sphincsharaka128fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
@@ -74,14 +74,39 @@
     file(COPY keys/id_ecdsa-nistp256-sphincsharaka128fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
     file(READ keys/id_ecdsa-nistp256-sphincsharaka128fsimple.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize sphincsharaka192frobust key pair
-    file(COPY keys/id_sphincsharaka192frobust DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_sphincsharaka192frobust.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_sphincsharaka192frobust.pub CONTENTS)
+    # copy and authorize sphincssha256128fsimple key pair
+    file(COPY keys/id_sphincssha256128fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_sphincssha256128fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_sphincssha256128fsimple.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
-    # copy and authorize ecdsa-nistp384-sphincsharaka192frobust key pair
-    file(COPY keys/id_ecdsa-nistp384-sphincsharaka192frobust DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(COPY keys/id_ecdsa-nistp384-sphincsharaka192frobust.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
-    file(READ keys/id_ecdsa-nistp384-sphincsharaka192frobust.pub CONTENTS)
+    # copy and authorize rsa3072-sphincssha256128fsimple key pair
+    file(COPY keys/id_rsa3072-sphincssha256128fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_rsa3072-sphincssha256128fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_rsa3072-sphincssha256128fsimple.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize ecdsa-nistp256-sphincssha256128fsimple key pair
+    file(COPY keys/id_ecdsa-nistp256-sphincssha256128fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_ecdsa-nistp256-sphincssha256128fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_ecdsa-nistp256-sphincssha256128fsimple.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize sphincssha256192srobust key pair
+    file(COPY keys/id_sphincssha256192srobust DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_sphincssha256192srobust.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_sphincssha256192srobust.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize ecdsa-nistp384-sphincssha256192srobust key pair
+    file(COPY keys/id_ecdsa-nistp384-sphincssha256192srobust DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_ecdsa-nistp384-sphincssha256192srobust.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_ecdsa-nistp384-sphincssha256192srobust.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize sphincssha256256fsimple key pair
+    file(COPY keys/id_sphincssha256256fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_sphincssha256256fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_sphincssha256256fsimple.pub CONTENTS)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
+    # copy and authorize ecdsa-nistp521-sphincssha256256fsimple key pair
+    file(COPY keys/id_ecdsa-nistp521-sphincssha256256fsimple DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(COPY keys/id_ecdsa-nistp521-sphincssha256256fsimple.pub DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/home/bob/.ssh/ FILE_PERMISSIONS OWNER_READ OWNER_WRITE)
+    file(READ keys/id_ecdsa-nistp521-sphincssha256256fsimple.pub CONTENTS)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/home/alice/.ssh/authorized_keys "${CONTENTS}")
 ##### OQS_TEMPLATE_FRAGMENT_COPY_AUTHORIZE_KT_END

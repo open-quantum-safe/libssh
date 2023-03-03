@@ -244,6 +244,24 @@ static int torture_pkd_setup_ecdsa_nistp521_falcon_1024(void** state) {
 
     return 0;
 }
+static int torture_pkd_setup_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_DILITHIUM_2, LIBSSH_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_rsa3072_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_DILITHIUM_2, LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_ecdsa_nistp256_dilithium_2(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP256_DILITHIUM_2, LIBSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY);
+
+    return 0;
+}
 static int torture_pkd_setup_dilithium_3(void** state) {
     setup_post_quantum_keys();
     *state = (void *) torture_pkd_setup(PKD_DILITHIUM_3, LIBSSH_DILITHIUM_3_TESTKEY);
@@ -256,33 +274,15 @@ static int torture_pkd_setup_ecdsa_nistp384_dilithium_3(void** state) {
 
     return 0;
 }
-static int torture_pkd_setup_dilithium_2_aes(void** state) {
+static int torture_pkd_setup_dilithium_5(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_DILITHIUM_2_AES, LIBSSH_DILITHIUM_2_AES_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_DILITHIUM_5, LIBSSH_DILITHIUM_5_TESTKEY);
 
     return 0;
 }
-static int torture_pkd_setup_rsa3072_dilithium_2_aes(void** state) {
+static int torture_pkd_setup_ecdsa_nistp521_dilithium_5(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_RSA3072_DILITHIUM_2_AES, LIBSSH_RSA3072_DILITHIUM_2_AES_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_ecdsa_nistp256_dilithium_2_aes(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP256_DILITHIUM_2_AES, LIBSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_dilithium_5_aes(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_DILITHIUM_5_AES, LIBSSH_DILITHIUM_5_AES_TESTKEY);
-
-    return 0;
-}
-static int torture_pkd_setup_ecdsa_nistp521_dilithium_5_aes(void** state) {
-    setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP521_DILITHIUM_5_AES, LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP521_DILITHIUM_5, LIBSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY);
 
     return 0;
 }
@@ -304,15 +304,45 @@ static int torture_pkd_setup_ecdsa_nistp256_sphincs_haraka_128f_simple(void** st
 
     return 0;
 }
-static int torture_pkd_setup_sphincs_haraka_192f_robust(void** state) {
+static int torture_pkd_setup_sphincs_sha256_128f_simple(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_SPHINCS_HARAKA_192F_ROBUST, LIBSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_SHA256_128F_SIMPLE, LIBSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
 
     return 0;
 }
-static int torture_pkd_setup_ecdsa_nistp384_sphincs_haraka_192f_robust(void** state) {
+static int torture_pkd_setup_rsa3072_sphincs_sha256_128f_simple(void** state) {
     setup_post_quantum_keys();
-    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST, LIBSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+    *state = (void *) torture_pkd_setup(PKD_RSA3072_SPHINCS_SHA256_128F_SIMPLE, LIBSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_ecdsa_nistp256_sphincs_sha256_128f_simple(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE, LIBSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_sphincs_sha256_192s_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_SHA256_192S_ROBUST, LIBSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_ecdsa_nistp384_sphincs_sha256_192s_robust(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST, LIBSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_sphincs_sha256_256f_simple(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_SPHINCS_SHA256_256F_SIMPLE, LIBSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
+
+    return 0;
+}
+static int torture_pkd_setup_ecdsa_nistp521_sphincs_sha256_256f_simple(void** state) {
+    setup_post_quantum_keys();
+    *state = (void *) torture_pkd_setup(PKD_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE, LIBSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
 
     return 0;
 }
@@ -785,18 +815,23 @@ static int torture_pkd_setup_ecdsa_nistp384_sphincs_haraka_192f_robust(void** st
     f(client, ecdsa_nistp256_falcon_512_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_falcon_512, teardown) \
     f(client, falcon_1024_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_falcon_1024, teardown) \
     f(client, ecdsa_nistp521_falcon_1024_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp521_falcon_1024, teardown) \
+    f(client, dilithium_2_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_2, teardown) \
+    f(client, rsa3072_dilithium_2_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_dilithium_2, teardown) \
+    f(client, ecdsa_nistp256_dilithium_2_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_dilithium_2, teardown) \
     f(client, dilithium_3_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_3, teardown) \
     f(client, ecdsa_nistp384_dilithium_3_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp384_dilithium_3, teardown) \
-    f(client, dilithium_2_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_2_aes, teardown) \
-    f(client, rsa3072_dilithium_2_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_dilithium_2_aes, teardown) \
-    f(client, ecdsa_nistp256_dilithium_2_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_dilithium_2_aes, teardown) \
-    f(client, dilithium_5_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_5_aes, teardown) \
-    f(client, ecdsa_nistp521_dilithium_5_aes_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp521_dilithium_5_aes, teardown) \
+    f(client, dilithium_5_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_dilithium_5, teardown) \
+    f(client, ecdsa_nistp521_dilithium_5_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp521_dilithium_5, teardown) \
     f(client, sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_haraka_128f_simple, teardown) \
     f(client, rsa3072_sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_sphincs_haraka_128f_simple, teardown) \
     f(client, ecdsa_nistp256_sphincs_haraka_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_sphincs_haraka_128f_simple, teardown) \
-    f(client, sphincs_haraka_192f_robust_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_haraka_192f_robust, teardown) \
-    f(client, ecdsa_nistp384_sphincs_haraka_192f_robust_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp384_sphincs_haraka_192f_robust, teardown)
+    f(client, sphincs_sha256_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_sha256_128f_simple, teardown) \
+    f(client, rsa3072_sphincs_sha256_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_rsa3072_sphincs_sha256_128f_simple, teardown) \
+    f(client, ecdsa_nistp256_sphincs_sha256_128f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp256_sphincs_sha256_128f_simple, teardown) \
+    f(client, sphincs_sha256_192s_robust_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_sha256_192s_robust, teardown) \
+    f(client, ecdsa_nistp384_sphincs_sha256_192s_robust_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp384_sphincs_sha256_192s_robust, teardown) \
+    f(client, sphincs_sha256_256f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_sphincs_sha256_256f_simple, teardown) \
+    f(client, ecdsa_nistp521_sphincs_sha256_256f_simple_ecdh_sha2_nistp256, kexcmd("ecdh-sha2-nistp256"), setup_ecdsa_nistp521_sphincs_sha256_256f_simple, teardown)
 ///// OQS_TEMPLATE_FRAGMENT_KEX_TEST_CASES_END
 #endif
 
@@ -1135,6 +1170,17 @@ PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_falcon_1024, OPENSSH_KEX_CMD)
 #define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP521_FALCON_1024_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp521_falcon_1024, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
+#define CLIENT_ID_FILE OPENSSH_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_RSA3072_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp256_dilithium_2, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
 #define CLIENT_ID_FILE OPENSSH_DILITHIUM_3_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_3, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
@@ -1142,23 +1188,12 @@ PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_3, OPENSSH_KEX_CMD)
 #define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP384_DILITHIUM_3_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp384_dilithium_3, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
-#define CLIENT_ID_FILE OPENSSH_DILITHIUM_2_AES_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_2_aes, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_DILITHIUM_5_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_5, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 
-#define CLIENT_ID_FILE OPENSSH_RSA3072_DILITHIUM_2_AES_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_dilithium_2_aes, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-
-#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp256_dilithium_2_aes, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-#define CLIENT_ID_FILE OPENSSH_DILITHIUM_5_AES_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
-#undef CLIENT_ID_FILE
-
-#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp521_dilithium_5, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 #define CLIENT_ID_FILE OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
@@ -1171,12 +1206,30 @@ PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_sphincs_haraka_128f_simple, OP
 #define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY
 PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp256_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
-#define CLIENT_ID_FILE OPENSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 
-#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY
-PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp384_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
+#define CLIENT_ID_FILE OPENSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_rsa3072_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp256_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp384_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+#define CLIENT_ID_FILE OPENSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
+#undef CLIENT_ID_FILE
+
+#define CLIENT_ID_FILE OPENSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY
+PKDTESTS_OQSKEYAUTH(emit_keytest, openssh_ecdsa_nistp521_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
 #undef CLIENT_ID_FILE
 ///// OQS_TEMPLATE_FRAGMENT_EMIT_KEYTESTS_END
 #endif
@@ -1264,18 +1317,23 @@ struct {
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_falcon_512, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_falcon_1024, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp521_falcon_1024, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_2, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_dilithium_2, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_3, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp384_dilithium_3, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_2_aes, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_dilithium_2_aes, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_dilithium_2_aes, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_dilithium_5, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp521_dilithium_5, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
     PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
-    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp384_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_rsa3072_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp256_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp384_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
+    PKDTESTS_OQSKEYAUTH(emit_testmap, openssh_ecdsa_nistp521_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
 ///// OQS_TEMPLATE_FRAGMENT_EMIT_TESTMAP_END
 #endif
 
@@ -1379,18 +1437,23 @@ static int pkd_run_tests(void) {
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_falcon_512, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_falcon_1024, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp521_falcon_1024, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_2, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_dilithium_2, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_dilithium_2, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_3, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp384_dilithium_3, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_2_aes, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_dilithium_2_aes, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_dilithium_2_aes, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_5_aes, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp521_dilithium_5_aes, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_dilithium_5, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp521_dilithium_5, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
         PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_sphincs_haraka_128f_simple, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
-        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp384_sphincs_haraka_192f_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_rsa3072_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp256_sphincs_sha256_128f_simple, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp384_sphincs_sha256_192s_robust, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
+        PKDTESTS_OQSKEYAUTH(emit_unit_test_comma, openssh_ecdsa_nistp521_sphincs_sha256_256f_simple, OPENSSH_KEX_CMD)
 ///// OQS_TEMPLATE_FRAGMENT_EMIT_UNIT_TESTS_END
     };
 #endif

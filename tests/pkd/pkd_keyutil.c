@@ -100,6 +100,21 @@ void setup_post_quantum_keys() {
                             LIBSSH_ECDSA_NISTP521_FALCON_1024_TESTKEY);
     }
     assert_int_equal(rc, 0);
+    if (access(LIBSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_RSA3072_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_DILITHIUM2 -q -N \"\" -f "
+                            LIBSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
     if (access(LIBSSH_DILITHIUM_3_TESTKEY, F_OK) != 0) {
         rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM3 -q -N \"\" -f "
                             LIBSSH_DILITHIUM_3_TESTKEY);
@@ -110,29 +125,14 @@ void setup_post_quantum_keys() {
                             LIBSSH_ECDSA_NISTP384_DILITHIUM_3_TESTKEY);
     }
     assert_int_equal(rc, 0);
-    if (access(LIBSSH_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2AES -q -N \"\" -f "
-                            LIBSSH_DILITHIUM_2_AES_TESTKEY);
+    if (access(LIBSSH_DILITHIUM_5_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM5 -q -N \"\" -f "
+                            LIBSSH_DILITHIUM_5_TESTKEY);
     }
     assert_int_equal(rc, 0);
-    if (access(LIBSSH_RSA3072_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2AES -q -N \"\" -f "
-                            LIBSSH_RSA3072_DILITHIUM_2_AES_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_DILITHIUM2AES -q -N \"\" -f "
-                            LIBSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_DILITHIUM_5_AES_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM5AES -q -N \"\" -f "
-                            LIBSSH_DILITHIUM_5_AES_TESTKEY);
-    }
-    assert_int_equal(rc, 0);
-    if (access(LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_DILITHIUM5AES -q -N \"\" -f "
-                            LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
+    if (access(LIBSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_DILITHIUM5 -q -N \"\" -f "
+                            LIBSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY);
     }
     assert_int_equal(rc, 0);
     if (access(LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY, F_OK) != 0) {
@@ -150,14 +150,39 @@ void setup_post_quantum_keys() {
                             LIBSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
     }
     assert_int_equal(rc, 0);
-    if (access(LIBSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA192FROBUST -q -N \"\" -f "
-                            LIBSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+    if (access(LIBSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                            LIBSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
     }
     assert_int_equal(rc, 0);
-    if (access(LIBSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY, F_OK) != 0) {
-        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_SPHINCSHARAKA192FROBUST -q -N \"\" -f "
-                            LIBSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+    if (access(LIBSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                            LIBSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                            LIBSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256192SROBUST -q -N \"\" -f "
+                            LIBSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_SPHINCSSHA256192SROBUST -q -N \"\" -f "
+                            LIBSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256256FSIMPLE -q -N \"\" -f "
+                            LIBSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
+    }
+    assert_int_equal(rc, 0);
+    if (access(LIBSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY, F_OK) != 0) {
+        rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_SPHINCSSHA256256FSIMPLE -q -N \"\" -f "
+                            LIBSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
     }
     assert_int_equal(rc, 0);
 ///// OQS_TEMPLATE_FRAGMENT_SETUP_PQ_KEYS_END
@@ -192,18 +217,23 @@ void cleanup_post_quantum_keys() {
     cleanup_key(LIBSSH_ECDSA_NISTP256_FALCON_512_TESTKEY);
     cleanup_key(LIBSSH_FALCON_1024_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_NISTP521_FALCON_1024_TESTKEY);
+    cleanup_key(LIBSSH_DILITHIUM_2_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_DILITHIUM_2_TESTKEY);
+    cleanup_key(LIBSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY);
     cleanup_key(LIBSSH_DILITHIUM_3_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_NISTP384_DILITHIUM_3_TESTKEY);
-    cleanup_key(LIBSSH_DILITHIUM_2_AES_TESTKEY);
-    cleanup_key(LIBSSH_RSA3072_DILITHIUM_2_AES_TESTKEY);
-    cleanup_key(LIBSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
-    cleanup_key(LIBSSH_DILITHIUM_5_AES_TESTKEY);
-    cleanup_key(LIBSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
+    cleanup_key(LIBSSH_DILITHIUM_5_TESTKEY);
+    cleanup_key(LIBSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY);
     cleanup_key(LIBSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
     cleanup_key(LIBSSH_RSA3072_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
     cleanup_key(LIBSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
-    cleanup_key(LIBSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
-    cleanup_key(LIBSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+    cleanup_key(LIBSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+    cleanup_key(LIBSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+    cleanup_key(LIBSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+    cleanup_key(LIBSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
+    cleanup_key(LIBSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
 ///// OQS_TEMPLATE_FRAGMENT_CLEANUP_PQ_KEYS_END
 }
 #endif
@@ -333,6 +363,21 @@ void setup_openssh_client_keys() {
                                 OPENSSH_ECDSA_NISTP521_FALCON_1024_TESTKEY);
         }
         assert_int_equal(rc, 0);
+        if (access(OPENSSH_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_RSA3072_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_RSA3072_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_DILITHIUM2 -q -N \"\" -f "
+                                OPENSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
         if (access(OPENSSH_DILITHIUM_3_TESTKEY, F_OK) != 0) {
             rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM3 -q -N \"\" -f "
                                 OPENSSH_DILITHIUM_3_TESTKEY);
@@ -343,29 +388,14 @@ void setup_openssh_client_keys() {
                                 OPENSSH_ECDSA_NISTP384_DILITHIUM_3_TESTKEY);
         }
         assert_int_equal(rc, 0);
-        if (access(OPENSSH_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM2AES -q -N \"\" -f "
-                                OPENSSH_DILITHIUM_2_AES_TESTKEY);
+        if (access(OPENSSH_DILITHIUM_5_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM5 -q -N \"\" -f "
+                                OPENSSH_DILITHIUM_5_TESTKEY);
         }
         assert_int_equal(rc, 0);
-        if (access(OPENSSH_RSA3072_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_DILITHIUM2AES -q -N \"\" -f "
-                                OPENSSH_RSA3072_DILITHIUM_2_AES_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_DILITHIUM2AES -q -N \"\" -f "
-                                OPENSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_DILITHIUM_5_AES_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t DILITHIUM5AES -q -N \"\" -f "
-                                OPENSSH_DILITHIUM_5_AES_TESTKEY);
-        }
-        assert_int_equal(rc, 0);
-        if (access(OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_DILITHIUM5AES -q -N \"\" -f "
-                                OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
+        if (access(OPENSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_DILITHIUM5 -q -N \"\" -f "
+                                OPENSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY);
         }
         assert_int_equal(rc, 0);
         if (access(OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY, F_OK) != 0) {
@@ -383,14 +413,39 @@ void setup_openssh_client_keys() {
                                 OPENSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
         }
         assert_int_equal(rc, 0);
-        if (access(OPENSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSHARAKA192FROBUST -q -N \"\" -f "
-                                OPENSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+        if (access(OPENSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                                OPENSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
         }
         assert_int_equal(rc, 0);
-        if (access(OPENSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY, F_OK) != 0) {
-            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_SPHINCSHARAKA192FROBUST -q -N \"\" -f "
-                                OPENSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+        if (access(OPENSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t RSA3072_SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                                OPENSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP256_SPHINCSSHA256128FSIMPLE -q -N \"\" -f "
+                                OPENSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256192SROBUST -q -N \"\" -f "
+                                OPENSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP384_SPHINCSSHA256192SROBUST -q -N \"\" -f "
+                                OPENSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t SPHINCSSHA256256FSIMPLE -q -N \"\" -f "
+                                OPENSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
+        }
+        assert_int_equal(rc, 0);
+        if (access(OPENSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY, F_OK) != 0) {
+            rc = system_checked(OPENSSH_KEYGEN " -t ECDSA_NISTP521_SPHINCSSHA256256FSIMPLE -q -N \"\" -f "
+                                OPENSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
         }
         assert_int_equal(rc, 0);
 ///// OQS_TEMPLATE_FRAGMENT_SETUP_CLIENT_PQ_KEYS_END
@@ -420,18 +475,23 @@ void cleanup_openssh_client_keys() {
         cleanup_key(OPENSSH_ECDSA_NISTP256_FALCON_512_TESTKEY);
         cleanup_key(OPENSSH_FALCON_1024_TESTKEY);
         cleanup_key(OPENSSH_ECDSA_NISTP521_FALCON_1024_TESTKEY);
+        cleanup_key(OPENSSH_DILITHIUM_2_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_DILITHIUM_2_TESTKEY);
+        cleanup_key(OPENSSH_ECDSA_NISTP256_DILITHIUM_2_TESTKEY);
         cleanup_key(OPENSSH_DILITHIUM_3_TESTKEY);
         cleanup_key(OPENSSH_ECDSA_NISTP384_DILITHIUM_3_TESTKEY);
-        cleanup_key(OPENSSH_DILITHIUM_2_AES_TESTKEY);
-        cleanup_key(OPENSSH_RSA3072_DILITHIUM_2_AES_TESTKEY);
-        cleanup_key(OPENSSH_ECDSA_NISTP256_DILITHIUM_2_AES_TESTKEY);
-        cleanup_key(OPENSSH_DILITHIUM_5_AES_TESTKEY);
-        cleanup_key(OPENSSH_ECDSA_NISTP521_DILITHIUM_5_AES_TESTKEY);
+        cleanup_key(OPENSSH_DILITHIUM_5_TESTKEY);
+        cleanup_key(OPENSSH_ECDSA_NISTP521_DILITHIUM_5_TESTKEY);
         cleanup_key(OPENSSH_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
         cleanup_key(OPENSSH_RSA3072_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
         cleanup_key(OPENSSH_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE_TESTKEY);
-        cleanup_key(OPENSSH_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
-        cleanup_key(OPENSSH_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+        cleanup_key(OPENSSH_RSA3072_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+        cleanup_key(OPENSSH_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE_TESTKEY);
+        cleanup_key(OPENSSH_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST_TESTKEY);
+        cleanup_key(OPENSSH_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
+        cleanup_key(OPENSSH_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE_TESTKEY);
 ///// OQS_TEMPLATE_FRAGMENT_CLEANUP_CLIENT_PQ_KEYS_END
     }
 #endif

@@ -127,24 +127,29 @@
 #define OQS_PUREPQ_HOSTKEYS \
                             "ssh-falcon512," \
                             "ssh-falcon1024," \
+                            "ssh-dilithium2," \
                             "ssh-dilithium3," \
-                            "ssh-dilithium2aes," \
-                            "ssh-dilithium5aes," \
+                            "ssh-dilithium5," \
                             "ssh-sphincsharaka128fsimple," \
-                            "ssh-sphincsharaka192frobust,"
+                            "ssh-sphincssha256128fsimple," \
+                            "ssh-sphincssha256192srobust," \
+                            "ssh-sphincssha256256fsimple,"
 ///// OQS_TEMPLATE_FRAGMENT_ADD_PQ_HOSTKEY_STRING_END
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_START
 #define OQS_HYBRID_HOSTKEYS \
                            "ssh-rsa3072-falcon512," \
                            "ssh-ecdsa-nistp256-falcon512," \
                            "ssh-ecdsa-nistp521-falcon1024," \
+                           "ssh-rsa3072-dilithium2," \
+                           "ssh-ecdsa-nistp256-dilithium2," \
                            "ssh-ecdsa-nistp384-dilithium3," \
-                           "ssh-rsa3072-dilithium2aes," \
-                           "ssh-ecdsa-nistp256-dilithium2aes," \
-                           "ssh-ecdsa-nistp521-dilithium5aes," \
+                           "ssh-ecdsa-nistp521-dilithium5," \
                            "ssh-rsa3072-sphincsharaka128fsimple," \
                            "ssh-ecdsa-nistp256-sphincsharaka128fsimple," \
-                           "ssh-ecdsa-nistp384-sphincsharaka192frobust,"
+                           "ssh-rsa3072-sphincssha256128fsimple," \
+                           "ssh-ecdsa-nistp256-sphincssha256128fsimple," \
+                           "ssh-ecdsa-nistp384-sphincssha256192srobust," \
+                           "ssh-ecdsa-nistp521-sphincssha256256fsimple,"
 ///// OQS_TEMPLATE_FRAGMENT_ADD_HYBRID_HOSTKEY_STRING_END
 #define OQS_HOSTKEYS        OQS_PUREPQ_HOSTKEYS OQS_HYBRID_HOSTKEYS
 

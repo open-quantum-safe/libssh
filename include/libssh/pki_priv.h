@@ -186,22 +186,26 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
 
 #define IS_RSA_HYBRID_ALG_NAME(alg) ( \
                                       strcmp(alg, "ssh-rsa3072-falcon512") == 0 || \
-                                      strcmp(alg, "ssh-rsa3072-dilithium2aes") == 0 || \
-                                      strcmp(alg, "ssh-rsa3072-sphincsharaka128fsimple") == 0)
+                                      strcmp(alg, "ssh-rsa3072-dilithium2") == 0 || \
+                                      strcmp(alg, "ssh-rsa3072-sphincsharaka128fsimple") == 0 || \
+                                      strcmp(alg, "ssh-rsa3072-sphincssha256128fsimple") == 0)
 
 #define IS_RSA_HYBRID(alg) ( \
                              (alg) == SSH_KEYTYPE_RSA3072_FALCON_512 || \
-                             (alg) == SSH_KEYTYPE_RSA3072_DILITHIUM_2_AES || \
-                             (alg) == SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE)
+                             (alg) == SSH_KEYTYPE_RSA3072_DILITHIUM_2 || \
+                             (alg) == SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE || \
+                             (alg) == SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_SIMPLE)
 
 #define IS_ECDSA_HYBRID(alg) ( \
                                (alg) == SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512 || \
                                (alg) == SSH_KEYTYPE_ECDSA_NISTP521_FALCON_1024 || \
+                               (alg) == SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2 || \
                                (alg) == SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3 || \
-                               (alg) == SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES || \
-                               (alg) == SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES || \
+                               (alg) == SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5 || \
                                (alg) == SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE || \
-                               (alg) == SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST)
+                               (alg) == SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE || \
+                               (alg) == SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST || \
+                               (alg) == SSH_KEYTYPE_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE)
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_MACROS_END
 #define IS_HYBRID(alg) (IS_RSA_HYBRID(alg) || IS_ECDSA_HYBRID(alg))
 
@@ -209,11 +213,13 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
 #define IS_OQS_KEY_TYPE(type) ( \
                                 (type) == SSH_KEYTYPE_FALCON_512 || \
                                 (type) == SSH_KEYTYPE_FALCON_1024 || \
+                                (type) == SSH_KEYTYPE_DILITHIUM_2 || \
                                 (type) == SSH_KEYTYPE_DILITHIUM_3 || \
-                                (type) == SSH_KEYTYPE_DILITHIUM_2_AES || \
-                                (type) == SSH_KEYTYPE_DILITHIUM_5_AES || \
+                                (type) == SSH_KEYTYPE_DILITHIUM_5 || \
                                 (type) == SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE || \
-                                (type) == SSH_KEYTYPE_SPHINCS_HARAKA_192F_ROBUST || \
+                                (type) == SSH_KEYTYPE_SPHINCS_SHA256_128F_SIMPLE || \
+                                (type) == SSH_KEYTYPE_SPHINCS_SHA256_192S_ROBUST || \
+                                (type) == SSH_KEYTYPE_SPHINCS_SHA256_256F_SIMPLE || \
                                 IS_HYBRID(type))
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_PQ_KT_END
 
@@ -221,11 +227,13 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
 #define CASE_KEY_OQS \
     case SSH_KEYTYPE_FALCON_512: \
     case SSH_KEYTYPE_FALCON_1024: \
+    case SSH_KEYTYPE_DILITHIUM_2: \
     case SSH_KEYTYPE_DILITHIUM_3: \
-    case SSH_KEYTYPE_DILITHIUM_2_AES: \
-    case SSH_KEYTYPE_DILITHIUM_5_AES: \
+    case SSH_KEYTYPE_DILITHIUM_5: \
     case SSH_KEYTYPE_SPHINCS_HARAKA_128F_SIMPLE: \
-    case SSH_KEYTYPE_SPHINCS_HARAKA_192F_ROBUST
+    case SSH_KEYTYPE_SPHINCS_SHA256_128F_SIMPLE: \
+    case SSH_KEYTYPE_SPHINCS_SHA256_192S_ROBUST: \
+    case SSH_KEYTYPE_SPHINCS_SHA256_256F_SIMPLE
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_PQ_SWITCH_CASES_END
 
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_START
@@ -233,17 +241,20 @@ int pki_parse_oqs_signature_from_blob(ssh_signature sig,
 
 #define CASE_KEY_RSA_HYBRID \
     case SSH_KEYTYPE_RSA3072_FALCON_512: \
-    case SSH_KEYTYPE_RSA3072_DILITHIUM_2_AES: \
-    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE
+    case SSH_KEYTYPE_RSA3072_DILITHIUM_2: \
+    case SSH_KEYTYPE_RSA3072_SPHINCS_HARAKA_128F_SIMPLE: \
+    case SSH_KEYTYPE_RSA3072_SPHINCS_SHA256_128F_SIMPLE
 
 #define CASE_KEY_ECDSA_HYBRID \
     case SSH_KEYTYPE_ECDSA_NISTP256_FALCON_512: \
     case SSH_KEYTYPE_ECDSA_NISTP521_FALCON_1024: \
+    case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2: \
     case SSH_KEYTYPE_ECDSA_NISTP384_DILITHIUM_3: \
-    case SSH_KEYTYPE_ECDSA_NISTP256_DILITHIUM_2_AES: \
-    case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5_AES: \
+    case SSH_KEYTYPE_ECDSA_NISTP521_DILITHIUM_5: \
     case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_HARAKA_128F_SIMPLE: \
-    case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_HARAKA_192F_ROBUST
+    case SSH_KEYTYPE_ECDSA_NISTP256_SPHINCS_SHA256_128F_SIMPLE: \
+    case SSH_KEYTYPE_ECDSA_NISTP384_SPHINCS_SHA256_192S_ROBUST: \
+    case SSH_KEYTYPE_ECDSA_NISTP521_SPHINCS_SHA256_256F_SIMPLE
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_HYBRID_SWITCH_CASES_END
 
 #define CASE_KEY_HYBRID \
