@@ -9,6 +9,7 @@
 set -exo pipefail
 
 OPENSSH_BIN_PATH="`pwd`/oqs-test/tmp/bin"
+OPENSSH_SBIN_PATH="`pwd`/oqs-test/tmp/sbin"
 OQS_ROOT_DIR=${OQS_ROOT_DIR:-"`pwd`/oqs"}
 
 # OQS-OpenSSH ssh(d) binaries must appear first in the path before any system-installed version when cmake is invoked, so that tests will call the OQS version.
@@ -18,7 +19,12 @@ if [ ! -f ${OPENSSH_BIN_PATH}/ssh ]; then
   exit 1
 fi
 
-PATH="${OPENSSH_BIN_PATH}:${PATH}"
+if [ ! -f ${OPENSSH_SBIN_PATH}/sshd ]; then
+  echo Could not find OQS-OpenSSH sshd binary.
+  exit 1
+fi
+
+PATH="${OPENSSH_BIN_PATH}:${OPENSSH_SBIN_PATH}:${PATH}"
 
 mkdir build && pushd build
 cmake -DUNIT_TESTING=ON -DWITH_SERVER=ON -DSERVER_TESTING=ON -DCLIENT_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_POST_QUANTUM_CRYPTO=ON -DOQS_ROOT_DIR=${OQS_ROOT_DIR} ..
