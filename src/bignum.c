@@ -77,7 +77,7 @@ ssh_string ssh_make_unsigned_bignum_string(bignum num, size_t paddedlen) {
 
   ptr = ssh_string_new(paddedlen);
   if (ptr == NULL) {
-    return NULL;
+      return NULL;
   }
 
   /* We need to include any leading zeroes in this case. */
