@@ -34,6 +34,7 @@
 #include "libssh/dh.h"
 #include "libssh/pki.h"
 #include "libssh/oqs-utils.h"
+#include "libssh/bignum.h"
 
 #include <oqs/oqs.h>
 #include <openssl/ecdh.h>
@@ -349,11 +350,13 @@ int ssh_client_hykex_init(ssh_session session)
  * a SSH_MSG_NEWKEYS
  */
 static SSH_PACKET_CALLBACK(ssh_packet_client_hykex_reply) {
-    int rc, oqs_rc;
+    int rc, oqs_rc, ecdh_ss_len;
     ssh_string hostkey = NULL;
     uint8_t *oqs_shared_secret = NULL;
     ssh_buffer hybrid_shared_secret = NULL;
     ssh_buffer hashed_shared_secret = NULL;
+    ssh_string ecdh_shared_secret = NULL;
+    const EC_GROUP *group = EC_KEY_get0_group(session->next_crypto->ecdh_privkey);
 
     (void)type;
     (void)user;
@@ -417,6 +420,9 @@ static SSH_PACKET_CALLBACK(ssh_packet_client_hykex_reply) {
 
     /** Compute shared secret **/
 
+    /* Remember this for later; has to be done before ecdh_build_k is called because it frees the underlying key. */
+    ecdh_ss_len = (EC_GROUP_get_degree(group) + 7) / 8;
+
     /* Compute ECDH shared secret */
     if (ecdh_build_k(session) < 0) {
         ssh_set_error(session, SSH_FATAL, "Cannot build k number");
@@ -443,6 +449,17 @@ static SSH_PACKET_CALLBACK(ssh_packet_client_hykex_reply) {
         goto exit;
     }
 
+    /* Previous versions of this library added the ECDH shared secret as an mpint. This has now changed to treat it as a fixed-length
+     * byte array. See https://github.com/open-quantum-safe/openssh/issues/136. libssh treats the ECDH shared secret internally as an mpint,
+     * though, so pull it back out as a fixed-length byte array.
+     */
+    ecdh_shared_secret = ssh_make_unsigned_bignum_string(session->next_crypto->shared_secret, ecdh_ss_len);
+    if (ecdh_shared_secret == NULL) {
+        ssh_set_error(session, SSH_FATAL, "Could not copy ECDH shared secret to string");
+        rc = SSH_ERROR;
+        goto exit;
+    }
+
     /* Assemble hybrid shared secret. */
     hybrid_shared_secret = ssh_buffer_new();
     if (hybrid_shared_secret == NULL) {
@@ -453,10 +470,13 @@ static SSH_PACKET_CALLBACK(ssh_packet_client_hykex_reply) {
 
     ssh_buffer_set_secure(hybrid_shared_secret);
 
+    /* We use an ssh_string to put the ECDH shared secret into the correct format with the existing utility function, but we don't
+     * pack it into the buffer as a string because that will prepend its length. Just pack the data.
+     */
     rc = ssh_buffer_pack(hybrid_shared_secret,
-                         "PB",
+                         "PP",
                          session->next_crypto->oqs_kem->length_shared_secret, oqs_shared_secret,
-                         session->next_crypto->shared_secret);
+                         ssh_string_len(ecdh_shared_secret), ssh_string_data(ecdh_shared_secret));
 
     if (rc != SSH_OK) {
         goto exit;
@@ -506,6 +526,9 @@ exit:
     ssh_buffer_free(hybrid_shared_secret);
     ssh_buffer_free(hashed_shared_secret);
 
+    ssh_string_burn(ecdh_shared_secret);
+    ssh_string_free(ecdh_shared_secret);
+
     ssh_oqs_kex_free(session);
 
     if (rc != SSH_PACKET_USED) {
@@ -534,12 +557,13 @@ void ssh_server_hykex_init(ssh_session session)
 }
 
 SSH_PACKET_CALLBACK(ssh_packet_server_hykex_init) {
-    int rc, oqs_rc, curve, len;
+    int rc, oqs_rc, curve, len, ecdh_ss_len;
     enum ssh_digest_e digest = SSH_DIGEST_AUTO;
     ssh_string sig_blob = NULL;
     ssh_string q_c_string = NULL;
     ssh_string q_s_string = NULL;
     ssh_string pq_pubkey_blob = NULL;
+    ssh_string ecdh_shared_secret = NULL;
     uint8_t *oqs_shared_secret = NULL;
     ssh_buffer hybrid_shared_secret = NULL;
     ssh_buffer hashed_shared_secret = NULL;
@@ -640,6 +664,9 @@ SSH_PACKET_CALLBACK(ssh_packet_server_hykex_init) {
     session->next_crypto->ecdh_privkey = ecdh_key;
     session->next_crypto->ecdh_server_pubkey = q_s_string;
 
+    /* Remember this for later; has to be done before ecdh_build_k is called because it frees the underlying key. */
+    ecdh_ss_len = (EC_GROUP_get_degree(group) + 7) / 8;
+
     /* Compute ECDH shared secret */
     rc = ecdh_build_k(session);
     if (rc < 0) {
@@ -680,11 +707,26 @@ SSH_PACKET_CALLBACK(ssh_packet_server_hykex_init) {
         ssh_string_data(session->next_crypto->ecdh_server_pubkey),
         ssh_string_len(session->next_crypto->ecdh_server_pubkey));
 
+    /* Previous versions of this library added the ECDH shared secret as an mpint. This has now changed to treat it as a fixed-length
+     * byte array. See https://github.com/open-quantum-safe/openssh/issues/136. libssh treats the ECDH shared secret internally as an mpint,
+     * though, so pull it back out as a fixed-length byte array.
+     */
+    ecdh_shared_secret = ssh_make_unsigned_bignum_string(session->next_crypto->shared_secret, ecdh_ss_len);
+    if (ecdh_shared_secret == NULL) {
+        explicit_bzero(oqs_shared_secret, session->next_crypto->oqs_kem->length_shared_secret);
+        SAFE_FREE(oqs_shared_secret);
+
+        ssh_set_error_oom(session);
+        goto error; 
+    }
+
     /* Assemble hybrid shared secret. */
     hybrid_shared_secret = ssh_buffer_new();
     if (hybrid_shared_secret == NULL) {
         explicit_bzero(oqs_shared_secret, session->next_crypto->oqs_kem->length_shared_secret);
         SAFE_FREE(oqs_shared_secret);
+        ssh_string_burn(ecdh_shared_secret);
+        ssh_string_free(ecdh_shared_secret);
 
         ssh_set_error_oom(session);
         goto error;
@@ -692,13 +734,18 @@ SSH_PACKET_CALLBACK(ssh_packet_server_hykex_init) {
 
     ssh_buffer_set_secure(hybrid_shared_secret);
 
+    /* We use an ssh_string to put the ECDH shared secret into the correct format with the existing utility function, but we don't
+     * pack it into the buffer as a string because that will prepend its length. Just pack the data.
+     */
     rc = ssh_buffer_pack(hybrid_shared_secret,
-                         "PB",
+                         "PP",
                          session->next_crypto->oqs_kem->length_shared_secret, oqs_shared_secret,
-                         session->next_crypto->shared_secret);
+                         ssh_string_len(ecdh_shared_secret), ssh_string_data(ecdh_shared_secret));
 
     explicit_bzero(oqs_shared_secret, session->next_crypto->oqs_kem->length_shared_secret);
     SAFE_FREE(oqs_shared_secret);
+    ssh_string_burn(ecdh_shared_secret);
+    ssh_string_free(ecdh_shared_secret);
 
     if (rc != SSH_OK) {
         ssh_buffer_free(hybrid_shared_secret);
