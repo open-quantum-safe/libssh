@@ -1,6 +1,6 @@
 {%- for kex in config['kexs'] %}
     {%- for curve in kex['mix_with'] %}
-* ecdh-{{ curve['name'] }}-{{ kex['name']|lower|replace('_','-') }}-{{ kex['hash'] }}@openquantumsafe.org
+* {{ curve['pretty_name'] }}
     {%- endfor %}
 {%- endfor %}
 
