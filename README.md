@@ -125,33 +125,33 @@ These instructions assume you have completed the build above; in particular, tha
 The following key exchange algorithm strings are the hybrid algorithms we recommend using, that combine an established classical algorithm with a post-quantum algorithm. They can be provided to the "-o KexAlgorithms" option to both ssh and sshd. The "ecdh-nistp384-oqsdefault-sha384@openquantumsafe.org" option chooses a suitable default, but specific PQ algorithms can be chosen. See the OQS home page for information on the algorithms.
 
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_START -->
-* ecdh-nistp256-frodokem-640-aes-sha256@openquantumsafe.org
-* ecdh-nistp384-frodokem-976-aes-sha384@openquantumsafe.org
-* ecdh-nistp521-frodokem-1344-aes-sha512@openquantumsafe.org
-* ecdh-nistp256-frodokem-640-shake-sha256@openquantumsafe.org
-* ecdh-nistp384-frodokem-976-shake-sha384@openquantumsafe.org
-* ecdh-nistp521-frodokem-1344-shake-sha512@openquantumsafe.org
-* ecdh-nistp256-kyber-512-sha256@openquantumsafe.org
-* ecdh-nistp384-kyber-768-sha384@openquantumsafe.org
-* ecdh-nistp521-kyber-1024-sha512@openquantumsafe.org
-* ecdh-nistp256-kyber-512-90s-sha256@openquantumsafe.org
-* ecdh-nistp384-kyber-768-90s-sha384@openquantumsafe.org
-* ecdh-nistp521-kyber-1024-90s-sha512@openquantumsafe.org
-* ecdh-nistp256-bike-l1-sha512@openquantumsafe.org
-* ecdh-nistp384-bike-l3-sha512@openquantumsafe.org
-* ecdh-nistp256-classic-mceliece-348864-sha256@openquantumsafe.org
-* ecdh-nistp256-classic-mceliece-348864f-sha256@openquantumsafe.org
-* ecdh-nistp384-classic-mceliece-460896-sha512@openquantumsafe.org
-* ecdh-nistp384-classic-mceliece-460896f-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-6688128-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-6688128f-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-6960119-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-6960119f-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-8192128-sha512@openquantumsafe.org
-* ecdh-nistp521-classic-mceliece-8192128f-sha512@openquantumsafe.org
-* ecdh-nistp256-hqc-128-sha256@openquantumsafe.org
-* ecdh-nistp384-hqc-192-sha384@openquantumsafe.org
-* ecdh-nistp521-hqc-256-sha512@openquantumsafe.org
+* ecdh-nistp256-frodokem-640-aesr2-sha256@openquantumsafe.org
+* ecdh-nistp384-frodokem-976-aesr2-sha384@openquantumsafe.org
+* ecdh-nistp521-frodokem-1344-aesr2-sha512@openquantumsafe.org
+* ecdh-nistp256-frodokem-640-shaker2-sha256@openquantumsafe.org
+* ecdh-nistp384-frodokem-976-shaker2-sha384@openquantumsafe.org
+* ecdh-nistp521-frodokem-1344-shaker2-sha512@openquantumsafe.org
+* ecdh-nistp256-kyber-512r3-sha256-d00@openquantumsafe.org
+* ecdh-nistp384-kyber-768r3-sha384-d00@openquantumsafe.org
+* ecdh-nistp521-kyber-1024r3-sha512-d00@openquantumsafe.org
+* ecdh-nistp256-kyber-512-90sr3-sha256@openquantumsafe.org
+* ecdh-nistp384-kyber-768-90sr3-sha384@openquantumsafe.org
+* ecdh-nistp521-kyber-1024-90sr3-sha512@openquantumsafe.org
+* ecdh-nistp256-bike-l1r3-sha512@openquantumsafe.org
+* ecdh-nistp384-bike-l3r3-sha512@openquantumsafe.org
+* ecdh-nistp256-classic-mceliece-348864r3-sha256@openquantumsafe.org
+* ecdh-nistp256-classic-mceliece-348864fr3-sha256@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-460896r3-sha512@openquantumsafe.org
+* ecdh-nistp384-classic-mceliece-460896fr3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-6688128r3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-6688128fr3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-6960119r3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-6960119fr3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-8192128r3-sha512@openquantumsafe.org
+* ecdh-nistp521-classic-mceliece-8192128fr3-sha512@openquantumsafe.org
+* ecdh-nistp256-hqc-128r3-sha256@openquantumsafe.org
+* ecdh-nistp384-hqc-192r3-sha384@openquantumsafe.org
+* ecdh-nistp521-hqc-256r3-sha512@openquantumsafe.org
 <!--- OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_KEXS_END -->
 
 The following key exchange algorithm strings are pure-PQ algorithms. They should only be used experimentally.
