@@ -338,6 +338,14 @@ if (CLIENT_TESTING OR SERVER_TESTING)
     message(STATUS "TORTURE_ENVIRONMENT=${TORTURE_ENVIRONMENT}")
 endif ()
 
+find_program(SSH_KEYGEN_EXECUTABLE
+             NAME
+                ssh-keygen
+             PATHS
+                /sbin
+                /usr/sbin
+                /usr/local/sbin)
+
 configure_file(tests_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/tests_config.h)
 
 if (WITH_BENCHMARKS)
