@@ -19,7 +19,7 @@ else
     autoreconf -i
 fi
 
-./configure --prefix="${PREFIX}" --with-libs=-lm --with-liboqs-dir="${LIBOQS_DIR}" --sysconfdir="${PREFIX}"
+./configure --prefix="${PREFIX}" --with-libs=-lm --with-liboqs-dir="${LIBOQS_DIR}" --sysconfdir="${PREFIX}" --with-pam
 
 if [ "x${CIRCLECI}" == "xtrue" ] || [ "x${TRAVIS}" == "xtrue" ]; then
     make -j2

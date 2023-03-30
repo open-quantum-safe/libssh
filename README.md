@@ -42,13 +42,13 @@ This support can only be built if OpenSSL is used as the cryptographic library f
 2. Install necessary dependencies. In particular, you will need CMake, Ninja, gcc, and libssl-dev to build. On Ubuntu:
 
 ```
-    sudo apt install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz
+    sudo apt install cmake gcc g++ ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz
 ```
 
 If you want to build client as well as server tests for libssh (-DCLIENT_TESTING=ON) below in step 6, install these additional dependencies. On Ubuntu:
 
 ```
-    sudo apt install libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper
+    sudo apt install libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper libpam0g-dev
 ```
  
 3. Choose an appropriate installation location for OQS's libraries and include files. Example choices are `/usr/local` or `/usr/local/oqs` for a system-wide installation, or `${HOME}/oqs` or `${HOME}/build/oqs` for a user-local installation. This can be anywhere, but in the instructions below we refer to it as `${OQS_ROOT_DIR}`. 
