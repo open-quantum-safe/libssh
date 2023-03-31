@@ -1,6 +1,6 @@
 {%- for kex in config['kexs'] %}
     {%- for curve in kex['mix_with'] %}
-#define KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }} HYBRID_ECDH_OQS_KEX_SUFFIX("ecdh-{{ curve['name'] }}-{{ kex['name']|lower|replace('_','-') }}-{{ kex['hash'] }}")
+#define KEX_ECDH_{{ curve['name']|upper }}_{{ kex['name']|upper }}_{{ kex['hash']|upper }} HYBRID_ECDH_OQS_KEX_SUFFIX("{{ curve['pretty_name'] }}")
     {%- endfor %}
 {%- endfor %}
 

@@ -14,7 +14,7 @@
 /* OpenSSH */
 
 #define OPENSSH_BINARY SSH_EXECUTABLE
-#define OPENSSH_KEYGEN "ssh-keygen"
+#define OPENSSH_KEYGEN SSH_KEYGEN_EXECUTABLE
 
 #define OPENSSH_HOSTKEY_ALGOS \
   "-o HostKeyAlgorithms="        \
