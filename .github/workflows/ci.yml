@@ -19,7 +19,7 @@ jobs:
     - name: Install prerequisites
       run: |
         sudo apt-get update
-        sudo apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper
+        sudo apt-get install cmake gcc g++ ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz libcmocka-dev libcmocka0 libsocket-wrapper libnss-wrapper libuid-wrapper libpam-wrapper libpam0g-dev
       
     - name: Clone liboqs
       uses: actions/checkout@v2
