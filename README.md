@@ -3,6 +3,8 @@
 OQS-libssh
 ==================================
 
+THIS PROJECT IS PRESENTLY INACTIVE. CONTRIBUTORS WANTED.
+
 [libssh](https://libssh.org/) is an open-source implementation of the Secure Shell protocol. This version of libssh provides support for using "post-quantum" (PQ) cryptographic algorithms. Not to be confused with "quantum cryptography," which is cryptography done on quantum computers, "post-quantum" cryptography (PQC) is algorithms to be used on classical computers which are not vulnerable to the attacks the algorithms in current use (primarily RSA and Elliptic Curve Cryptography) are. See the home page for the Open Quantum Safe (OQS) project at https://openquantumsafe.org/ for further information.
 
 WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
