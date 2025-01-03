@@ -1,9 +1,13 @@
-[![CI](https://github.com/open-quantum-safe/libssh/actions/workflows/ci.yml/badge.svg)](https://github.com/open-quantum-safe/libssh/actions/workflows/ci.yml)
+![Static Badge](https://img.shields.io/badge/status-deprecated-red)
 
 OQS-libssh
 ==================================
 
-THIS PROJECT IS PRESENTLY INACTIVE. CONTRIBUTORS WANTED.
+## <span style="color: red;">DEPRECATION NOTICE</span>
+
+<b><span style="color: red;">The Open Quantum Safe project has discontinued development of our libssh fork.  This repository is being archived as read-only.  Use of this code is not recommended, as it may rely on obsolete algorithms or implementations or may have security vulnerabilities or other bugs.</span></b>
+
+## About
 
 [libssh](https://libssh.org/) is an open-source implementation of the Secure Shell protocol. This version of libssh provides support for using "post-quantum" (PQ) cryptographic algorithms. Not to be confused with "quantum cryptography," which is cryptography done on quantum computers, "post-quantum" cryptography (PQC) is algorithms to be used on classical computers which are not vulnerable to the attacks the algorithms in current use (primarily RSA and Elliptic Curve Cryptography) are. See the home page for the Open Quantum Safe (OQS) project at https://openquantumsafe.org/ for further information.
 
