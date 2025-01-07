@@ -5,7 +5,7 @@ OQS-libssh
 
 ## <span style="color: red;">DEPRECATION NOTICE</span>
 
-<b><span style="color: red;">The Open Quantum Safe project has discontinued development of our libssh fork.  This repository is being archived as read-only.  Use of this code is not recommended, as it may rely on obsolete algorithms or implementations or may have security vulnerabilities or other bugs.</span></b>
+<b><span style="color: red;">The Open Quantum Safe project has discontinued development of our libssh fork.  This repository is being archived as read-only.  Use of this code is not recommended, as it may rely on obsolete algorithms or implementations or may have security vulnerabilities or other bugs. If you are interested in reviving and maintaining this project, please reach out via the [OQS discussion board on Github](https://github.com/orgs/open-quantum-safe/discussions).</span></b>
 
 ## About
 
@@ -13,16 +13,20 @@ OQS-libssh
 
 WARNING: These algorithms and implementations are experimental. Standards for post-quantum cryptographic algorithms are still under development. Included at this time are implementations of algorithms from Round 3 of the NIST's Post-Quantum Cryptography standardization process. While at the time of this writing there are no vulnerabilities known in any of the quantum-safe algorithms used in the OQS project, it is advisable to wait on deploying quantum-safe algorithms until further guidance is provided by the standards community, especially from the NIST standardization project. Accordingly, although "pure-PQ" options are provided, we recommend only enabling "hybrid" options, which combine time-tested classical algorithms with new PQ algorithms. This will ensure the solution is at least no less secure than existing traditional cryptography.
 
-- [Overview](#overview)
-- [Build Instructions for libssh](#build-instructions)
-- [Build Instructions for OQS-OpenSSH](#build-instructions-for-oqs-openssh)
-- [Key Exchange Algorithms](#key-exchange-algorithms)
-- [Digital Signature Algorithms](#digital-signature-algorithms)
-- [Known Issues](#known-issues)
-- [Contributing](#contributing)
-- [License](#license)
-- [Team](#team)
-- [Acknowledgements](#acknowledgements)
+- [OQS-libssh](#oqs-libssh)
+  - [DEPRECATION NOTICE](#deprecation-notice)
+  - [About](#about)
+  - [Overview](#overview)
+  - [Build Instructions](#build-instructions)
+    - [Preserving client and server authentication keys for runs of the `pkd_hello` suite](#preserving-client-and-server-authentication-keys-for-runs-of-the-pkd_hello-suite)
+  - [Build instructions for OQS-OpenSSH](#build-instructions-for-oqs-openssh)
+  - [Key Exchange Algorithms](#key-exchange-algorithms)
+  - [Digital Signature Algorithms](#digital-signature-algorithms)
+  - [Known Issues](#known-issues)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Team](#team)
+  - [Acknowledgments](#acknowledgments)
 
 ## Overview
 
